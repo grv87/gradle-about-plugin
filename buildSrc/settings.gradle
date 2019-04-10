@@ -1,0 +1,46 @@
+#!/usr/bin/env groovy
+/*
+ * Gradle Settings file for gradle-about-plugin buildSrc
+ * Copyright ©  Basil Peace
+ *
+ * This file is part of gradle-about-plugin.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+pluginManagement {
+  repositories {
+    maven {
+      url 'https://fidata.jfrog.io/fidata/plugins-release/'
+      credentials {
+        File gradlePropertiesFile = new File(file('..'), Project.GRADLE_PROPERTIES)
+        if (gradlePropertiesFile.exists()) {
+          gradlePropertiesFile.withReader { Reader reader ->
+            Properties properties = new Properties()
+            properties.load(reader)
+            username = properties.getProperty('artifactoryUser')
+            password = properties.getProperty('artifactoryPassword')
+          }
+        } else {
+          username = settings.ext.artifactoryUser
+          password = settings.ext.artifactoryPassword
+        }
+      }
+    }
+  }
+}
+
+ext.rootDir = file('..')
+
+apply from: new File(ext.rootDir, 'buildSrc/gradle/load-properties.gradle')
+
+apply from: new File(ext.rootDir, 'gradle/build-cache.gradle')

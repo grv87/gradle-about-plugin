@@ -1,0 +1,68 @@
+#!/usr/bin/env groovy
+/*
+ * Build script for gradle-about-plugin buildSrc
+ * Copyright ©  Basil Peace
+ *
+ * This file is part of gradle-about-plugin.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+plugins {
+  id 'java'
+  id 'groovy'
+  id 'java-library'
+  id 'java-gradle-plugin'
+}
+
+group = 'org.fidata.gradle'
+
+ext.rootDir = file('..')
+
+apply from: new File(ext.rootDir, 'buildSrc/gradle/load-properties.gradle')
+
+dependencyLocking.lockAllConfigurations()
+
+repositories {
+  maven {
+    url 'https://fidata.jfrog.io/fidata/plugins-snapshot/'
+    credentials {
+      username = project.ext.artifactoryUser
+      password = project.ext.artifactoryPassword
+    }
+  }
+}
+
+configurations.all { Configuration configuration ->
+  configuration.resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+dependencies {
+  runtimeOnly(group: 'org.fidata.project.groovy', name: 'org.fidata.project.groovy.gradle.plugin', version: '6.0.0-SNAPSHOT')
+  runtimeOnly(group: 'org.fidata.plugin', name: 'org.fidata.plugin.gradle.plugin', version: '6.0.0-SNAPSHOT')
+}
+
+configurations.all {
+  resolutionStrategy.dependencySubstitution {
+    substitute module('org.fidata.gradle:gradle-about-plugin') with project(':')
+  }
+}
+
+apply from: new File(ext.rootDir, 'gradle/dependencies-compile.gradle')
+
+sourceSets.main {
+  java.srcDirs = ["${ project.ext.rootDir }/src/main/java"]
+  groovy.srcDirs = ["${ project.ext.rootDir }/src/main/groovy"]
+  resources.srcDirs = ["${ project.ext.rootDir }/src/main/resources"]
+}
+
+apply from: new File(ext.rootDir, 'gradle/gradle-plugin-markers.gradle')
