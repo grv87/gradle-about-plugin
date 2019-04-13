@@ -47,8 +47,8 @@ configurations.all { Configuration configuration ->
 }
 
 dependencies {
-  runtimeOnly(group: 'org.fidata.project.groovy', name: 'org.fidata.project.groovy.gradle.plugin', version: '6.0.0-SNAPSHOT')
-  runtimeOnly(group: 'org.fidata.plugin', name: 'org.fidata.plugin.gradle.plugin', version: '6.0.0-SNAPSHOT')
+  runtimeOnly(group: 'org.fidata.project.groovy', name: 'org.fidata.project.groovy.gradle.plugin', version: '6.0.1-hotfix-publishPluginJar-SNAPSHOT')
+  runtimeOnly(group: 'org.fidata.plugin', name: 'org.fidata.plugin.gradle.plugin', version: '6.0.1-hotfix-publishPluginJar-SNAPSHOT')
 }
 
 configurations.all {
