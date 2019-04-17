@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 /*
- * Compile dependencies for gradle-about-plugin
+ * Compile dependencies for about-library
  * Copyright ©  Basil Peace
  *
  * This file is part of gradle-about-plugin.

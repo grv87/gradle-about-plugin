@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 /*
- * Build script for gradle-about-plugin
+ * Build script for about-library
  * Copyright ©  Basil Peace
  *
  * This file is part of gradle-about-plugin.
@@ -18,27 +18,9 @@
  * permissions and limitations under the License.
  */
 plugins {
-  id 'org.fidata.project'
-}
-
-// TODO: move all this to .ABOUT file
-description = '' // TODO
-tags.set(['ABOUT', 'AboutCode', 'info', 'contacts', 'license', 'meta', 'metadata'])
-//noinspection GroovyUnusedAssignment
-license = 'Apache-2.0'
-//noinspection GroovyUnusedAssignment
-publicReleases = true
-contacts {
-  'grv87@yandex.ru' {
-    moniker 'Basil Peace'
-    github 'grv87'
-    roles 'owner', 'developer'
-  }
+  id 'org.fidata.project.java'
 }
 
 ext.rootDir = file('.')
 
-tasks.named('codenarcBuildSrc').configure {
-  disabledRules.addAll 'JavaIoPackageAccess' // TODO, 'DuplicateNumberLiteral'
-}
-
+apply from: new File(ext.rootDir, 'gradle/dependencies-compile.gradle')

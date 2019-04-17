@@ -20,7 +20,7 @@
 pluginManagement {
   repositories {
     maven {
-      url 'https://fidata.jfrog.io/fidata/plugins-release/'
+      url 'https://fidata.jfrog.io/fidata/plugins-snapshot/'
       credentials {
         username = settings.ext.artifactoryUser
         password = settings.ext.artifactoryPassword
@@ -34,3 +34,11 @@ rootProject.name = 'gradle-about-plugin'
 ext.rootDir = file('.')
 
 apply from: new File(ext.rootDir, 'gradle/build-cache.gradle')
+
+[
+  'library',
+  'gradle-plugin',
+].each {
+  include it
+  project(":$it").projectDir = new File(ext.rootDir, it)
+}

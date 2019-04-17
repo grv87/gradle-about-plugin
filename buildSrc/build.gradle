@@ -18,23 +18,31 @@
  * permissions and limitations under the License.
  */
 plugins {
-  id 'java'
+  /*id 'java'
   id 'groovy'
   id 'java-library'
   id 'java-gradle-plugin'
+  id 'io.franzbecker.gradle-lombok' version ''*/
+  id 'org.fidata.project.java' version '6.0.1-hotfix-publishPluginJar-SNAPSHOT' apply false
+  id 'org.fidata.project.groovy' version '6.0.1-hotfix-publishPluginJar-SNAPSHOT' apply false
+  id 'org.fidata.plugin' version '6.0.1-hotfix-publishPluginJar-SNAPSHOT' apply false
 }
 
-group = 'org.fidata.gradle'
+// group = 'org.fidata.gradle'
 
 ext.rootDir = file('..')
 
 apply from: new File(ext.rootDir, 'buildSrc/gradle/load-properties.gradle')
 
-dependencyLocking.lockAllConfigurations()
+apply plugin: 'org.fidata.project.java'
+apply plugin: 'org.fidata.project.groovy'
+apply plugin: 'org.fidata.plugin'
+
+// dependencyLocking.lockAllConfigurations()
 
 repositories {
   maven {
-    url 'https://fidata.jfrog.io/fidata/plugins-snapshot/'
+    url 'https://fidata.jfrog.io/fidata/plugins-snapshot/' // TODO
     credentials {
       username = project.ext.artifactoryUser
       password = project.ext.artifactoryPassword
@@ -42,27 +50,33 @@ repositories {
   }
 }
 
-configurations.all { Configuration configuration ->
+/*configurations.all { Configuration configuration ->
   configuration.resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
+}*/
 
 dependencies {
-  runtimeOnly(group: 'org.fidata.project.groovy', name: 'org.fidata.project.groovy.gradle.plugin', version: '6.0.1-hotfix-publishPluginJar-SNAPSHOT')
-  runtimeOnly(group: 'org.fidata.plugin', name: 'org.fidata.plugin.gradle.plugin', version: '6.0.1-hotfix-publishPluginJar-SNAPSHOT')
+  runtimeOnly(group: 'org.fidata.project.groovy', name: 'org.fidata.project.groovy.gradle.plugin', version: '6.0.1-hotfix-publishPluginJar-SNAPSHOT').status = 'integration'
+  runtimeOnly(group: 'org.fidata.plugin', name: 'org.fidata.plugin.gradle.plugin', version: '6.0.1-hotfix-publishPluginJar-SNAPSHOT').status = 'integration'
 }
 
 configurations.all {
   resolutionStrategy.dependencySubstitution {
+    substitute module('org.fidata:about-library') with project(':')
     substitute module('org.fidata.gradle:gradle-about-plugin') with project(':')
   }
 }
 
-apply from: new File(ext.rootDir, 'gradle/dependencies-compile.gradle')
+apply from: new File(ext.rootDir, 'library/gradle/dependencies-compile.gradle')
 
 sourceSets.main {
-  java.srcDirs = ["${ project.ext.rootDir }/src/main/java"]
-  groovy.srcDirs = ["${ project.ext.rootDir }/src/main/groovy"]
-  resources.srcDirs = ["${ project.ext.rootDir }/src/main/resources"]
+  java.srcDirs = ["${ project.ext.rootDir }/library/src/main/java", "${ project.ext.rootDir }/plugin/src/main/java"]
+  groovy.srcDirs = ["${ project.ext.rootDir }/library/src/main/groovy", "${ project.ext.rootDir }/plugin/src/main/groovy"]
+  resources.srcDirs = ["${ project.ext.rootDir }/library/src/main/resources", "${ project.ext.rootDir }/plugin/src/main/resources"]
 }
 
-apply from: new File(ext.rootDir, 'gradle/gradle-plugin-markers.gradle')
+apply from: new File(ext.rootDir, 'plugin/gradle/gradle-plugin-markers.gradle')
+
+// TODO
+compatTest.enabled = false
+checkstyleMain.enabled = false
+codenarcMain.enabled = false

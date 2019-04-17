@@ -20,7 +20,7 @@
 pluginManagement {
   repositories {
     maven {
-      url 'https://fidata.jfrog.io/fidata/plugins-release/'
+      url 'https://fidata.jfrog.io/fidata/plugins-snapshot/'
       credentials {
         File gradlePropertiesFile = new File(file('..'), Project.GRADLE_PROPERTIES)
         if (gradlePropertiesFile.exists()) {
@@ -44,3 +44,11 @@ ext.rootDir = file('..')
 apply from: new File(ext.rootDir, 'buildSrc/gradle/load-properties.gradle')
 
 apply from: new File(ext.rootDir, 'gradle/build-cache.gradle')
+
+/*[
+  'library',
+  'gradle-plugin',
+].each {
+  include it
+  project(":$it").projectDir = new File(ext.rootDir, it)
+}*/
