@@ -19,6 +19,7 @@
  */
 plugins {
   id 'org.fidata.project'
+  id 'org.fidata.about'
 }
 
 // TODO: move all this to .ABOUT file
@@ -41,4 +42,3 @@ ext.rootDir = file('.')
 tasks.named('codenarcBuildSrc').configure {
   disabledRules.addAll 'JavaIoPackageAccess' // TODO, 'DuplicateNumberLiteral'
 }
-

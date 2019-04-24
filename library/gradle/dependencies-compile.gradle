@@ -22,7 +22,7 @@ dependencies {
   implementation(group: 'com.google.guava', name: 'guava', version: '25.1-jre')
   // implementation(group: 'org.yaml', name: 'snakeyaml', version: '[1.23, 2[')
   implementation(group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '[2.9, 3[')
-  implementation(group: 'com.fasterxml.jackson.module', name: 'jackson-module-guice', version: '[2.9, 3[')
+  implementation(group: 'com.github.jonpeterson', name: 'jackson-module-model-versioning', version: '[1.2.2, 2[')
   // implementation(group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '[2.9, 3[')
   api(group: 'org.spdx', name: 'spdx-tools', version: '[2.1.15, 3[') {
     exclude(group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl')

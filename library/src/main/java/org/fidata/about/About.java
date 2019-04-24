@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.github.jonpeterson.jackson.module.versioning.JsonVersionedModel;
+import com.github.jonpeterson.jackson.module.versioning.VersioningModule;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -19,6 +21,7 @@ import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
 import org.fidata.jackson.ChecksumDeserializer;
@@ -33,7 +36,9 @@ import java.nio.file.Path;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(builderClassName = "Builder")
-final class About {
+@JsonVersionedModel(propertyName = "specVersion", currentVersion = "3.1.2", toCurrentConverterClass = ToCurrentAboutConverter.class)
+@EqualsAndHashCode
+public final class About {
   /**
    * Component description, as a short text
    */
@@ -262,23 +267,33 @@ final class About {
     protected /*TOTEST*/ void unknownField(String key, Object value) {
       extValue(key, value);
     }
-
-    public static About readFromFile(File src) throws IOException {
-      final ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
-      final SimpleModule deserializersModule = new SimpleModule();
-      deserializersModule.addDeserializer(Path.class, new RelativePathDeserializer(src));
-      deserializersModule.addDeserializer(AnyLicenseInfo.class, new SpdxAnyLicenseInfoDeserializer());
-      objectMapper.registerModule(deserializersModule);
-      return objectMapper.readValue(src, About.class);
-    }
   }
+
+  private static final VersioningModule VERSIONING_MODULE = new VersioningModule();
 
   public static About readFromFile(File src) throws IOException {
     final ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+
+    final SimpleModule deserializersModule = new SimpleModule();
+    deserializersModule.addDeserializer(Path.class, new RelativePathDeserializer(src));
+    deserializersModule.addDeserializer(AnyLicenseInfo.class, new SpdxAnyLicenseInfoDeserializer());
+    objectMapper.registerModule(deserializersModule);
+
+    objectMapper.registerModule(VERSIONING_MODULE);
+
+    return objectMapper.readValue(src, About.class);
+  }
+
+  public void writeToFile(File res) throws IOException {
+    final ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+
     final SimpleModule serializersModule = new SimpleModule();
-    serializersModule.addSerializer(Path.class, new RelativePathSerializer(src));
+    serializersModule.addSerializer(Path.class, new RelativePathSerializer(res));
     serializersModule.addSerializer(AnyLicenseInfo.class, new ToStringSerializer());
     objectMapper.registerModule(serializersModule);
-    return objectMapper.readValue(src, About.class);
+
+    objectMapper.registerModule(VERSIONING_MODULE);
+
+    objectMapper.writeValue(res, this);
   }
 }

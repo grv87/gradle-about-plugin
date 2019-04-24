@@ -2,6 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
+      <module name="org.fidata.gradle.buildSrc.main" target="1.8" />
+      <module name="org.fidata.gradle.buildSrc.test" target="1.8" />
       <module name="org.fidata.gradle.gradle-about-plugin.compatTest" target="1.8" />
       <module name="org.fidata.gradle.gradle-about-plugin.functionalTest" target="1.8" />
       <module name="org.fidata.gradle.gradle-about-plugin.gradleTest" target="1.8" />
