@@ -1,23 +1,9 @@
 about_resource: .
-name: AboutCode-toolkit
-version: 3.4.0.pre1
-author:
-    - >-
-        Jillian Daguil, Chin Yeung Li, Philippe Ombredanne, Thomas Druez
-copyright: Copyright (c) 2013-2017 nexB Inc.
+name: gradle-about-plugin
+author: Basil Peace
+copyright: Copyright ©  Basil Peace
 description: |-
-    AboutCode Toolkit is a tool to process ABOUT files. An ABOUT file
-    provides a simple way to document the provenance (origin and license)
-    'about' a software component. This is a small text file stored in the
-    codebase side-by-side with the documented software component.
-homepage_url: http://www.nexb.com/community.html
-license_expression: apache-2.0
-licenses:
-    -   file: apache-2.0.LICENSE
-        key: apache-2.0
-        name: Apache License 2.0
-        url: https://enterprise.dejacode.com/urn/?urn=urn:dje:license:apache-2.0
-notice_file: NOTICE
-owner: nexB Inc.
-vcs_repository: https://github.com/nexB/aboutcode-toolkit.git
+    Parsing ABOUT files from Java and Gradle
+license_expression: Apache-2.0
+vcs_repository: https://github.com/FIDATA/gradle-about-plugin
 vcs_tool: git

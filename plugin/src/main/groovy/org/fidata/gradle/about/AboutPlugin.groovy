@@ -11,7 +11,7 @@ class AboutPlugin implements Plugin<Project> {
 
   @Override
   void apply(Project project) {
-    final About about = About.Builder.readFromFile(project.file("${ project.name }.ABOUT"))
+    final About about = About.readFromFile(project.file("${ project.name }.ABOUT"))
 
     project.extensions.add ABOUT_EXTENSION_NAME, about
   }
