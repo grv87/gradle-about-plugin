@@ -22,21 +22,6 @@ plugins {
   id 'org.fidata.about'
 }
 
-// TODO: move all this to .ABOUT file
-description = '' // TODO
-tags.set(['ABOUT', 'AboutCode', 'info', 'contacts', 'license', 'meta', 'metadata'])
-//noinspection GroovyUnusedAssignment
-license = 'Apache-2.0'
-//noinspection GroovyUnusedAssignment
-publicReleases = true
-contacts {
-  'grv87@yandex.ru' {
-    moniker 'Basil Peace'
-    github 'grv87'
-    roles 'owner', 'developer'
-  }
-}
-
 ext.rootDir = file('.')
 
 tasks.named('codenarcBuildSrc').configure {

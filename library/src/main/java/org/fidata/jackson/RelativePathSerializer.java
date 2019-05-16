@@ -8,26 +8,17 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystem;
 import java.nio.file.Path;
+import org.fidata.utils.PathRelativizer;
 
 public class RelativePathSerializer extends StdScalarSerializer<Path> {
-  private final Path res;
-  private final FileSystem resFileSystem;
-  private final Path resRoot;
-  public RelativePathSerializer(File res) {
+  private final PathRelativizer pathRelativizer;
+  public RelativePathSerializer(PathRelativizer pathRelativizer) {
     super(Path.class);
-    this.res = res.toPath();
-    this.resFileSystem = this.res.getFileSystem();
-    this.resRoot = this.res.getRoot();
+    this.pathRelativizer = pathRelativizer;
   }
 
   @Override
   public void serialize(Path value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-    if (
-      !resFileSystem.equals(value.getFileSystem()) ||
-      !resRoot.equals(value.getRoot())
-    ) {
-      throw new IllegalArgumentException("Path with different file system or root cannot be serialized relatively");
-    }
-    gen.writeString(res.relativize(value).toString());
+    gen.writeString(pathRelativizer.relativize(value).toString());
   }
 }

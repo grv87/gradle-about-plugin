@@ -10,12 +10,15 @@ import java.io.IOException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import lombok.Getter;
+import org.fidata.utils.PathAbsolutizer;
 
 public class RelativePathDeserializer extends StdScalarDeserializer<Path> {
-  private final Path src;
-  public RelativePathDeserializer(File src) {
+  @Getter
+  private final PathAbsolutizer pathAbsolutizer;
+  public RelativePathDeserializer(PathAbsolutizer pathAbsolutizer) {
     super(Path.class);
-    this.src = src.toPath();
+    this.pathAbsolutizer = pathAbsolutizer;
   }
 
   @Override
@@ -24,10 +27,9 @@ public class RelativePathDeserializer extends StdScalarDeserializer<Path> {
     final String nodeValue = node.textValue();
     Path relPath;
     try {
-      relPath = Paths.get(nodeValue);
+      return pathAbsolutizer.absolutize(nodeValue);
     } catch (InvalidPathException e) {
       throw new InvalidFormatException(jp, e.getMessage(), nodeValue, _valueClass);
     }
-    return src.resolve(relPath).toAbsolutePath();
   }
 }

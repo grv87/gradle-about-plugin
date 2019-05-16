@@ -1,9 +1,13 @@
 about_resource: .
 name: gradle-about-plugin
+owner: FIDATA
 author: Basil Peace
+gradle_author_github: grv87
 copyright: Copyright ©  Basil Peace
 description: |-
     Parsing ABOUT files from Java and Gradle
 license_expression: Apache-2.0
+internal_use_only: no
 vcs_repository: https://github.com/FIDATA/gradle-about-plugin
 vcs_tool: git
+gradle_keywords: ABOUT, AboutCode, info, contacts, license, meta, metadata

@@ -1,22 +1,30 @@
 package org.fidata.about;
 
+import static org.apache.commons.lang3.StringUtils.endsWithIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
+import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.github.jonpeterson.jackson.module.versioning.JsonVersionedModel;
 import com.github.jonpeterson.jackson.module.versioning.VersioningModule;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.io.BaseEncoding;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
+import java.nio.file.Path;
 import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -24,29 +32,30 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
-import org.fidata.jackson.ChecksumDeserializer;
-import org.fidata.jackson.ChecksumSerializer;
 import org.fidata.jackson.RelativePathDeserializer;
 import org.fidata.jackson.RelativePathSerializer;
 import org.fidata.jackson.SpdxAnyLicenseInfoDeserializer;
+import org.fidata.utils.PathAbsolutizer;
+import org.fidata.utils.PathRelativizer;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
-import java.nio.file.Path;
 
 @JsonDeserialize(builder = About.Builder.class)
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+@JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(builderClassName = "Builder")
 @JsonVersionedModel(propertyName = "specVersion", currentVersion = "3.1.2", toCurrentConverterClass = ToCurrentAboutConverter.class)
 @EqualsAndHashCode
 public final class About {
+  public static final String FILE_FIELD_SUFFIX = "_file";
+  public static final String URL_FIELD_SUFFIX = "_url";
+  private static final String CHECKSUM_FIELD_PREFIX = "checksum_";
+  private static final String PATH_ABSOLUTIZER = "PATH_ABSOLUTIZER";
   /**
    * Component description, as a short text
    */
   @Getter
   private final String description;
-
-  @Getter
-  private final List<String> xKeywords;
 
   /**
    * A direct URL to download the original file or archive documented by this ABOUT file
@@ -237,35 +246,77 @@ public final class About {
   @Getter
   private final String revision;
 
-  /**
-   * MD5 for the file documented by this ABOUT file in the "about_resource" field
-   */
-  @Getter
-  @JsonDeserialize(using = ChecksumDeserializer.class)
-  @JsonSerialize(using = ChecksumSerializer.class)
-  private final byte[] checksumMd5;
+  private static final BaseEncoding CHECKSUM_ENCODING = BaseEncoding.base16();
 
   /**
-   * SHA1 for the file documented by this ABOUT file in the "about_resource" field
+   * Checksums for the file documented by this ABOUT file in the "about_resource" field
    */
   @Getter
-  @JsonDeserialize(using = ChecksumDeserializer.class)
-  @JsonSerialize(using = ChecksumSerializer.class)
-  private final byte[] checksumSha1;
-
   @Singular
-  private final Map<String, Object> extValues;
+  @JsonIgnore
+  private final Map<String, byte[]> checksums;
+
+  /**
+   * Extension fields referencing files
+   */
+  @Getter
+  @Singular
+  @JsonIgnore
+  private final Map<String, Path> extFiles;
+
+  /**
+   * Extension fields referencing URLs
+   */
+  @Getter
+  @Singular
+  @JsonIgnore
+  private final Map<String, URL> extUrls;
+
+  /**
+   * Other (than file and URL) extension fields
+   */
+  @Getter
+  @Singular
+  @JsonIgnore
+  // TODO: on add test that name has no `file` or `url` suffix
+  private final Map<String, String> extStrings;
 
   @JsonAnyGetter
-  Map<String, Object> getExtValues() {
-    return this.extValues;
+  protected /* TOTEST */ Map<String, Object> getExtValues() {
+    ImmutableMap.Builder<String, Object> resultBuilder = ImmutableMap.builder();
+    for (Map.Entry<String, byte[]> entry : checksums.entrySet()) {
+      resultBuilder.put(CHECKSUM_FIELD_PREFIX + entry.getKey(), CHECKSUM_ENCODING.encode(entry.getValue()));
+    }
+    resultBuilder.putAll(extStrings);
+    for (Map.Entry<String, Path> entry : extFiles.entrySet()) {
+      resultBuilder.put(entry.getKey() + FILE_FIELD_SUFFIX, entry.getValue());
+    }
+    for (Map.Entry<String, URL> entry : extUrls.entrySet()) {
+      resultBuilder.put(entry.getKey() + URL_FIELD_SUFFIX, entry.getValue());
+    }
+    return resultBuilder.build();
   }
 
   @JsonPOJOBuilder(withPrefix = "")
   public final static class Builder {
+    private final PathAbsolutizer pathAbsolutizer;
+
+    public Builder(@JacksonInject(PATH_ABSOLUTIZER) PathAbsolutizer pathAbsolutizer) {
+      this.pathAbsolutizer = pathAbsolutizer;
+    }
+
     @JsonAnySetter
-    protected /*TOTEST*/ void unknownField(String key, Object value) {
-      extValue(key, value);
+    protected /*TOTEST*/ void unknownField(String key, String value) throws MalformedURLException {
+      // TODO: more efficient way ?
+      if (endsWithIgnoreCase(key, FILE_FIELD_SUFFIX)) {
+        extFile(key.substring(0, key.length() - FILE_FIELD_SUFFIX.length()), pathAbsolutizer.absolutize(value));
+      } else if (endsWithIgnoreCase(key, URL_FIELD_SUFFIX)) {
+        extUrl(key.substring(0, key.length() - URL_FIELD_SUFFIX.length()), new URL(value));
+      } else if (startsWithIgnoreCase(key, CHECKSUM_FIELD_PREFIX)) {
+        checksum(key.substring(CHECKSUM_FIELD_PREFIX.length()), CHECKSUM_ENCODING.decode(value));
+      } else {
+        extString(key, value);
+      }
     }
   }
 
@@ -274,10 +325,16 @@ public final class About {
   public static About readFromFile(File src) throws IOException {
     final ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
 
+    PathAbsolutizer pathAbsolutizer = new PathAbsolutizer(src.getParentFile());
+
     final SimpleModule deserializersModule = new SimpleModule();
-    deserializersModule.addDeserializer(Path.class, new RelativePathDeserializer(src));
+    deserializersModule.addDeserializer(Path.class, new RelativePathDeserializer(pathAbsolutizer));
     deserializersModule.addDeserializer(AnyLicenseInfo.class, new SpdxAnyLicenseInfoDeserializer());
     objectMapper.registerModule(deserializersModule);
+
+    InjectableValues.Std injectableValues = new InjectableValues.Std();
+    injectableValues.addValue(PATH_ABSOLUTIZER, pathAbsolutizer);
+    objectMapper.setInjectableValues(injectableValues);
 
     objectMapper.registerModule(VERSIONING_MODULE);
 
@@ -287,8 +344,10 @@ public final class About {
   public void writeToFile(File res) throws IOException {
     final ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
 
+    PathRelativizer pathRelativizer = new PathRelativizer(res.getParentFile());
+
     final SimpleModule serializersModule = new SimpleModule();
-    serializersModule.addSerializer(Path.class, new RelativePathSerializer(res));
+    serializersModule.addSerializer(Path.class, new RelativePathSerializer(pathRelativizer));
     serializersModule.addSerializer(AnyLicenseInfo.class, new ToStringSerializer());
     objectMapper.registerModule(serializersModule);
 

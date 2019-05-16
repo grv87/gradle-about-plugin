@@ -1,4 +1,4 @@
-package org.fidata.gradle.about
+package org.fidata.about.gradle
 
 import groovy.transform.CompileStatic
 import org.fidata.about.About
