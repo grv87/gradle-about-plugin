@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class VersionParser {
-  private static final Pattern VERSION_PATTERN = Pattern.compile("(\\d+)\\.(\\d+)(.(\\d+))?")
+  private static final Pattern VERSION_PATTERN = Pattern.compile("(\\d+)\\.(\\d+)(.(\\d+))?");
 
   /**
    * Parses simple string version, like <code>3.1</code> or <code>2.1.5</code>

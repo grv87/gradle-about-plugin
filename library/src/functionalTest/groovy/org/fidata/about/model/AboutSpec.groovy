@@ -1,6 +1,6 @@
-package org.fidata.about
+package org.fidata.about.model
 
-import static org.fidata.about.TestingUtils.getTestLoc
+
 import spock.lang.Specification
 
 class AboutSpec extends Specification {
@@ -24,7 +24,7 @@ class AboutSpec extends Specification {
 from testing_utils import extract_test_loc
 from testing_utils import get_temp_file
 */
-  def test_About_load_ignores_original_field_order_and_uses_standard_predefined_order():
+ /* def test_About_load_ignores_original_field_order_and_uses_standard_predefined_order():
     // fields in this file are not in the standard order
     testFile = getTestLoc('test_model/parse/ordered_fields.ABOUT')
     a = model.About(test_file)
@@ -32,7 +32,7 @@ from testing_utils import get_temp_file
 
     expected = ['about_resource', 'name', 'version', 'download_url']
     result = [f.name for f in a.all_fields() if f.present]
-    assert expected == result
+    assert expected == result*/
 
 /*    def test_About_duplicate_field_names_are_detected_with_different_case(self):
         # This test is failing because the YAML does not keep the order when

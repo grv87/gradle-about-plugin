@@ -20,3 +20,4 @@ NOT GOALS
 (run of `about check` does that).
 2. Saving (serialization) of ABOUT files
 3. Keep order of fields
+4. Read text files referenced from ABOUT file (or even assert that they exist)

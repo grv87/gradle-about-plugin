@@ -45,8 +45,6 @@ handler.setLevel(logging.DEBUG)
 logger.addHandler(handler)
 
 */
-  private static final File TESTDATA_DIR = new File(Resources.getResource(this.Class, '').toURI())
-
   /**
    * Returns the location of a test file or directory given a path relative to
    * the testdata directory
@@ -56,7 +54,7 @@ logger.addHandler(handler)
    * @return
    */
   static File getTestLoc(String path, boolean mustExists = true) {
-    File testLoc = new File(TESTDATA_DIR, path)
+    File testLoc = new File(Resources.getResource(this, path).toURI())
     if (mustExists) {
       assert testLoc.exists()
     }

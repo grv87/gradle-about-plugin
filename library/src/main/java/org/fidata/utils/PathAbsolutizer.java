@@ -1,7 +1,6 @@
 package org.fidata.utils;
 
 import java.io.File;
-import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import lombok.Getter;
@@ -27,7 +26,13 @@ public final class PathAbsolutizer {
     return baseDir.resolve(relPath).toAbsolutePath();
   }
 
-  public Path absolutize(String relPath) throws InvalidPathException {
+  /**
+   *
+   * @param relPath
+   * @throws java.nio.file.InvalidPathException
+   * @return
+   */
+  public Path absolutize(String relPath) {
     return absolutize(Paths.get(relPath));
   }
 }
