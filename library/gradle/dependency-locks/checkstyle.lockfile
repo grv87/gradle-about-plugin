@@ -9,10 +9,10 @@ com.google.guava:guava:27.1-jre
 com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava
 com.google.j2objc:j2objc-annotations:1.1
 com.ibm.icu:icu4j:63.1
-com.puppycrawl.tools:checkstyle:8.19
+com.puppycrawl.tools:checkstyle:8.20
 commons-beanutils:commons-beanutils:1.9.3
 commons-collections:commons-collections:3.2.2
-info.picocli:picocli:3.9.5
+info.picocli:picocli:3.9.6
 net.sf.saxon:Saxon-HE:9.9.1-2
 org.antlr:antlr4-runtime:4.7.2
 org.checkerframework:checker-qual:2.5.2

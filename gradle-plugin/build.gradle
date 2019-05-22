@@ -21,7 +21,7 @@ plugins {
   id 'org.fidata.project.groovy'
   id 'org.fidata.plugin'
 }
-// publicReleases = true // TODO
+publicReleases = true // TODO
 
 ext.rootDir = file('.')
 
@@ -43,9 +43,8 @@ stutter {
 tasks.named('codenarcCompatTest').configure {
   disabledRules.add 'JavaIoPackageAccess' // TODO
 }
-/*pluginBundle.plugins {
+pluginBundle.plugins {
   aboutPlugin {
     displayName = 'Gradle About plugin'
   }
 }
-*/
