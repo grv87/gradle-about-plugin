@@ -1,35 +1,39 @@
 package org.fidata.about.model;
 
 import static org.apache.commons.lang3.StringUtils.endsWithIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 import com.fasterxml.jackson.annotation.JacksonInject;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.github.jonpeterson.jackson.module.versioning.JsonVersionedModel;
+import com.github.jonpeterson.jackson.module.versioning.VersionedModelConverter;
 import com.github.jonpeterson.jackson.module.versioning.VersioningModule;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.io.BaseEncoding;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -50,102 +54,129 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 @Builder(builderClassName = "Builder")
 @JsonVersionedModel(propertyName = "specVersion", currentVersion = "3.1.2", toCurrentConverterClass = About.ToCurrentAboutConverter.class)
 @EqualsAndHashCode
-public final class About {
-  public static final String FILE_FIELD_SUFFIX = "_file";
-  public static final String URL_FIELD_SUFFIX = "_url";
+public class About {
+  private static final String FILE_FIELD_SUFFIX = "_file";
+  private static final String URL_FIELD_SUFFIX = "_url";
   private static final String CHECKSUM_FIELD_PREFIX = "checksum_";
-  private static final String PATH_ABSOLUTIZER = "PATH_ABSOLUTIZER";
+
+  private static final String CURRENT_SPEC_VERSION = "3.1.2";
+
+  @Getter
+  private final FileTextField aboutResource;
+
+  @Getter
+  private final StringField name;
+
+  @Getter
+  @lombok.Builder.Default
+  private final StringField specVersion = new StringField(CURRENT_SPEC_VERSION); // TOTEST
+
   /**
    * Component description, as a short text
    */
-  @Getter
-  private final String description;
+  @JsonIgnore
+  public final StringField getDescription() {
+    return getString("description");
+  }
 
   /**
    * A direct URL to download the original file or archive documented by this ABOUT file
    */
-  @Getter
-  private final URL downloadUrl;
+  @JsonIgnore
+  public final UrlField getDownloadUrl() {
+    return getUrl("download");
+  }
 
   /**
    * URL to the homepage for this component
    */
-  @Getter
-  private final URL homepageUrl;
+  @JsonIgnore
+  public final UrlField getHomepageUrl() {
+    return getUrl("homepage");
+  }
 
   /**
    * Changelog file for the component
    */
-  @Getter
-  private final Path changelogFile;
+  @JsonIgnore
+  public final FileTextField getChangelogFile() {
+    return getFile("changelog");
+  }
 
   /**
    * Notes and comments about the component
    */
-  @Getter
-  private final String notes;
+  @JsonIgnore
+  public final StringField getNotes() {
+    return getString("notes");
+  }
 
   /**
    * The name of the primary organization or person(s) that owns or provides the component
    */
-  @Getter
-  private final String owner;
+  @JsonIgnore
+  public final StringField getOwner() {
+    return getString("owner");
+  }
 
   /**
    * URL to the homepage for the owner
    */
-  @Getter
-  private final URL ownerUrl;
+  @JsonIgnore
+  public final UrlField getOwnerUrl() {
+    return getUrl("owner");
+  }
 
   /**
    * Contact information (such as an email address or physical address) for the component owner
    */
-  @Getter
-  private final String contact;
+  @JsonIgnore
+  public final StringField getContact() {
+    return getString("contact");
+  }
 
   /**
    * Name of the organization(s) or person(s) that authored the component
    */
-  @Getter
-  private final String author;
+  @JsonIgnore
+  public final StringField getAuthor() {
+    return getString("author");
+  }
 
   /**
    * Author file for the component
    */
-  @Getter
-  private final Path authorFile;
+  @JsonIgnore
+  public final FileTextField getAuthorFile() {
+    return getFile("author");
+  }
 
   /**
    * Copyright statement for the component
    */
-  @Getter
-  private final String copyright;
+  @JsonIgnore
+  public final StringField getCopyright() {
+    return getString("copyright");
+  };
 
   /**
    * Legal notice or credits for the component
    */
-  @Getter
-  private final Path noticeFile;
+  @JsonIgnore
+  public final FileTextField getNoticeFile() {
+    return getFile("notice");
+  }
 
   /**
    * URL to a legal notice for the component
    */
-  @Getter
-  private final URL noticeUrl;
+  @JsonIgnore
+  public final UrlField getNoticeUrl() {
+    return getUrl("notice");
+  }
 
-  /**
-   * License file that applies to the component
-   *
-   * For example, the name of a license file such as LICENSE or COPYING file extracted from a downloaded archive
-   */
   @Getter
-  private final Path licenseFile;
-
-  /**
-   * URL to the license text for the component
-   */
-  @Getter
-  private final URL licenseUrl;
+  private final List<License> licenses;
 
   /**
    * The license expression that apply to the component
@@ -157,25 +188,13 @@ public final class About {
   private final AnyLicenseInfo licenseExpression;
 
   /**
-   * The license short name for the license
-   */
-  @Getter
-  private final String licenseName;
-
-  /**
-   * The license key(s) for the component
-   */
-  @Getter
-  private final String licenseKey;
-
-  /**
    * Set this flag to yes if the component license requires source code redistribution
    *
    * Defaults to no when absent
    */
   @Getter
   @lombok.Builder.Default
-  private final boolean redistribute = false;
+  private final BooleanField redistribute = BooleanField.FALSE;
 
   /**
    * Set this flag to yes if the component license requires publishing an attribution or credit notice
@@ -184,7 +203,7 @@ public final class About {
    */
   @Getter
   @lombok.Builder.Default
-  private final boolean attribute = false;
+  private final BooleanField attribute = BooleanField.FALSE;
 
   /**
    * Set this flag to yes if the component license requires tracking changes made to a the component
@@ -193,7 +212,7 @@ public final class About {
    */
   @Getter
   @lombok.Builder.Default
-  private final boolean trackChanges = false;
+  private final BooleanField trackChanges = BooleanField.FALSE;
 
   /**
    * Set this flag to yes if the component has been modified
@@ -202,7 +221,7 @@ public final class About {
    */
   @Getter
   @lombok.Builder.Default
-  private final boolean modified = false;
+  private final BooleanField modified = BooleanField.FALSE;
 
   /**
    * Set this flag to yes if the component is used internal only
@@ -211,104 +230,81 @@ public final class About {
    */
   @Getter
   @lombok.Builder.Default
-  private final boolean internalUseOnly = false;
+  private final BooleanField internalUseOnly = BooleanField.FALSE;
 
   /**
    * VCS tool such as git, svn, cvs, etc.
    */
   @Getter
-  private final String vcsTool;
+  private final StringField vcsTool;
 
   /**
    * Typically a URL or some other identifier used by a VCS tool
    * to point to a repository such as an SVN or Git repository URL
    */
   @Getter
-  private final String vcsRepository;
+  private final StringField vcsRepository;
 
   /**
    * Path used by a particular VCS tool to point to a file, directory or module inside a repository
    */
   @Getter
-  private final String vcsPath;
+  private final StringField vcsPath;
 
   /**
    * Tag name or path used by a particular VCS tool
    */
   @Getter
-  private final String vcsTag;
+  private final StringField vcsTag;
 
   /**
    * Branch name or path used by a particular VCS tool
    */
   @Getter
-  private final String vcsBranch;
+  private final StringField vcsBranch;
 
   /**
    * Revision identifier such as a revision hash or version number
    */
   @Getter
-  private final String revision;
-
-  private static final BaseEncoding CHECKSUM_ENCODING = BaseEncoding.base16();
+  private final StringField revision;
 
   /**
    * Checksums for the file documented by this ABOUT file in the "about_resource" field
    */
-  @Getter
-  @Singular
+  @Getter // TODO: check that it is immutable
   @JsonIgnore
-  private final LinkedHashMap<String, byte[]> checksums;
+  @Singular
+  private final Map<String, ChecksumField> checksums;
+
+  @Singular
+  private final Map<String, ? extends Field> fields;
 
   /**
    * Extension fields referencing files
    */
-  @Getter
-  @Singular
-  @JsonIgnore
-  private final LinkedHashMap<String, Path> extFiles;
+  public final FileTextField getFile(String key) {
+    return (FileTextField)fields.get(key + FILE_FIELD_SUFFIX);
+  }
 
   /**
    * Extension fields referencing URLs
    */
-  @Getter
-  @Singular
   @JsonIgnore
-  private final LinkedHashMap<String, URL> extUrls;
+  public final UrlField getUrl(String key) {
+    return (UrlField)fields.get(key + URL_FIELD_SUFFIX);
+  }
 
   /**
    * Other (than file and URL) extension fields
    */
-  @Getter
-  @Singular
   @JsonIgnore
-  // TODO: on add test that name has no `file` or `url` suffix
-  private final LinkedHashMap<String, String> extStrings;
-
-  @JsonAnyGetter
-  protected /* TOTEST */ Map<String, Object> getExtValues() {
-    ImmutableMap.Builder<String, Object> resultBuilder = ImmutableMap.builder();
-    for (Map.Entry<String, byte[]> entry : checksums.entrySet()) {
-      resultBuilder.put(CHECKSUM_FIELD_PREFIX + entry.getKey(), CHECKSUM_ENCODING.encode(entry.getValue()));
-    }
-    resultBuilder.putAll(extStrings);
-    for (Map.Entry<String, Path> entry : extFiles.entrySet()) {
-      resultBuilder.put(entry.getKey() + FILE_FIELD_SUFFIX, entry.getValue());
-    }
-    for (Map.Entry<String, URL> entry : extUrls.entrySet()) {
-      resultBuilder.put(entry.getKey() + URL_FIELD_SUFFIX, entry.getValue());
-    }
-    return resultBuilder.build();
+  public final StringField getString(String key) {
+    return (StringField)fields.get(key);
   }
 
   @JsonPOJOBuilder(withPrefix = "")
   public final static class Builder {
-    private final PathAbsolutizer pathAbsolutizer;
-
-    public Builder(@JacksonInject(PATH_ABSOLUTIZER) PathAbsolutizer pathAbsolutizer) {
-      this.pathAbsolutizer = pathAbsolutizer;
-    }
-
     @JsonAnySetter
     protected /*TOTEST*/ void unknownField(String key, String value) throws MalformedURLException {
       // TODO: more efficient way ?
@@ -337,7 +333,7 @@ public final class About {
     objectMapper.registerModule(deserializersModule);
 
     InjectableValues.Std injectableValues = new InjectableValues.Std();
-    injectableValues.addValue(PATH_ABSOLUTIZER, pathAbsolutizer);
+    injectableValues.addValue(FileTextField.PATH_ABSOLUTIZER, pathAbsolutizer);
     objectMapper.setInjectableValues(injectableValues);
 
     objectMapper.registerModule(VERSIONING_MODULE);
@@ -345,7 +341,41 @@ public final class About {
     return objectMapper.readValue(src, About.class);
   }
 
-  public static class ToCurrentAboutConverter implements VersionedModelConverter {
+  protected static class AboutDeserializer extends StdDeserializer<About> {
+    public AboutDeserializer() {
+      super(About.class);
+    }
+
+    @Override
+    public About deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+      Builder builder = new Builder();
+      String fieldName;
+      while ((fieldName = p.nextFieldName()) != null) {
+        if (equalsIgnoreCase(fieldName, "about_resource")) {
+          builder.aboutResource(p.readValueAs(FileTextField.class));
+        } else if (equalsIgnoreCase(fieldName, "name")) {
+          builder.name(p.readValueAs(StringField.class));
+        } else if (startsWithIgnoreCase(fieldName, CHECKSUM_FIELD_PREFIX)) {
+          builder.checksum(fieldName.substring(CHECKSUM_FIELD_PREFIX.length()), p.readValueAs(ChecksumField.class));
+        } else {
+          Field fieldValue;
+          if (endsWithIgnoreCase(fieldName, FILE_FIELD_SUFFIX)) {
+            fieldName = fieldName.substring(0, fieldName.length() - FILE_FIELD_SUFFIX.length());
+            fieldValue = p.readValueAs(FileTextField.class);
+          } else if (endsWithIgnoreCase(fieldName, URL_FIELD_SUFFIX)) {
+            fieldName = fieldName.substring(0, fieldName.length() - URL_FIELD_SUFFIX.length());
+            fieldValue = p.readValueAs(UrlField.class);
+          } else {
+            fieldValue = p.readValueAs(StringField.class);
+          }
+          builder.field(fieldName, fieldValue);
+        }
+      }
+      return builder.build();
+    }
+  }
+
+  protected static class ToCurrentAboutConverter implements VersionedModelConverter {
     private static final Version VERSION_2_0 = new Version(2, 0, 0, "", null, null);
     // TODO: private static final Version VERSION_3_0 = new Version(3, 0, 0, "", null, null);
     private static final Version VERSION_3_1 = new Version(3, 1, 0, "", null, null);
@@ -356,7 +386,7 @@ public final class About {
       Version targetVersion = VersionParser.parse(targetModelVersion);
 
       if (targetVersion.compareTo(VERSION_3_1) >= 0 && version.compareTo(VERSION_3_1) <= 0) {
-        // TODO: test that case is ignored here
+        // TODO: test that 1) case is ignored here 2) field names should be before PropertyNamingStrategy transformation
         modelData.put("homepage_url", modelData.get("home_url").textValue());
         // Making all paths starting with / relative
         Iterator<String> fieldNamesIterator = modelData.fieldNames();

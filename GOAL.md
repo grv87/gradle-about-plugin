@@ -19,3 +19,4 @@ NOT GOALS
 1. Java library might not be able to run full validation of ABOUT file
 (run of `about check` does that).
 2. Saving (serialization) of ABOUT files
+3. Keep order of fields
