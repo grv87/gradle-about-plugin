@@ -18,14 +18,14 @@
  * permissions and limitations under the License.
  */
 plugins {
-  /*id 'java'
+  id 'java'
   id 'groovy'
   id 'java-library'
   id 'java-gradle-plugin'
-  id 'io.franzbecker.gradle-lombok' version ''*/
-  id 'org.fidata.project.java' version '6.0.1-hotfix-publishPluginJar-SNAPSHOT' apply false
+  // id 'io.franzbecker.gradle-lombok' version ''
+  /*id 'org.fidata.project.java' version '6.0.1-hotfix-publishPluginJar-SNAPSHOT' apply false
   id 'org.fidata.project.groovy' version '6.0.1-hotfix-publishPluginJar-SNAPSHOT' apply false
-  id 'org.fidata.plugin' version '6.0.1-hotfix-publishPluginJar-SNAPSHOT' apply false
+  id 'org.fidata.plugin' version '6.0.1-hotfix-publishPluginJar-SNAPSHOT' apply false*/
 }
 
 // group = 'org.fidata.gradle'
@@ -34,9 +34,9 @@ ext.rootDir = file('..')
 
 apply from: new File(ext.rootDir, 'buildSrc/gradle/load-properties.gradle')
 
-apply plugin: 'org.fidata.project.java'
+/*apply plugin: 'org.fidata.project.java'
 apply plugin: 'org.fidata.project.groovy'
-apply plugin: 'org.fidata.plugin'
+apply plugin: 'org.fidata.plugin'*/
 
 // dependencyLocking.lockAllConfigurations()
 
@@ -55,10 +55,12 @@ repositories {
 }*/
 
 dependencies {
-  runtimeOnly(group: 'org.fidata.project.groovy', name: 'org.fidata.project.groovy.gradle.plugin', version: '6.0.1-hotfix-publishPluginJar-SNAPSHOT').status = 'integration'
-  runtimeOnly(group: 'org.fidata.plugin', name: 'org.fidata.plugin.gradle.plugin', version: '6.0.1-hotfix-publishPluginJar-SNAPSHOT').status = 'integration'
+  runtimeOnly(group: 'org.fidata.project.groovy', name: 'org.fidata.project.groovy.gradle.plugin', version: '6.0.1-hotfix-publishPluginJar-SNAPSHOT') // .status = 'integration'
+  runtimeOnly(group: 'org.fidata.plugin', name: 'org.fidata.plugin.gradle.plugin', version: '6.0.1-hotfix-publishPluginJar-SNAPSHOT') // .status = 'integration'
 }
 
+/*
+TODO:
 configurations.all {
   resolutionStrategy.dependencySubstitution {
     substitute module('org.fidata:about-library') with project(':')
@@ -80,3 +82,5 @@ apply from: new File(ext.rootDir, 'plugin/gradle/gradle-plugin-markers.gradle')
 compatTest.enabled = false
 checkstyleMain.enabled = false
 codenarcMain.enabled = false
+
+*/

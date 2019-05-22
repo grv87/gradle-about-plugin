@@ -1,4 +1,4 @@
-package org.fidata.about;
+package org.fidata.about.model;
 
 import static org.apache.commons.lang3.StringUtils.endsWithIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.InjectableValues;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -14,7 +15,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.github.jonpeterson.jackson.module.versioning.JsonVersionedModel;
 import com.github.jonpeterson.jackson.module.versioning.VersioningModule;
@@ -25,6 +28,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -33,10 +38,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
 import org.fidata.jackson.RelativePathDeserializer;
-import org.fidata.jackson.RelativePathSerializer;
 import org.fidata.jackson.SpdxAnyLicenseInfoDeserializer;
+import org.fidata.jackson.VersionParser;
 import org.fidata.utils.PathAbsolutizer;
-import org.fidata.utils.PathRelativizer;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
 
 @JsonDeserialize(builder = About.Builder.class)
@@ -44,7 +48,7 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(builderClassName = "Builder")
-@JsonVersionedModel(propertyName = "specVersion", currentVersion = "3.1.2", toCurrentConverterClass = ToCurrentAboutConverter.class)
+@JsonVersionedModel(propertyName = "specVersion", currentVersion = "3.1.2", toCurrentConverterClass = About.ToCurrentAboutConverter.class)
 @EqualsAndHashCode
 public final class About {
   public static final String FILE_FIELD_SUFFIX = "_file";
@@ -254,7 +258,7 @@ public final class About {
   @Getter
   @Singular
   @JsonIgnore
-  private final Map<String, byte[]> checksums;
+  private final LinkedHashMap<String, byte[]> checksums;
 
   /**
    * Extension fields referencing files
@@ -262,7 +266,7 @@ public final class About {
   @Getter
   @Singular
   @JsonIgnore
-  private final Map<String, Path> extFiles;
+  private final LinkedHashMap<String, Path> extFiles;
 
   /**
    * Extension fields referencing URLs
@@ -270,7 +274,7 @@ public final class About {
   @Getter
   @Singular
   @JsonIgnore
-  private final Map<String, URL> extUrls;
+  private final LinkedHashMap<String, URL> extUrls;
 
   /**
    * Other (than file and URL) extension fields
@@ -279,7 +283,7 @@ public final class About {
   @Singular
   @JsonIgnore
   // TODO: on add test that name has no `file` or `url` suffix
-  private final Map<String, String> extStrings;
+  private final LinkedHashMap<String, String> extStrings;
 
   @JsonAnyGetter
   protected /* TOTEST */ Map<String, Object> getExtValues() {
@@ -341,18 +345,38 @@ public final class About {
     return objectMapper.readValue(src, About.class);
   }
 
-  public void writeToFile(File res) throws IOException {
-    final ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+  public static class ToCurrentAboutConverter implements VersionedModelConverter {
+    private static final Version VERSION_2_0 = new Version(2, 0, 0, "", null, null);
+    // TODO: private static final Version VERSION_3_0 = new Version(3, 0, 0, "", null, null);
+    private static final Version VERSION_3_1 = new Version(3, 1, 0, "", null, null);
 
-    PathRelativizer pathRelativizer = new PathRelativizer(res.getParentFile());
+    @Override
+    public ObjectNode convert(ObjectNode modelData, String modelVersion, String targetModelVersion, JsonNodeFactory nodeFactory) {
+      Version version = VersionParser.parse(modelVersion);
+      Version targetVersion = VersionParser.parse(targetModelVersion);
 
-    final SimpleModule serializersModule = new SimpleModule();
-    serializersModule.addSerializer(Path.class, new RelativePathSerializer(pathRelativizer));
-    serializersModule.addSerializer(AnyLicenseInfo.class, new ToStringSerializer());
-    objectMapper.registerModule(serializersModule);
+      if (targetVersion.compareTo(VERSION_3_1) >= 0 && version.compareTo(VERSION_3_1) <= 0) {
+        // TODO: test that case is ignored here
+        modelData.put("homepage_url", modelData.get("home_url").textValue());
+        // Making all paths starting with / relative
+        Iterator<String> fieldNamesIterator = modelData.fieldNames();
+        String fieldName;
+        while ((fieldName = fieldNamesIterator.next()) != null) {
+          if (endsWithIgnoreCase(fieldName, FILE_FIELD_SUFFIX)) {
+            String fieldValue = modelData.get(fieldName).textValue();
+            if (fieldValue.startsWith("/")) {
+              modelData.set(fieldName, new TextNode("." + fieldValue));
+            }
+          }
+        }
+      }
 
-    objectMapper.registerModule(VERSIONING_MODULE);
+      if (targetVersion.compareTo(VERSION_2_0) >= 0 && version.compareTo(VERSION_2_0) <= 0) {
+        modelData.put("license_file", modelData.get("license_text_file").textValue());
+        modelData.put("license_expression", modelData.get("license_spdx").textValue());
+      }
 
-    objectMapper.writeValue(res, this);
+      return modelData;
+    }
   }
 }

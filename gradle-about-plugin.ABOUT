@@ -1,13 +1,44 @@
 about_resource: .
 name: gradle-about-plugin
+gradle_versioning_system: semver-2.0.0
 owner: FIDATA
-author: Basil Peace
-gradle_author_github: grv87
+# author: Basil Peace
 copyright: Copyright ©  Basil Peace
 description: |-
     Parsing ABOUT files from Java and Gradle
 license_expression: Apache-2.0
+licenses:
+  - key: Apache-2.0
+    name: Apache-2.0
+    file: LICENSE
+    maven_distribution: repo
 internal_use_only: no
 vcs_repository: https://github.com/FIDATA/gradle-about-plugin
 vcs_tool: git
-gradle_keywords: ABOUT, AboutCode, info, contacts, license, meta, metadata
+maven_developers:
+  - id: grv87
+    name: Basil Peace
+    organization: FIDATA
+    roles:
+      - owner
+      - developer
+    timezone: Europe/Moscow
+    properties:
+      github: grv87
+      twitter: grv87
+maven_organization:
+  name: FIDATA
+  url: https://fidata.org/
+maven_issue_management:
+  system: GitHub
+  url: https://github.com/FIDATA/gradle-about-plugin/issues
+maven_ci_management:
+  system: Jenkins
+  url: https://jenkins.fidata.org/job/Github/job/gradle-about-plugin/
+gradle_keywords:
+  - ABOUT
+  - AboutCode
+  - info
+  - contacts
+  - license
+  - metametadata

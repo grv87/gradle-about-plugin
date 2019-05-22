@@ -19,7 +19,7 @@
  */
 plugins {
   id 'org.fidata.project'
-  id 'org.fidata.about'
+  // id 'org.fidata.about'
 }
 
 ext.rootDir = file('.')
