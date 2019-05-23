@@ -17,5 +17,4 @@ public abstract class Field<T> {
   public Field(T value) {
     this.value = value;
   }
-
 }

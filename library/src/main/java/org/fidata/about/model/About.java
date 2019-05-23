@@ -1,18 +1,16 @@
 package org.fidata.about.model;
 
-import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.apache.commons.lang3.StringUtils.endsWithIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 import static org.fidata.about.model.FileTextField.PATH_ABSOLUTIZER;
-import com.fasterxml.jackson.annotation.JacksonInject;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.InjectableValues;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -24,47 +22,61 @@ import com.github.jonpeterson.jackson.module.versioning.VersionedModelConverter;
 import com.github.jonpeterson.jackson.module.versioning.VersioningModule;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.Singular;
+import lombok.experimental.SuperBuilder;
 import org.fidata.jackson.RelativePathDeserializer;
 import org.fidata.jackson.SpdxAnyLicenseInfoDeserializer;
 import org.fidata.jackson.VersionParser;
 import org.fidata.utils.PathAbsolutizer;
 import org.spdx.rdfparser.license.AnyLicenseInfo;
+import org.spdx.rdfparser.license.SpdxNoneLicense;
 
-@JsonDeserialize(builder = About.Builder.class)
-@JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder(builderClassName = "Builder")
-@JsonVersionedModel(propertyName = "specVersion", currentVersion = "3.1.2", toCurrentConverterClass = About.ToCurrentAboutConverter.class)
-@EqualsAndHashCode
-public class About {
-  private static final String FILE_FIELD_SUFFIX = "_file";
-  private static final String URL_FIELD_SUFFIX = "_url";
+@JsonDeserialize(builder = About.AboutBuilderImpl.class)
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+public class About extends AbstractFieldSet {
   private static final String CHECKSUM_FIELD_PREFIX = "checksum_";
 
   private static final String CURRENT_SPEC_VERSION = "3.1.2";
 
+  /**
+   * The resource this file referencing to
+   */
   @Getter
   @NonNull
   private final FileTextField aboutResource;
 
+  /**
+   * Component name
+   */
   @Getter
   @NonNull
   private final StringField name;
 
+  /**
+   * Component or package version
+   *
+   * A component or package usually has a version, such as a revision number or hash from a version control system
+   * (for a snapshot checked out from VCS such as Subversion or Git).
+   * If not available, the version should be the date the component was provisioned,
+   * in an ISO date format such as 'YYYY-MM-DD'.
+   */
+  public final StringField getVersion() {
+    return getString("version");
+  }
+
+  /**
+   * The version of the ABOUT file format specification used for this file
+   *
+   * This is provided as a hint to readers and tools in order to support future versions of this specification
+   */
   @Getter
   @lombok.Builder.Default
   private final StringField specVersion = new StringField(CURRENT_SPEC_VERSION); // TOTEST
@@ -170,7 +182,8 @@ public class About {
    * between multiple license identifiers, such as a choice among multiple licenses
    */
   @Getter
-  private final AnyLicenseInfo licenseExpression;
+  @lombok.Builder.Default
+  private final AnyLicenseInfo licenseExpression = new SpdxNoneLicense();
 
   /**
    * Set this flag to yes if the component license requires source code redistribution
@@ -221,7 +234,7 @@ public class About {
    * VCS tool such as git, svn, cvs, etc.
    */
   public final StringField getVcsTool() {
-    return getString("vcsTool");
+    return getString("vcs_tool");
   }
 
   /**
@@ -229,28 +242,28 @@ public class About {
    * to point to a repository such as an SVN or Git repository URL
    */
   public final StringField getVcsRepository() {
-    return getString("vcsRepository");
+    return getString("vcs_repository");
   }
 
   /**
    * Path used by a particular VCS tool to point to a file, directory or module inside a repository
    */
   public final StringField getVcsPath() {
-    return getString("vcsPath");
+    return getString("vcs_path");
   }
 
   /**
    * Tag name or path used by a particular VCS tool
    */
   public final StringField getVcsTag() {
-    return getString("vcsTag");
+    return getString("vcs_tag");
   }
 
   /**
    * Branch name or path used by a particular VCS tool
    */
   public final StringField getVcsBranch() {
-    return getString("vcsBranch");
+    return getString("vcs_branch");
   }
 
   /**
@@ -267,77 +280,29 @@ public class About {
   @Singular
   private final Map<String, ChecksumField> checksums;
 
-  @Singular
-  private final Map<String, ? extends Field> fields;
-
-  /**
-   * Extension fields referencing files
-   */
-  public final FileTextField getFile(String key) {
-    return (FileTextField)fields.get(Locale.ROOT + FILE_FIELD_SUFFIX);
-  }
-
-  /**
-   * Extension fields referencing files
-   */
-  public final FileTextField getFile(String extensionPrefix, String key) {
-    return (FileTextField)fields.get(extensionPrefix + capitalize(key) + FILE_FIELD_SUFFIX); // TODO
-  }
-
-  /**
-   * Extension fields referencing URLs
-   */
-  public final UrlField getUrl(String key) {
-    return (UrlField)fields.get(key + URL_FIELD_SUFFIX);
-  }
-
-  /**
-   * Extension fields referencing URLs
-   */
-  public final UrlField getUrl(String extensionPrefix, String key) {
-    return (UrlField)fields.get(extensionPrefix + capitalize(key) + URL_FIELD_SUFFIX);
-  }
-
-  /**
-   * Other (than file and URL) extension fields
-   */
-  public final StringField getString(String key) {
-    return (StringField)fields.get(key);
-  }
-
-  /**
-   * Other (than file and URL) extension fields
-   */
-  public final StringField getString(String extensionPrefix, String key) {
-    return (StringField)fields.get(extensionPrefix + capitalize(key));
-  }
-
   @JsonPOJOBuilder(withPrefix = "")
-  @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-  public final static class Builder {
-    @Setter
-    @JacksonInject(PATH_ABSOLUTIZER)
-    private PathAbsolutizer pathAbsolutizer;
-
-    @JsonAnySetter
-    protected /*TOTEST*/ void unknownField(String key, String value) throws MalformedURLException {
-      // TODO: more efficient way ?
-      if (endsWithIgnoreCase(key, FILE_FIELD_SUFFIX)) {
-        field(key, new FileTextField(pathAbsolutizer, value));
-      } else if (endsWithIgnoreCase(key, URL_FIELD_SUFFIX)) {
-        field(key, new UrlField(value));
-      } else if (startsWithIgnoreCase(key, CHECKSUM_FIELD_PREFIX)) {
-        checksum(key.substring(CHECKSUM_FIELD_PREFIX.length()), new ChecksumField(value));
-      } else {
-        field(key, new StringField(value));
+  @JsonVersionedModel(propertyName = "specVersion", currentVersion = CURRENT_SPEC_VERSION, defaultDeserializeToVersion = CURRENT_SPEC_VERSION, toCurrentConverterClass = About.ToCurrentAboutConverter.class)
+  public static abstract class AboutBuilder<C extends About, B extends AboutBuilder<C, B>> extends AbstractFieldSetBuilder<C, B> {
+    @Override
+    protected boolean parseUnknownField(String name, String value) {
+      if (startsWithIgnoreCase(name, CHECKSUM_FIELD_PREFIX)) {
+        checksum(name.substring(CHECKSUM_FIELD_PREFIX.length()), new ChecksumField(value));
+        return true;
       }
+      return false;
     }
   }
 
+  protected static final class AboutBuilderImpl extends AboutBuilder<About, AboutBuilderImpl> {}
+
   private static final VersioningModule VERSIONING_MODULE = new VersioningModule();
 
-  public static About readFromFile(File src) throws IOException {
+  protected static <T extends About> T readFromFile(File src, Class<T> tClass) throws IOException {
     final ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
+
+    objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+    objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
+    objectMapper.getDeserializationConfig().with(JsonParser.Feature.STRICT_DUPLICATE_DETECTION);
 
     PathAbsolutizer pathAbsolutizer = new PathAbsolutizer(src.getParentFile());
 
@@ -352,13 +317,26 @@ public class About {
 
     objectMapper.registerModule(VERSIONING_MODULE);
 
-    return objectMapper.readValue(src, About.class);
+    return objectMapper.readValue(src, tClass);
   }
 
-  protected static class ToCurrentAboutConverter implements VersionedModelConverter {
+  public static About readFromFile(File src) throws IOException {
+    return readFromFile(src, About.class);
+  }
+
+  public static class ToCurrentAboutConverter implements VersionedModelConverter {
     private static final Version VERSION_2_0 = new Version(2, 0, 0, "", null, null);
     // TODO: private static final Version VERSION_3_0 = new Version(3, 0, 0, "", null, null);
     private static final Version VERSION_3_1 = new Version(3, 1, 0, "", null, null);
+
+    private void renameField(ObjectNode modelData, String oldName, String newName) {
+      // TODO: test that case is ignored here
+      JsonNode value = modelData.get(oldName);
+      if (value != null) {
+        modelData.remove(oldName);
+        modelData.set(newName, value);
+      }
+    }
 
     @Override
     public ObjectNode convert(ObjectNode modelData, String modelVersion, String targetModelVersion, JsonNodeFactory nodeFactory) {
@@ -366,8 +344,8 @@ public class About {
       Version targetVersion = VersionParser.parse(targetModelVersion);
 
       if (targetVersion.compareTo(VERSION_3_1) >= 0 && version.compareTo(VERSION_3_1) <= 0) {
-        // TODO: test that 1) case is ignored here 2) field names should be before PropertyNamingStrategy transformation
-        modelData.put("homepage_url", modelData.get("home_url").textValue());
+        renameField(modelData, "home_url", "homepage_url");
+
         // Making all paths starting with / relative
         Iterator<String> fieldNamesIterator = modelData.fieldNames();
         String fieldName;
@@ -382,8 +360,8 @@ public class About {
       }
 
       if (targetVersion.compareTo(VERSION_2_0) >= 0 && version.compareTo(VERSION_2_0) <= 0) {
-        modelData.put("license_file", modelData.get("license_text_file").textValue());
-        modelData.put("license_expression", modelData.get("license_spdx").textValue());
+        renameField(modelData, "license_text_file", "license_file");
+        renameField(modelData, "license_spdx", "license_expression");
       }
 
       return modelData;

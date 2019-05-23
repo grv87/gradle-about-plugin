@@ -1,6 +1,6 @@
 about_resource: .
 name: gradle-about-plugin
-gradle_versioning_system: semver-2.0.0
+gradle_versioning_schema: semver-2.0.0
 owner: FIDATA
 # author: Basil Peace
 copyright: Copyright ©  Basil Peace

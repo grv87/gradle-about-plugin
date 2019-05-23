@@ -1,7 +1,6 @@
 package org.fidata.about.gradle
 
 import groovy.transform.CompileStatic
-import org.fidata.about.About
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -11,7 +10,7 @@ class AboutPlugin implements Plugin<Project> {
 
   @Override
   void apply(Project project) {
-    final About about = About.readFromFile(project.file("${ project.name }.ABOUT"))
+    final AboutExtended about = AboutExtended.readFromFile(project.file("${ project.name }.ABOUT"))
 
     project.extensions.add ABOUT_EXTENSION_NAME, about
   }

@@ -18,6 +18,7 @@
  * permissions and limitations under the License.
  */
 plugins {
+  id 'org.fidata.project.java'
   id 'org.fidata.project.groovy'
   id 'org.fidata.plugin'
 }

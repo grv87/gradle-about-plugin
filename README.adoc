@@ -1,0 +1,29 @@
+= gradle-about-plugin
+
+== Differences with aboutcode-toolkit
+
+[cols="2",options="header"]
+|===
+^|aboutcode-toolkit
+^|gradle-about-plugin
+
+| handles all custom fields as `StringField` s
+a|
+*   respects suffixes described by specification for file and URL
+    fields
+*   allows extensibility with custom fields of complex types
+
+| parses `licenses` field into 4 separate lists
+| has designated `License` class
+|===
+
+
+------------------------------------------------------------------------
+Copyright ©  Basil Peace
+
+This file is part of gradle-about-plugin.
+
+Copying and distribution of this file, with or without modification,
+are permitted in any medium without royalty provided the copyright
+notice and this notice are preserved.  This file is offered as-is,
+without any warranty.
