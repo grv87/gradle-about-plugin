@@ -3,6 +3,7 @@ package org.fidata.about.model;
 import static org.apache.commons.lang3.StringUtils.endsWithIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 import static org.fidata.about.model.FileTextField.PATH_ABSOLUTIZER;
+import static org.fidata.spdx.SpdxUtils.walkLicenseInfo;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.InjectableValues;
@@ -11,7 +12,6 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
@@ -29,8 +29,13 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Singular;
 import lombok.experimental.SuperBuilder;
+import org.apache.jena.util.FileUtils;
 import org.fidata.jackson.VersionParser;
+import org.fidata.spdx.AnyLicenseInfoWalker;
 import org.fidata.utils.PathAbsolutizer;
+import org.spdx.rdfparser.license.ExtractedLicenseInfo;
+import org.spdx.rdfparser.license.LicenseException;
+import org.spdx.rdfparser.license.SimpleLicensingInfo;
 import org.spdx.rdfparser.license.SpdxNoneLicense;
 
 @JsonDeserialize(builder = About.AboutBuilderImpl.class)
@@ -179,6 +184,7 @@ public class About extends AbstractFieldSet {
    * between multiple license identifiers, such as a choice among multiple licenses
    */
   @Getter
+  @NonNull
   @lombok.Builder.Default
   private final LicenseExpressionField licenseExpression = new LicenseExpressionField(new SpdxNoneLicense());
 
@@ -277,7 +283,6 @@ public class About extends AbstractFieldSet {
   @Singular
   private final Map<String, ChecksumField> checksums;
 
-  @JsonPOJOBuilder(withPrefix = "")
   @JsonVersionedModel(propertyName = "specVersion", currentVersion = CURRENT_SPEC_VERSION, defaultDeserializeToVersion = CURRENT_SPEC_VERSION, toCurrentConverterClass = About.ToCurrentAboutConverter.class)
   public static abstract class AboutBuilder<C extends About, B extends AboutBuilder<C, B>> extends AbstractFieldSetBuilder<C, B> {
     @Override
@@ -287,6 +292,58 @@ public class About extends AbstractFieldSet {
         return true;
       }
       return false;
+    }
+
+    @Override
+    protected void doValidate() {
+      if (licenseExpression$set) {
+        if (licenses != null) {
+          for (License license : licenses) {
+            StringField licenseKeyField = license.getKey();
+            FileTextField licenseFileField = license.getFile();
+            if (licenseKeyField != null && licenseFileField != null) {
+              String licenseKey = licenseKeyField.getValue();
+              String licenseText;
+              try {
+                licenseText = FileUtils.readWholeFileAsUTF8(licenseFileField.getValue().toString());
+              } catch (IOException ignored) {
+                // Don't use problematic license file
+                // TOTHINK about it
+                continue;
+              }
+              walkLicenseInfo(licenseExpression.getValue(), new AnyLicenseInfoWalker() {
+                @Override
+                public void processSimpleLicensingInfo(SimpleLicensingInfo simpleLicensingInfo) {
+                  if (ExtractedLicenseInfo.class.isInstance(simpleLicensingInfo)) {
+                    ExtractedLicenseInfo extractedLicenseInfo = (ExtractedLicenseInfo)simpleLicensingInfo;
+                    if (licenseKey.equals(extractedLicenseInfo.getLicenseId())) {
+                      extractedLicenseInfo.setExtractedText(licenseText);
+                    }
+                  } else if (org.spdx.rdfparser.license.License.class.isInstance(simpleLicensingInfo)) {
+                    org.spdx.rdfparser.license.License license = (org.spdx.rdfparser.license.License)simpleLicensingInfo;
+                    if (licenseKey.equals(license.getLicenseId())) {
+                      license.setLicenseText(licenseText);
+                    }
+                  }
+                }
+
+                @Override
+                public void processException(LicenseException licenseException) {
+                  if (licenseKey.equals(licenseException.getLicenseExceptionId())) {
+                    licenseException.setLicenseExceptionText(licenseText);
+                  }
+                }
+              });
+            }
+          }
+        }
+
+        final List<String> validationErrors = licenseExpression.getValue().verify();
+        if (!validationErrors.isEmpty()) {
+          // TODO: Groovy had nicer formatting
+          throw new IllegalArgumentException(String.format("License \'%s\' is not valid. Validation errors: %s", licenseExpression.getValue().toString(), validationErrors.toString()));
+        }
+      }
     }
   }
 

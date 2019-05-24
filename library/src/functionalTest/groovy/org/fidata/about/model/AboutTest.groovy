@@ -194,4 +194,44 @@ class AboutTest {
     ]
     assert expected == result*/
   }
+
+  @Test
+  void testSetsDefaultLicenseExpressionToNone() {
+    File testFile = getTestLoc('license_expression/default.about')
+    About a = About.readFromFile(testFile)
+    assert a.licenseExpression.value.toString() == 'NONE'
+  }
+
+  @Test
+  void testAcceptsValidLicenseExpression() {
+    File testFile = getTestLoc('license_expression/valid.about')
+    About a = About.readFromFile(testFile)
+  }
+
+  @Test
+  void testAcceptsLicenseExpressionWithException() {
+    File testFile = getTestLoc('license_expression/with_exception.about')
+    About a = About.readFromFile(testFile)
+  }
+
+  @Test
+  void testDoesntAcceptEmptyLicenseExpression() {
+    File testFile = getTestLoc('license_expression/empty.about')
+    thrown.expect IOException
+    About a = About.readFromFile(testFile)
+  }
+
+  @Test
+  void testDoesntAcceptNullLicenseExpression() {
+    File testFile = getTestLoc('license_expression/null.about')
+    thrown.expect IOException
+    About a = About.readFromFile(testFile)
+  }
+
+  @Test
+  void testDoesntAcceptInvalidLicenseExpression() {
+    File testFile = getTestLoc('license_expression/invalid.about')
+    thrown.expect IOException
+    About a = About.readFromFile(testFile)
+  }
 }

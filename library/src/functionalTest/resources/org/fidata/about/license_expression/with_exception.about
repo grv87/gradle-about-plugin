@@ -1,0 +1,11 @@
+about_resource: .
+name: with_exception
+license_expression: GPL-2.0-only WITH Classpath-exception-2.0
+# WORKAROUND:
+# Even standard SPDX exceptions require its text provided
+# It is a bug, see https://github.com/spdx/tools/issues/186
+# <grv87 2019-05-25>
+licenses:
+  - key: GPL-2.0
+  - key: Classpath-exception-2.0
+    file: CLASSPATH_EXCEPTION.txt

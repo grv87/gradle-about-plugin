@@ -39,6 +39,10 @@ that ABOUT file is correct
 a|
 1. It's not so easy to get field name from Jackson
 2. It's not obvious which name should be assigned to list items
+
+| Doesn't validate license_expression field
+| Validate it
+|
 |===
 
 

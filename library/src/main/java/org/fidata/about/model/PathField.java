@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.OptBoolean;
 import java.nio.file.Path;
+import lombok.ToString;
 import org.fidata.utils.PathAbsolutizer;
 
+@ToString
 public class PathField extends Field<Path> {
   static final String PATH_ABSOLUTIZER = "PATH_ABSOLUTIZER";
 

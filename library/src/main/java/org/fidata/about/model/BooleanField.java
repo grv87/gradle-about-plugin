@@ -3,8 +3,10 @@ package org.fidata.about.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Arrays;
 import java.util.Locale;
+import lombok.ToString;
 import org.apache.commons.lang3.ArrayUtils;
 
+@ToString
 public final class BooleanField extends Field<Boolean> {
   public static final BooleanField FALSE = new BooleanField(false);
   public static final BooleanField TRUE = new BooleanField(true);

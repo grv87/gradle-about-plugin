@@ -95,7 +95,7 @@ public abstract class AbstractFieldSet {
     return IS_VALID_NAME.matcher(name).matches();
   }
 
-  @JsonPOJOBuilder(withPrefix = "")
+  @JsonPOJOBuilder(withPrefix = "", buildMethodName = "validate")
   public static abstract class AbstractFieldSetBuilder<C extends AbstractFieldSet, B extends AbstractFieldSetBuilder<C, B>> {
     @Setter
     @JacksonInject(PATH_ABSOLUTIZER)
@@ -130,6 +130,14 @@ public abstract class AbstractFieldSet {
     protected boolean parseUnknownField(String name, Object value) {
       return false;
     }
+
+    // TODO: Try to get rid of it
+    public final C validate() {
+      doValidate();
+      return build();
+    }
+
+    protected void doValidate() {}
   }
 
   protected static abstract class AbstractFieldSetBuilderImpl extends AbstractFieldSetBuilder<AbstractFieldSet, AbstractFieldSetBuilderImpl> {}

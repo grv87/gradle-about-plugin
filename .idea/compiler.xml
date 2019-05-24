@@ -5,6 +5,11 @@
       <profile default="true" name="Default" enabled="true" />
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="gradle-about-plugin.gradle-plugin.compatTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.gradleTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.main" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.test" target="1.8" />
       <module name="org.fidata.gradle.buildSrc.main" target="1.8" />
       <module name="org.fidata.gradle.buildSrc.test" target="1.8" />
       <module name="org.fidata.gradle.gradle-about-plugin.compatTest" target="1.8" />

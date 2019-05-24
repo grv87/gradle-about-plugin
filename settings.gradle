@@ -37,8 +37,10 @@ apply from: new File(ext.rootDir, 'gradle/build-cache.gradle')
 
 [
   'library',
-  'gradle-plugin',
+  'gradle-plugin:base',
+  'gradle-plugin:nebula',
+  'gradle-plugin:toolkit',
 ].each {
   include it
-  project(":$it").projectDir = new File(ext.rootDir, it)
+  project(":$it").projectDir = new File(ext.rootDir, it.replace(':', '/')) // TODO: Find convenient method in Gradle API
 }
