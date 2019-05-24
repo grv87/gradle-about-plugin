@@ -27,8 +27,11 @@ publicReleases = true // TODO
 ext.rootDir = file('.')
 
 dependencies {
-  api project(path: ':library')
-}  
+  api(project(path: ':library')) {
+     exclude(group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl')
+     exclude(group: 'org.apache.logging.log4j', module: 'log4j-core')
+  }
+}
 
 apply from: new File(ext.rootDir, 'gradle/gradle-plugin-markers.gradle')
 

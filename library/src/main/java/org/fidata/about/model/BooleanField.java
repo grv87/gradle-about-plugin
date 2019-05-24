@@ -32,6 +32,6 @@ public final class BooleanField extends Field<Boolean> {
     } else if (ArrayUtils.contains(FALSE_FLAGS, stringValue)) {
       return FALSE;
     }
-    throw new IllegalArgumentException(String.format("Invalid flag value: %s is not one of: %s", stringValue, Arrays.toString(FLAG_VALUES)));
+    throw new IllegalArgumentException(String.format("Invalid flag value: '%s' is not one of: %s", stringValue, Arrays.toString(FLAG_VALUES)));
   }
 }

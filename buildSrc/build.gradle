@@ -54,9 +54,12 @@ repositories {
   configuration.resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }*/
 
+String basePluginsVersion = '6.0.1-hotfix-publishPluginJar-SNAPSHOT' // TODO
+
 dependencies {
-  runtimeOnly(group: 'org.fidata.project.groovy', name: 'org.fidata.project.groovy.gradle.plugin', version: '6.0.1-hotfix-publishPluginJar-SNAPSHOT') // .status = 'integration'
-  runtimeOnly(group: 'org.fidata.plugin', name: 'org.fidata.plugin.gradle.plugin', version: '6.0.1-hotfix-publishPluginJar-SNAPSHOT') // .status = 'integration'
+  runtimeOnly(group: 'org.fidata.project.java', name: 'org.fidata.project.java.gradle.plugin', version: basePluginsVersion) // .status = 'integration'
+  runtimeOnly(group: 'org.fidata.project.groovy', name: 'org.fidata.project.groovy.gradle.plugin', version: basePluginsVersion) // .status = 'integration'
+  runtimeOnly(group: 'org.fidata.plugin', name: 'org.fidata.plugin.gradle.plugin', version: basePluginsVersion) // .status = 'integration'
 }
 
 /*

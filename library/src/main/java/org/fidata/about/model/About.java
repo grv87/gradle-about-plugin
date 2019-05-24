@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
@@ -22,7 +21,6 @@ import com.github.jonpeterson.jackson.module.versioning.VersionedModelConverter;
 import com.github.jonpeterson.jackson.module.versioning.VersioningModule;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -31,11 +29,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Singular;
 import lombok.experimental.SuperBuilder;
-import org.fidata.jackson.RelativePathDeserializer;
-import org.fidata.jackson.SpdxAnyLicenseInfoDeserializer;
 import org.fidata.jackson.VersionParser;
 import org.fidata.utils.PathAbsolutizer;
-import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.SpdxNoneLicense;
 
 @JsonDeserialize(builder = About.AboutBuilderImpl.class)
@@ -51,7 +46,7 @@ public class About extends AbstractFieldSet {
    */
   @Getter
   @NonNull
-  private final FileTextField aboutResource;
+  private final AboutResourceField aboutResource;
 
   /**
    * Component name
@@ -62,7 +57,7 @@ public class About extends AbstractFieldSet {
 
   /**
    * Component or package version
-   *
+   * <p>
    * A component or package usually has a version, such as a revision number or hash from a version control system
    * (for a snapshot checked out from VCS such as Subversion or Git).
    * If not available, the version should be the date the component was provisioned,
@@ -74,7 +69,7 @@ public class About extends AbstractFieldSet {
 
   /**
    * The version of the ABOUT file format specification used for this file
-   *
+   * <p>
    * This is provided as a hint to readers and tools in order to support future versions of this specification
    */
   @Getter
@@ -156,7 +151,9 @@ public class About extends AbstractFieldSet {
    */
   public final StringField getCopyright() {
     return getString("copyright");
-  };
+  }
+
+  ;
 
   /**
    * Legal notice or credits for the component
@@ -177,17 +174,17 @@ public class About extends AbstractFieldSet {
 
   /**
    * The license expression that apply to the component
-   *
+   * <p>
    * You can separate each identifier using " or " and " and " to document the relationship
    * between multiple license identifiers, such as a choice among multiple licenses
    */
   @Getter
   @lombok.Builder.Default
-  private final AnyLicenseInfo licenseExpression = new SpdxNoneLicense();
+  private final LicenseExpressionField licenseExpression = new LicenseExpressionField(new SpdxNoneLicense());
 
   /**
    * Set this flag to yes if the component license requires source code redistribution
-   *
+   * <p>
    * Defaults to no when absent
    */
   @Getter
@@ -196,7 +193,7 @@ public class About extends AbstractFieldSet {
 
   /**
    * Set this flag to yes if the component license requires publishing an attribution or credit notice
-   *
+   * <p>
    * Defaults to no when absent
    */
   @Getter
@@ -205,7 +202,7 @@ public class About extends AbstractFieldSet {
 
   /**
    * Set this flag to yes if the component license requires tracking changes made to a the component
-   *
+   * <p>
    * Defaults to no when absent
    */
   @Getter
@@ -214,7 +211,7 @@ public class About extends AbstractFieldSet {
 
   /**
    * Set this flag to yes if the component has been modified
-   *
+   * <p>
    * Defaults to no when absent
    */
   @Getter
@@ -223,7 +220,7 @@ public class About extends AbstractFieldSet {
 
   /**
    * Set this flag to yes if the component is used internal only
-   *
+   * <p>
    * Defaults to no when absent
    */
   @Getter
@@ -284,38 +281,33 @@ public class About extends AbstractFieldSet {
   @JsonVersionedModel(propertyName = "specVersion", currentVersion = CURRENT_SPEC_VERSION, defaultDeserializeToVersion = CURRENT_SPEC_VERSION, toCurrentConverterClass = About.ToCurrentAboutConverter.class)
   public static abstract class AboutBuilder<C extends About, B extends AboutBuilder<C, B>> extends AbstractFieldSetBuilder<C, B> {
     @Override
-    protected boolean parseUnknownField(String name, String value) {
+    protected boolean parseUnknownField(String name, Object value) {
       if (startsWithIgnoreCase(name, CHECKSUM_FIELD_PREFIX)) {
-        checksum(name.substring(CHECKSUM_FIELD_PREFIX.length()), new ChecksumField(value));
+        checksum(name.substring(CHECKSUM_FIELD_PREFIX.length()), new ChecksumField((String)value));
         return true;
       }
       return false;
     }
   }
 
-  protected static final class AboutBuilderImpl extends AboutBuilder<About, AboutBuilderImpl> {}
+  protected static final class AboutBuilderImpl extends AboutBuilder<About, AboutBuilderImpl> {
+  }
 
-  private static final VersioningModule VERSIONING_MODULE = new VersioningModule();
+  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper(new YAMLFactory());
+  static {
+    OBJECT_MAPPER.enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION);
+    OBJECT_MAPPER.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+    OBJECT_MAPPER.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES); // TODO
+
+    OBJECT_MAPPER.registerModule(new VersioningModule());
+  }
 
   protected static <T extends About> T readFromFile(File src, Class<T> tClass) throws IOException {
-    final ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
-
-    objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-    objectMapper.configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true);
-    objectMapper.getDeserializationConfig().with(JsonParser.Feature.STRICT_DUPLICATE_DETECTION);
-
-    PathAbsolutizer pathAbsolutizer = new PathAbsolutizer(src.getParentFile());
-
-    final SimpleModule deserializersModule = new SimpleModule();
-    deserializersModule.addDeserializer(Path.class, new RelativePathDeserializer(pathAbsolutizer));
-    deserializersModule.addDeserializer(AnyLicenseInfo.class, new SpdxAnyLicenseInfoDeserializer());
-    objectMapper.registerModule(deserializersModule);
+    ObjectMapper objectMapper = OBJECT_MAPPER.copy();
 
     InjectableValues.Std injectableValues = new InjectableValues.Std();
-    injectableValues.addValue(PATH_ABSOLUTIZER, pathAbsolutizer);
+    injectableValues.addValue(PATH_ABSOLUTIZER, new PathAbsolutizer(src.getParentFile()));
     objectMapper.setInjectableValues(injectableValues);
-
-    objectMapper.registerModule(VERSIONING_MODULE);
 
     return objectMapper.readValue(src, tClass);
   }
