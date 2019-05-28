@@ -6,12 +6,12 @@ import java.util.Locale;
 import lombok.ToString;
 import org.apache.commons.lang3.ArrayUtils;
 
-@ToString
+@ToString(callSuper = true)
 public final class BooleanField extends Field<Boolean> {
   public static final BooleanField FALSE = new BooleanField(false);
   public static final BooleanField TRUE = new BooleanField(true);
 
-  private BooleanField(Boolean booleanValue) {
+  BooleanField(boolean booleanValue) {
     super(booleanValue);
   }
 

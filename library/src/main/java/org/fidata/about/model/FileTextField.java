@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.OptBoolean;
 import lombok.ToString;
 import org.fidata.utils.PathAbsolutizer;
 
-@ToString
+@ToString(callSuper = true)
 public class FileTextField extends PathField {
   @JsonCreator
   public FileTextField(

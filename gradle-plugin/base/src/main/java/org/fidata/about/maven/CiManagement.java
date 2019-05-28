@@ -1,4 +1,4 @@
-package org.fidata.about.gradle;
+package org.fidata.about.maven;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.EqualsAndHashCode;
@@ -8,15 +8,15 @@ import org.fidata.about.model.AbstractFieldSet;
 import org.fidata.about.model.StringField;
 import org.fidata.about.model.UrlField;
 
-@JsonDeserialize(builder = Organization.OrganizationBuilderImpl.class)
+@JsonDeserialize(builder = CiManagement.CiManagementBuilderImpl.class)
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class Organization extends AbstractFieldSet {
+public class CiManagement extends AbstractFieldSet {
   @Getter
-  private final StringField name;
+  private final StringField system;
 
   @Getter
   private final UrlField url;
 
-  protected static final class OrganizationBuilderImpl extends OrganizationBuilder<Organization, OrganizationBuilderImpl> {}
+  protected static final class CiManagementBuilderImpl extends CiManagementBuilder<CiManagement, CiManagementBuilderImpl> {}
 }

@@ -6,7 +6,7 @@ import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.LicenseInfoFactory;
 import org.spdx.spdxspreadsheet.InvalidLicenseStringException;
 
-@ToString
+@ToString(callSuper = true)
 public final class LicenseExpressionField extends Field<AnyLicenseInfo> {
   /*
    * CAVEAT:

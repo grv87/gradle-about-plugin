@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import lombok.ToString;
 import org.fidata.utils.PathAbsolutizer;
 
-@ToString
+@ToString(callSuper = true)
 public class PathField extends Field<Path> {
   static final String PATH_ABSOLUTIZER = "PATH_ABSOLUTIZER";
 

@@ -5,7 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import lombok.ToString;
 
-@ToString
+@ToString(callSuper = true)
 public final class UrlField extends Field<URL> {
   @JsonCreator
   public UrlField(String stringValue) throws MalformedURLException {

@@ -4,12 +4,10 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import lombok.Getter;
-import lombok.ToString;
 
 /**
  * Class to convert paths relative to some base directory to absolute
  */
-@ToString
 public final class PathAbsolutizer {
   @Getter
   private final Path baseDir;

@@ -1,4 +1,4 @@
-package org.fidata.about.gradle;
+package org.fidata.about.maven;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.List;

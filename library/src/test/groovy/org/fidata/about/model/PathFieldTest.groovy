@@ -1,6 +1,7 @@
 package org.fidata.about.model
 
 import static org.fidata.about.TestingUtils.getTestLoc
+import java.nio.file.Path
 import org.fidata.utils.PathAbsolutizer
 import org.junit.Rule
 import org.junit.Test
@@ -43,5 +44,20 @@ class PathFieldTest {
     thrown.expectMessage errMsg
 
     PathField field = new PathField(pathAbsolutizer, testFile)
+  }
+
+  @Test
+  void testToString() {
+    final String testFile = 'license.LICENSE'
+    final File baseDir = getTestLoc('model/base_dir')
+
+    final PathAbsolutizer pathAbsolutizer = new PathAbsolutizer(baseDir)
+
+    final PathField field = new PathField(pathAbsolutizer, testFile)
+
+    final Path value = field.value
+    final String valueToString = value.toString()
+    final String fieldToString = field.toString()
+    assert fieldToString.contains(valueToString)
   }
 }

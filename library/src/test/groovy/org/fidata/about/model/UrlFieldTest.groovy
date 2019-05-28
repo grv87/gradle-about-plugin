@@ -47,8 +47,18 @@ class UrlFieldTest {
      * CAVEAT:
      * Here is a bug in aboutcode-toolkit.
      * Empty path is legal according to the section 3 of RFC 3986.
+     * TODO: report it
      * <grv87 2019-05-24>
      */
     assert isValidUrl('http:')
+  }
+
+  @Test
+  void testToString() {
+    final URL value = new URL('https://fidata.org/')
+    final UrlField field = new UrlField(value)
+    final String valueToString = value.toString()
+    final String fieldToString = field.toString()
+    assert fieldToString.contains(valueToString)
   }
 }
