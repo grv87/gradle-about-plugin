@@ -1,6 +1,7 @@
 package org.fidata.about.gradle
 
 import groovy.transform.CompileStatic
+import org.fidata.about.AboutExtended
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

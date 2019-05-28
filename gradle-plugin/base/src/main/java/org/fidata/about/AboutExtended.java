@@ -1,17 +1,25 @@
-package org.fidata.about.gradle;
+package org.fidata.about;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Set;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Singular;
 import lombok.experimental.SuperBuilder;
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.maven.scm.manager.ScmManager;
+import org.apache.maven.scm.provider.ScmProvider;
+import org.apache.maven.scm.repository.ScmRepository;
 import org.fidata.about.maven.CiManagement;
 import org.fidata.about.maven.IssueManagement;
 import org.fidata.about.maven.LicenseExtended;
@@ -66,9 +74,21 @@ public class AboutExtended extends About {
     return (Set<? extends LicenseExtended>)super.getLicenses();
   }
 
+  @JacksonInject
+  @NonNull
+  private final ScmManager scmManager; // TODO
+
   public UrlField getVcsConnectionUrl() {
-    new UrlField(new URL())
-    // TODO
+    String vcsConnectionUrl = "scm:" + getVcsRepository();
+    List<String> validationErrors = scmManager.validateScmRepository(vcsConnectionUrl);
+    if (!validationErrors.isEmpty()) {
+      throw new IllegalStateException(String.format("Invalid vcs connection URL: %s.\n%s", vcsConnectionUrl, validationErrors.toString()));
+    }
+    try {
+      return new UrlField(new URL(vcsConnectionUrl));
+    } catch (MalformedURLException e) {
+      throw new IllegalStateException(String.format("Invalid vcs connection URL: %s", vcsConnectionUrl), e);
+    }
   }
 
   public UrlField getVcsDeveloperConnectionUrl() {
