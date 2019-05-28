@@ -4,6 +4,8 @@ import static org.apache.commons.lang3.StringUtils.endsWithIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 import static org.fidata.about.model.FileTextField.PATH_ABSOLUTIZER;
 import static org.fidata.spdx.SpdxUtils.walkLicenseInfo;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.InjectableValues;
@@ -19,11 +21,13 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.github.jonpeterson.jackson.module.versioning.JsonVersionedModel;
 import com.github.jonpeterson.jackson.module.versioning.VersionedModelConverter;
 import com.github.jonpeterson.jackson.module.versioning.VersioningModule;
+import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
@@ -33,6 +37,7 @@ import org.apache.jena.util.FileUtils;
 import org.fidata.jackson.VersionParser;
 import org.fidata.spdx.AnyLicenseInfoWalker;
 import org.fidata.utils.PathAbsolutizer;
+import org.spdx.rdfparser.license.AnyLicenseInfo;
 import org.spdx.rdfparser.license.ExtractedLicenseInfo;
 import org.spdx.rdfparser.license.LicenseException;
 import org.spdx.rdfparser.license.SimpleLicensingInfo;
@@ -175,7 +180,9 @@ public class About extends AbstractFieldSet {
   }
 
   @Getter
-  private final List<License> licenses;
+  @NonNull
+  @lombok.Builder.Default
+  private final Set<? extends License> licenses = ImmutableSet.of();
 
   /**
    * The license expression that apply to the component
@@ -272,8 +279,8 @@ public class About extends AbstractFieldSet {
   /**
    * Revision identifier such as a revision hash or version number
    */
-  public final StringField getRevision() {
-    return getString("revision");
+  public final StringField getVcsRevision() {
+    return getString("vcs_revision");
   }
 
   /**
@@ -281,14 +288,47 @@ public class About extends AbstractFieldSet {
    */
   @Getter // TODO: check that it is immutable
   @Singular
-  private final Map<String, ChecksumField> checksums;
+  private final Map<String, ? extends ChecksumField> checksums;
 
   @JsonVersionedModel(propertyName = "specVersion", currentVersion = CURRENT_SPEC_VERSION, defaultDeserializeToVersion = CURRENT_SPEC_VERSION, toCurrentConverterClass = About.ToCurrentAboutConverter.class)
   public static abstract class AboutBuilder<C extends About, B extends AboutBuilder<C, B>> extends AbstractFieldSetBuilder<C, B> {
+    private License.LicenseBuilder<? extends License, ? extends License.LicenseBuilder> licenseBuilder;
+
+    private License.LicenseBuilder<? extends License, ? extends License.LicenseBuilder> getLicenseBuilder() {
+      if (licenseBuilder == null) {
+        licenseBuilder = License.builder();
+      }
+      return licenseBuilder;
+    }
+
+    @Override
+    protected boolean parseUnknownFileTextField(String name, FileTextField value) {
+      if ("license_file".equals(name)) {
+        getLicenseBuilder().file(value);
+        return true;
+      }
+      return false;
+    }
+
+    protected boolean parseUnknownUrlField(String name, UrlField value) {
+      if ("license_url".equals(name)) {
+        getLicenseBuilder().url(value);
+        return true;
+      }
+      return false;
+    }
+
+
     @Override
     protected boolean parseUnknownField(String name, Object value) {
       if (startsWithIgnoreCase(name, CHECKSUM_FIELD_PREFIX)) {
         checksum(name.substring(CHECKSUM_FIELD_PREFIX.length()), new ChecksumField((String)value));
+        return true;
+      } else if ("license_key".equals(name)) {
+        licenseBuilder.key(new StringField((String)value));
+        return true;
+      } else if ("license_name".equals(name)) {
+        licenseBuilder.name(new StringField((String)value));
         return true;
       }
       return false;
@@ -296,7 +336,13 @@ public class About extends AbstractFieldSet {
 
     @Override
     protected void doValidate() {
+      if (licenseBuilder != null) {
+        // TODO: either one or another
+        // licenses.add(licenseBuilder.validate());
+      }
+
       if (licenseExpression$set) {
+        AnyLicenseInfo licenseInfo = licenseExpression.getOriginalValue();
         if (licenses != null) {
           for (License license : licenses) {
             StringField licenseKeyField = license.getKey();
@@ -311,9 +357,9 @@ public class About extends AbstractFieldSet {
                 // TOTHINK about it
                 continue;
               }
-              walkLicenseInfo(licenseExpression.getValue(), new AnyLicenseInfoWalker() {
+              walkLicenseInfo(licenseInfo, new AnyLicenseInfoWalker() {
                 @Override
-                public void processSimpleLicensingInfo(SimpleLicensingInfo simpleLicensingInfo) {
+                public void visitSimpleLicensingInfo(SimpleLicensingInfo simpleLicensingInfo) {
                   if (ExtractedLicenseInfo.class.isInstance(simpleLicensingInfo)) {
                     ExtractedLicenseInfo extractedLicenseInfo = (ExtractedLicenseInfo)simpleLicensingInfo;
                     if (licenseKey.equals(extractedLicenseInfo.getLicenseId())) {
@@ -328,7 +374,7 @@ public class About extends AbstractFieldSet {
                 }
 
                 @Override
-                public void processException(LicenseException licenseException) {
+                public void visitException(LicenseException licenseException) {
                   if (licenseKey.equals(licenseException.getLicenseExceptionId())) {
                     licenseException.setLicenseExceptionText(licenseText);
                   }
@@ -338,10 +384,10 @@ public class About extends AbstractFieldSet {
           }
         }
 
-        final List<String> validationErrors = licenseExpression.getValue().verify();
+        final List<String> validationErrors = licenseInfo.verify();
         if (!validationErrors.isEmpty()) {
           // TODO: Groovy had nicer formatting
-          throw new IllegalArgumentException(String.format("License \'%s\' is not valid. Validation errors: %s", licenseExpression.getValue().toString(), validationErrors.toString()));
+          throw new IllegalArgumentException(String.format("License \'%s\' is not valid. Validation errors: %s", licenseInfo.toString(), validationErrors.toString()));
         }
       }
     }
@@ -355,6 +401,12 @@ public class About extends AbstractFieldSet {
     OBJECT_MAPPER.enable(JsonParser.Feature.STRICT_DUPLICATE_DETECTION);
     OBJECT_MAPPER.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
     OBJECT_MAPPER.enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES); // TODO
+    /*
+     * This doesn't work due to bug in Jackson.
+     * See https://github.com/FasterXML/jackson-databind/issues/2024
+     * <grv87 2019-05-28>
+     */
+    OBJECT_MAPPER.setDefaultSetterInfo(JsonSetter.Value.forValueNulls(Nulls.FAIL, Nulls.FAIL));
 
     OBJECT_MAPPER.registerModule(new VersioningModule());
   }

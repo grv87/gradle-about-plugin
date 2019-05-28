@@ -11,6 +11,7 @@ public final class UrlField extends Field<URL> {
   public UrlField(String stringValue) throws MalformedURLException {
     this(new URL(stringValue));
   }
+
   public UrlField(URL urlValue) {
     super(urlValue);
   }

@@ -4,6 +4,8 @@ import static org.gradle.language.base.plugins.LifecycleBasePlugin.CHECK_TASK_NA
 import static org.gradle.language.base.plugins.LifecycleBasePlugin.VERIFICATION_GROUP
 import static org.gradle.api.plugins.JavaBasePlugin.DOCUMENTATION_GROUP
 import groovy.transform.CompileStatic
+import org.fidata.about.gradle.tasks.AboutAttrib
+import org.fidata.about.gradle.tasks.AboutCheck
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task

@@ -6,11 +6,11 @@ import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
 import org.spdx.rdfparser.license.SpdxNoneLicense;
 
 public interface AnyLicenseInfoWalker {
-  void processSimpleLicensingInfo(SimpleLicensingInfo simpleLicensingInfo);
+  void visitSimpleLicensingInfo(SimpleLicensingInfo simpleLicensingInfo);
 
-  default void processException(LicenseException licenseException) {}
+  default void visitException(LicenseException licenseException) {}
 
-  default void processNoAssertionLicense(SpdxNoAssertionLicense noAssertionLicense) {}
+  default void visitNoAssertionLicense(SpdxNoAssertionLicense noAssertionLicense) {}
 
-  default void processNoneLicense(SpdxNoneLicense noneLicense) {}
+  default void visitNoneLicense(SpdxNoneLicense noneLicense) {}
 }

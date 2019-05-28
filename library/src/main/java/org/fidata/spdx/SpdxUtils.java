@@ -11,22 +11,22 @@ import org.spdx.rdfparser.license.WithExceptionOperator;
 public final class SpdxUtils {
   public static void walkLicenseInfo(AnyLicenseInfo licenseInfo, AnyLicenseInfoWalker walker) {
     if (SimpleLicensingInfo.class.isInstance(licenseInfo)) {
-      walker.processSimpleLicensingInfo((SimpleLicensingInfo)licenseInfo);
+      walker.visitSimpleLicensingInfo((SimpleLicensingInfo)licenseInfo);
     } else if (OrLaterOperator.class.isInstance(licenseInfo)) {
-      walker.processSimpleLicensingInfo(((OrLaterOperator)licenseInfo).getLicense());
+      walker.visitSimpleLicensingInfo(((OrLaterOperator)licenseInfo).getLicense());
     } else if (WithExceptionOperator.class.isInstance(licenseInfo)) {
       WithExceptionOperator withExceptionOperator = (WithExceptionOperator)licenseInfo;
       walkLicenseInfo(withExceptionOperator.getLicense(), walker);
-      walker.processException(withExceptionOperator.getException());
+      walker.visitException(withExceptionOperator.getException());
     } else if (LicenseSet.class.isInstance(licenseInfo)) {
       AnyLicenseInfo[] members = ((LicenseSet)licenseInfo).getMembers();
       for (AnyLicenseInfo member : members) {
         walkLicenseInfo(member, walker);
       }
     } else if (SpdxNoAssertionLicense.class.isInstance(licenseInfo)) {
-      walker.processNoAssertionLicense((SpdxNoAssertionLicense)licenseInfo);
+      walker.visitNoAssertionLicense((SpdxNoAssertionLicense)licenseInfo);
     } else if (SpdxNoneLicense.class.isInstance(licenseInfo)) {
-      walker.processNoneLicense((SpdxNoneLicense)licenseInfo);
+      walker.visitNoneLicense((SpdxNoneLicense)licenseInfo);
     } else {
       throw new UnsupportedOperationException(String.format("Can't walk through unknown subclass of AnyLicenseInfo: %s", licenseInfo.getClass().getName()));
     }

@@ -1,11 +1,11 @@
 package org.fidata.about.gradle;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Singular;
@@ -48,7 +48,13 @@ public class AboutExtended extends About {
 
   @Getter
   @Singular
-  private final List<MailingList> mailingLists;
+  private final List<? extends MailingList> mailingLists;
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public Set<? extends LicenseExtended> getLicenses() {
+    return (Set<? extends LicenseExtended>)super.getLicenses();
+  }
 
   public UrlField getVcsConnectionUrl() {
     new UrlField(new URL())

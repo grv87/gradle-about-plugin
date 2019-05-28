@@ -70,6 +70,7 @@ class AboutTest {
     About a = About.readFromFile(testFile)
   }
 
+  @Ignore('https://github.com/FasterXML/jackson-databind/issues/2024')
   @Test
   void testHasErrorsWithEmptyNoticeFileField() {
     File testFile = getTestLoc('model/parse/empty_notice_field.about')
@@ -77,6 +78,7 @@ class AboutTest {
     thrown.expect IOException
 
     About a = About.readFromFile(testFile)
+    println a.noticeFile.value
   }
 
   @Test
@@ -177,6 +179,47 @@ class AboutTest {
     File testFile2 = getTestLoc('model/equal/complete/about.ABOUT')
     About b = About.readFromFile(testFile2)
     assert a != b
+  }
+
+  @Test
+  void testInitsAllFieldsToNotNull() {
+    File testFile = getTestLoc('gen/parser_tests/about_resource_field.ABOUT')
+    About a = About.readFromFile(testFile)
+    [
+      'aboutResource',
+      'name',
+      'version',
+      'specVersion',
+      'description',
+      'downloadUrl',
+      'homepageUrl',
+      'changelogFile',
+      'notes',
+      'owner',
+      'ownerUrl',
+      'contact',
+      'author',
+      'authorFile',
+      'copyright',
+      'noticeFile',
+      'noticeUrl',
+      'licenses',
+      'licenseExpression',
+      'redistribute',
+      'attribute',
+      'trackChanges',
+      'modified',
+      'internalUseOnly',
+      'vcsTool',
+      'vcsRepository',
+      'vcsPath',
+      'vcsTag',
+      'vcsBranch',
+      'vcsRevision',
+      'checksums',
+    ].each { String it ->
+      assert a."$it" != null
+    }
   }
 
   @Test

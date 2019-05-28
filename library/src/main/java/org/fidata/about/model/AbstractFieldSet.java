@@ -4,9 +4,11 @@ import static org.apache.commons.lang3.StringUtils.endsWithIgnoreCase;
 import static org.fidata.about.model.FileTextField.PATH_ABSOLUTIZER;
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.OptBoolean;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -37,7 +39,11 @@ public abstract class AbstractFieldSet {
    * Extension fields referencing files
    */
   public final FileTextField getFile(String name) {
-    return (FileTextField)customFields.get(name + FILE_FIELD_SUFFIX);
+    FileTextField result = (FileTextField)customFields.get(name);
+    if (result == null) {
+      result = new FileTextField(null, null);
+    }
+    return result;
   }
 
   /**
@@ -51,7 +57,11 @@ public abstract class AbstractFieldSet {
    * Extension fields referencing URLs
    */
   public final UrlField getUrl(String name) {
-    return (UrlField)customFields.get(name + URL_FIELD_SUFFIX);
+    UrlField result = (UrlField)customFields.get(name);
+    if (result == null) {
+      result = new UrlField((URL)null);
+    }
+    return result;
   }
 
   /**
@@ -65,7 +75,11 @@ public abstract class AbstractFieldSet {
    * String extension fields
    */
   public final StringField getString(String name) {
-    return (StringField)customFields.get(name);
+    StringField result = (StringField)customFields.get(name);
+    if (result == null) {
+      result = new StringField(null);
+    }
+    return result;
   }
 
   /**
@@ -97,8 +111,7 @@ public abstract class AbstractFieldSet {
 
   @JsonPOJOBuilder(withPrefix = "", buildMethodName = "validate")
   public static abstract class AbstractFieldSetBuilder<C extends AbstractFieldSet, B extends AbstractFieldSetBuilder<C, B>> {
-    @Setter
-    @JacksonInject(PATH_ABSOLUTIZER)
+    @Setter(onMethod_ = {@JacksonInject(value = PATH_ABSOLUTIZER, useInput = OptBoolean.FALSE)})
     private PathAbsolutizer pathAbsolutizer;
 
     @JsonAnySetter
@@ -110,9 +123,15 @@ public abstract class AbstractFieldSet {
           "0 to 9, a to z, A to Z and _.", name));
       }
       if (endsWithIgnoreCase(name, FILE_FIELD_SUFFIX)) {
-        customField(name, new FileTextField(pathAbsolutizer, (String)value));
+        FileTextField field = new FileTextField(pathAbsolutizer, (String)value);
+        if (!parseUnknownFileTextField(name, field)) {
+          customField(name, field);
+        }
       } else if (endsWithIgnoreCase(name, URL_FIELD_SUFFIX)) {
-        customField(name, new UrlField((String)value));
+        UrlField field = new UrlField((String)value);
+        if (!parseUnknownUrlField(name, field)) {
+          customField(name, field);
+        }
       } else if (!parseUnknownField(name, value)) {
         if (value == null) {
           // Default behavior of aboutcode-toolkit
@@ -125,6 +144,14 @@ public abstract class AbstractFieldSet {
         }
         customField(name, value);
       }
+    }
+
+    protected boolean parseUnknownFileTextField(String name, FileTextField value) {
+      return false;
+    }
+
+    protected boolean parseUnknownUrlField(String name, UrlField value) {
+      return false;
     }
 
     protected boolean parseUnknownField(String name, Object value) {

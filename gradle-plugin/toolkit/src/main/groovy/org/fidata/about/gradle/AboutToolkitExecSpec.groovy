@@ -12,7 +12,8 @@ class AboutToolkitExecSpec extends AbstractCommandExecSpec {
    * @param project Project this exec spec is attached.
    * @param registry Registry used to resolve executables.
    */
-  protected AboutToolkitExecSpec(Project project, ExternalExecutable registry) {
+  /*TODO protected*/ AboutToolkitExecSpec(Project project, ExternalExecutable registry) {
     super(project, registry)
+    setExecutable 'about'
   }
 }
