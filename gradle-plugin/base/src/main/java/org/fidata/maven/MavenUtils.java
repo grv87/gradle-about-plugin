@@ -3,6 +3,8 @@ package org.fidata.maven;
 import java.net.MalformedURLException;
 import java.net.URL;
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.maven.scm.manager.ScmManager;
+
 
 public final class MavenUtils {
   private static final char DELIMITER = SystemUtils.IS_OS_WINDOWS ? '|' : ':';
