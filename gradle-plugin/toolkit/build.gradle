@@ -29,7 +29,7 @@ ext.rootDir = file('.')
 apply from: new File(ext.rootDir, 'gradle/dependencies-compile.gradle')
 
 dependencies {
-  implementation(project(path: ':gradle-plugin:base'))
+  implementation(project(':gradle-plugin:base'))
 }
 
 apply from: new File(ext.rootDir, 'gradle/gradle-plugin-markers.gradle')

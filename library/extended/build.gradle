@@ -1,0 +1,51 @@
+#!/usr/bin/env groovy
+/*
+ * Build script for gradle-about-plugin
+ * Copyright ©  Basil Peace
+ *
+ * This file is part of gradle-about-plugin.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+plugins {
+  id 'org.fidata.project.java'
+}
+publicReleases = true // TODO
+
+ext.rootDir = file('.')
+
+dependencies {
+  api(project(path: ':library:base')) {
+     exclude(group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl')
+     exclude(group: 'org.apache.logging.log4j', module: 'log4j-core')
+  }
+  api(group: 'org.apache.maven.scm', name: 'maven-scm-api', version: '[1, 2[')
+  // api(group: 'org.apache.maven.scm', name: 'maven-scm-manager-plexus', version: '[1, 2[')
+  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-accurev', version: '[1, 2[')
+  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-bazaar', version: '[1, 2[')
+  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-clearcase', version: '[1, 2[')
+  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-cvs-commons', version: '[1, 2[')
+  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-git-commons', version: '[1, 2[')
+  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-hg', version: '[1, 2[')
+  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-integrity', version: '[1, 2[')
+  // TOTHINK implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-local', version: '[1, 2[')
+  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-perforce', version: '[1, 2[')
+  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-starteam', version: '[1, 2[')
+  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-svn-commons', version: '[1, 2[')
+  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-synergy', version: '[1, 2[')
+  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-vss', version: '[1, 2[')
+  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-tfs', version: '[1, 2[')
+  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-jazz', version: '[1, 2[')
+  // TODO testCompile localGroovy()
+  functionalTestCompile project(path: ':library:base', configuration: 'testFixtures')
+}

@@ -36,8 +36,11 @@ ext.rootDir = file('.')
 apply from: new File(ext.rootDir, 'gradle/build-cache.gradle')
 
 [
-  'library',
+  'library:base',
+  'library:extended',
   'gradle-plugin:base',
+  'gradle-plugin:bintray',
+  'gradle-plugin:plugin-publish',
   'gradle-plugin:nebula',
   'gradle-plugin:toolkit',
 ].each {

@@ -1,6 +1,6 @@
 about_resource: .
 name: gradle-about-plugin
-gradle_versioning_schema: semver-2.0.0
+extended_versioning_schema: semver-2.0.0
 owner: FIDATA
 # author: Basil Peace
 copyright: Copyright ©  Basil Peace
@@ -15,6 +15,9 @@ licenses:
 internal_use_only: no
 vcs_repository: https://github.com/FIDATA/gradle-about-plugin
 vcs_tool: git
+maven_organization:
+  name: FIDATA
+  url: https://fidata.org/
 maven_developers:
   - id: grv87
     name: Basil Peace
@@ -26,16 +29,13 @@ maven_developers:
     properties:
       github: grv87
       twitter: grv87
-maven_organization:
-  name: FIDATA
-  url: https://fidata.org/
 maven_issue_management:
   system: GitHub
   url: https://github.com/FIDATA/gradle-about-plugin/issues
 maven_ci_management:
   system: Jenkins
   url: https://jenkins.fidata.org/job/Github/job/gradle-about-plugin/
-gradle_keywords:
+extended_keywords:
   - ABOUT
   - AboutCode
   - info

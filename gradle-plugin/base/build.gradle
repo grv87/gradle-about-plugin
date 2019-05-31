@@ -18,7 +18,6 @@
  * permissions and limitations under the License.
  */
 plugins {
-  id 'org.fidata.project.java'
   id 'org.fidata.project.groovy'
   id 'org.fidata.plugin'
 }
@@ -27,27 +26,10 @@ publicReleases = true // TODO
 ext.rootDir = file('.')
 
 dependencies {
-  api(project(path: ':library')) {
+  api(project(':library:extended')) {
      exclude(group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl')
      exclude(group: 'org.apache.logging.log4j', module: 'log4j-core')
   }
-  api(group: 'org.apache.maven.scm', name: 'maven-scm-api', version: '[1, 2[')
-  api(group: 'org.apache.maven.scm', name: 'maven-scm-manager-plexus', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-accurev', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-bazaar', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-clearcase', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-cvs-commons', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-git-commons', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-hg', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-integrity', version: '[1, 2[')
-  // TOTHINK implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-local', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-perforce', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-starteam', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-svn-commons', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-synergy', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-vss', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-tfs', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-jazz', version: '[1, 2[')
 }
 
 apply from: new File(ext.rootDir, 'gradle/gradle-plugin-markers.gradle')

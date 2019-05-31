@@ -1,0 +1,50 @@
+#!/usr/bin/env groovy
+/*
+ * Build script for about-library
+ * Copyright ©  Basil Peace
+ *
+ * This file is part of gradle-about-plugin.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+ * implied. See the License for the specific language governing
+ * permissions and limitations under the License.
+ */
+plugins {
+  id 'org.fidata.project.java'
+}
+
+ext.rootDir = file('.')
+
+apply from: new File(ext.rootDir, 'gradle/dependencies-compile.gradle')
+
+sourceSets {
+  testFixtures {
+    groovy.srcDirs = ['src/testFixtures/groovy']
+  }
+}
+
+dependencies {
+  testFixturesCompile localGroovy()
+  testFixturesCompile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
+  testCompile localGroovy()
+  testCompile sourceSets.testFixtures.output
+  functionalTestCompile sourceSets.testFixtures.output
+}
+
+task testFixturesJar(type: Jar) {
+  from testFixturesClasses
+}
+configurations {
+  testFixtures
+}
+artifacts {
+  testFixtures testFixturesJar
+}

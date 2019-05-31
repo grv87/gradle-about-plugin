@@ -27,7 +27,7 @@ publicReleases = true // TODO
 ext.rootDir = file('.')
 
 dependencies {
-  implementation(project(path: ':gradle-plugin:base'))
+  implementation(project(':gradle-plugin:base'))
 }
 
 apply from: new File(ext.rootDir, 'gradle/gradle-plugin-markers.gradle')
@@ -46,6 +46,6 @@ tasks.named('codenarcCompatTest').configure {
 }
 pluginBundle.plugins {
   aboutNebulaPlugin {
-    displayName = 'Gradle About Nebula plugin'
+    displayName = 'Integration plugin between About and Nebula plugins'
   }
 }

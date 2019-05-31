@@ -10,6 +10,10 @@
       <module name="gradle-about-plugin.gradle-plugin.gradleTest" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.main" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.test" target="1.8" />
+      <module name="gradle-about-plugin.library.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.library.main" target="1.8" />
+      <module name="gradle-about-plugin.library.test" target="1.8" />
+      <module name="gradle-about-plugin.library.testFixtures" target="1.8" />
       <module name="org.fidata.gradle.buildSrc.main" target="1.8" />
       <module name="org.fidata.gradle.buildSrc.test" target="1.8" />
       <module name="org.fidata.gradle.gradle-about-plugin.compatTest" target="1.8" />

@@ -1,0 +1,1 @@
+package org.fidata.about.extended.maven;
