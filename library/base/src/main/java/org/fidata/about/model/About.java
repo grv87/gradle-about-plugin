@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.github.jonpeterson.jackson.module.versioning.JsonVersionedModel;
 import com.github.jonpeterson.jackson.module.versioning.VersionedModelConverter;
 import com.github.jonpeterson.jackson.module.versioning.VersioningModule;
@@ -407,6 +408,8 @@ public class About extends AbstractFieldSet {
      * <grv87 2019-05-28>
      */
     OBJECT_MAPPER.setDefaultSetterInfo(JsonSetter.Value.forValueNulls(Nulls.FAIL, Nulls.FAIL));
+
+    OBJECT_MAPPER.registerModule(new GuavaModule());
 
     OBJECT_MAPPER.registerModule(new VersioningModule());
   }

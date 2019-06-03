@@ -38,6 +38,7 @@ apply from: new File(ext.rootDir, 'gradle/build-cache.gradle')
 [
   'library:base',
   'library:extended',
+  'library:maven',
   'gradle-plugin:base',
   'gradle-plugin:bintray',
   'gradle-plugin:plugin-publish',

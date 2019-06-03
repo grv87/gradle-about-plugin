@@ -1,17 +1,16 @@
 package org.fidata.about.model.extended
 
 import static org.fidata.about.TestingUtils.getTestLoc
-import org.fidata.about.extended.AboutExtended
+import org.fidata.about.extended.ExtendedAbout
 import org.fidata.about.extended.maven.LicenseExtended
 import org.fidata.about.model.License
 import org.junit.Test
 
-class AboutExtendedTest {
+class MavenAboutTest {
   @Test
-  void testIsAbleToReadAboutExtended() {
-    final File testFile = getTestLoc('model/extended/extended.ABOUT')
-    final AboutExtended a = AboutExtended.readFromFile(testFile)
-    assert a.versioningSchema.value == 'semver-2.0.0'
+  void testIsAbleToReadMavenAbout() {
+    final File testFile = getTestLoc('maven/maven.ABOUT')
+    final MavenAbout a = MavenAbout.readFromFile(testFile)
     assert a.inceptionYear.value == '2019, very good year'
 
     final License l = a.licenses[0]
@@ -19,6 +18,9 @@ class AboutExtendedTest {
     final LicenseExtended le = (LicenseExtended)l
     assert le.comments.value == 'permissive license'
     assert le.distribution.value == 'repo'
+
+    // TODO: + vcs fields
+    // + Maven Vcs connection URL
 
     assert a.organization.name.value == 'Example Inc.'
     assert a.organization.url.value == new URL('https://example.com/')
@@ -45,10 +47,5 @@ class AboutExtendedTest {
     assert a.mailingLists[0].unsubscribe.value == 'unsubsribe@maillist.example.com'
     assert a.mailingLists[0].post.value == 'post@maillist.example.com'
     assert a.mailingLists[0].archiveUrl.value == new URL('https://maillist.example.com/archive')
-
-    assert a.keywords.size() == 3
-    assert a.keywords[0].value == 'extended'
-    assert a.keywords[0].value == 'expanded'
-    assert a.keywords[0].value == 'example'
   }
 }

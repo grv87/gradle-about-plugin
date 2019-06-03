@@ -40,7 +40,9 @@ dependencies {
 }
 
 task testFixturesJar(type: Jar) {
-  from testFixturesClasses
+  from compileTestFixturesJava
+  from compileTestFixturesGroovy
+  classifier 'testFixtures'
 }
 configurations {
   testFixtures

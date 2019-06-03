@@ -5,8 +5,9 @@ antlr:antlr:2.7.7
 com.athaydes:spock-reports:1.6.2
 com.fasterxml.jackson.core:jackson-annotations:2.9.0
 com.fasterxml.jackson.core:jackson-core:2.9.9
-com.fasterxml.jackson.core:jackson-databind:2.9.8
+com.fasterxml.jackson.core:jackson-databind:2.9.9
 com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.9
+com.fasterxml.jackson.datatype:jackson-datatype-guava:2.9.9
 com.github.andrewoma.dexx:collection:0.7
 com.github.cliftonlabs:json-simple:2.3.1
 com.github.jonpeterson:jackson-module-model-versioning:1.2.2

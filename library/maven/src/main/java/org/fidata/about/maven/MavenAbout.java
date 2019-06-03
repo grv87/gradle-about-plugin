@@ -1,4 +1,4 @@
-package org.fidata.about.extended;
+package org.fidata.about.maven;
 
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,25 +24,15 @@ import org.fidata.about.extended.maven.IssueManagement;
 import org.fidata.about.extended.maven.LicenseExtended;
 import org.fidata.about.extended.maven.MailingList;
 import org.fidata.about.extended.maven.Organization;
-import org.fidata.about.model.About;
+import org.fidata.about.extended.ExtendedAbout;
+import org.fidata.about.model.License;
 import org.fidata.about.model.StringField;
 import org.fidata.about.model.UrlField;
 
-@JsonDeserialize(builder = AboutExtended.AboutExtendedBuilderImpl.class)
+@JsonDeserialize(builder = MavenAbout.MavenAboutBuilderImpl.class)
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-public class AboutExtended extends About {
-  /**
-   * Versioning schema used for version field
-   *
-   * For example, `SemVer v2.0.0` or `CalVer`.
-   * If the version was made from the date the component was provisioned,
-   * value `ProvisionDate` should be used.
-   */
-  public StringField getVersioningSchema() {
-    return getString("extended", "versioning_schema");
-  }
-
+public class MavenAbout extends ExtendedAbout {
   public StringField getInceptionYear() {
     return getString("maven", "inception_year");
   }
@@ -102,21 +92,18 @@ public class AboutExtended extends About {
     return getUrl("maven", "vcs_url");
   }
 
-  @Getter(onMethod_ = {@JsonProperty("extended_keywords")})
-  @Singular
-  private final List<StringField> keywords;
-
-  public static abstract class AboutExtendedBuilder<C extends AboutExtended, B extends AboutExtendedBuilder<C, B>> extends About.AboutBuilder<C, B> {
+  public static abstract class MavenAboutBuilder<C extends MavenAbout, B extends MavenAboutBuilder<C, B>> extends ExtendedAbout.ExtendedAboutBuilder<C, B> {
+    @JsonDeserialize(contentAs = LicenseExtended.class)
     @Override
-    public B licenses(@NonNull final Set<? extends LicenseExtended> licenses) {
+    public B licenses(/*@NonNull*/ final Set<? extends License/*Extended*/> licenses) {
       return super.licenses(licenses);
     }
   }
 
 
-  protected static final class AboutExtendedBuilderImpl extends AboutExtendedBuilder<AboutExtended, AboutExtendedBuilderImpl> {}
+  protected static final class MavenAboutBuilderImpl extends MavenAboutBuilder<MavenAbout, MavenAboutBuilderImpl> {}
 
-  public static AboutExtended readFromFile(File src) throws IOException {
-    return readFromFile(src, AboutExtended.class);
+  public static MavenAbout readFromFile(File src) throws IOException {
+    return readFromFile(src, MavenAbout.class);
   }
 }

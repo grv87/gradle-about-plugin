@@ -1,5 +1,5 @@
 about_resource: .
-name: extended
+name: maven
 extended_versioning_schema: semver-2.0.0
 maven_inception_year: 2019, very good year
 licenses:
@@ -9,9 +9,9 @@ licenses:
     maven_comment: permissive license
     maven_distribution: repo
 vcs_tool: git
-vcs_repository: https://git.example.com/extended/
-maven_vcs_url: https://git-web.example.com/extended/
-maven_vcs_developer_connection_url: ssh://git.example.com/extended/
+vcs_repository: https://git.example.com/maven/
+maven_vcs_url: https://git-web.example.com/maven/
+maven_vcs_developer_connection_url: ssh://git.example.com/maven/
 maven_organization:
   name: Example Inc.
   url: https://example.com/
@@ -27,16 +27,15 @@ maven_developers:
       custom_property: custom_property_value
 maven_issue_management:
   system: Example BugTracker
-  url: https://bugs.example.com/extended/
+  url: https://bugs.example.com/maven/
 maven_ci_management:
   system: ExampleCI
-  url: https://ci.example.com/extended/
+  url: https://ci.example.com/maven/
 maven_mailing_lists:
   - subsribe: subsribe@maillist.example.com
     unsubsribe: unsubsribe@maillist.example.com
     post: post@maillist.example.com
     archive_url: https://maillist.example.com/archive
 extended_keywords:
-  - extended
-  - expanded
+  - maven
   - example
