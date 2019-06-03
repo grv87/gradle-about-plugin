@@ -7,8 +7,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.OptBoolean;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import java.net.MalformedURLException;
-import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -41,7 +40,7 @@ public abstract class AbstractFieldSet {
   public final FileTextField getFile(String name) {
     FileTextField result = (FileTextField)customFields.get(name);
     if (result == null) {
-      result = new FileTextField(null, null);
+      result = FileTextField.NULL;
     }
     return result;
   }
@@ -59,7 +58,7 @@ public abstract class AbstractFieldSet {
   public final UrlField getUrl(String name) {
     UrlField result = (UrlField)customFields.get(name);
     if (result == null) {
-      result = new UrlField((URI)null);
+      result = UrlField.NULL;
     }
     return result;
   }
@@ -77,7 +76,7 @@ public abstract class AbstractFieldSet {
   public final StringField getString(String name) {
     StringField result = (StringField)customFields.get(name);
     if (result == null) {
-      result = new StringField(null);
+      result = StringField.NULL;
     }
     return result;
   }
@@ -115,7 +114,7 @@ public abstract class AbstractFieldSet {
     private PathAbsolutizer pathAbsolutizer;
 
     @JsonAnySetter
-    protected final void unknownField(String name, Object value) throws MalformedURLException {
+    protected final void unknownField(String name, Object value) throws URISyntaxException {
       name = name.toLowerCase(Locale.ROOT);
       if (!isValidName(name)) {
         // TODO: Fix message
@@ -136,7 +135,7 @@ public abstract class AbstractFieldSet {
         if (value == null) {
           // Default behavior of aboutcode-toolkit
           // Note that Guava's ImmutableMap anyway doesn't accept nulls
-          value = new StringField("");
+          value = StringField.EMPTY;
         } else if (String.class.isInstance(value)) {
           // Note: Jackson already trimmed trailing spaces
           // on each line except the last one

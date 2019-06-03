@@ -1,23 +1,22 @@
 package org.fidata.about.maven;
 
+import static lombok.Builder.Default;
 import com.fasterxml.jackson.annotation.JacksonInject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Set;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import org.apache.maven.scm.manager.ScmManager;
 import org.fidata.about.extended.ExtendedAbout;
-import org.fidata.about.model.License;
 import org.fidata.about.model.StringField;
 import org.fidata.about.model.UrlField;
 
@@ -41,13 +40,13 @@ public class MavenAbout extends ExtendedAbout {
 
   @Getter
   @JsonProperty("maven_developers")
-  @Builder.Default
-  private final List<Developer> developers = ImmutableList.of();
+  @Default
+  private final Set<Developer> developers = ImmutableSet.of();
 
   @Getter
   @JsonProperty("maven_contributors")
-  @Builder.Default
-  private final List<Contributor> contributors = ImmutableList.of();
+  @Default
+  private final Set<Contributor> contributors = ImmutableSet.of();
 
   @Getter
   @JsonProperty("maven_issue_management")
@@ -59,7 +58,8 @@ public class MavenAbout extends ExtendedAbout {
 
   @Getter
   @JsonProperty("maven_mailing_lists")
-  private final List<? extends MailingList> mailingLists;
+  @Default
+  private final Set<? extends MailingList> mailingLists = ImmutableSet.of();
 
   @JacksonInject
   // @NonNull TODO
@@ -72,8 +72,8 @@ public class MavenAbout extends ExtendedAbout {
       throw new IllegalStateException(String.format("Invalid vcs connection URL: %s.\n%s", vcsConnectionUrl, validationErrors.toString()));
     }
     try {
-      return new UrlField(new URL(vcsConnectionUrl));
-    } catch (MalformedURLException e) {
+      return new UrlField(new URI(vcsConnectionUrl));
+    } catch (URISyntaxException e) {
       throw new IllegalStateException(String.format("Invalid vcs connection URL: %s", vcsConnectionUrl), e);
     }
   }

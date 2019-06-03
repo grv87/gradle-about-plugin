@@ -1,5 +1,6 @@
 package org.fidata.about.maven;
 
+import static lombok.Builder.Default;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -11,7 +12,8 @@ import org.fidata.about.model.StringField;
 @EqualsAndHashCode(callSuper = true)
 public class Developer extends Contributor {
   @Getter
-  private final StringField id;
+  @Default
+  private final StringField id = StringField.NULL;
 
   protected static final class DeveloperBuilderImpl extends DeveloperBuilder<Developer, DeveloperBuilderImpl> {}
 }

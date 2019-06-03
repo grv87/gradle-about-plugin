@@ -1,5 +1,6 @@
 package org.fidata.about.maven;
 
+import static lombok.Builder.Default;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,10 +14,12 @@ import org.fidata.about.model.UrlField;
 @EqualsAndHashCode(callSuper = true)
 public class Organization extends AbstractFieldSet {
   @Getter
-  private final StringField name;
+  @Default
+  private final StringField name = StringField.NULL;
 
   @Getter
-  private final UrlField url;
+  @Default
+  private final UrlField url = UrlField.NULL;
 
   protected static final class OrganizationBuilderImpl extends OrganizationBuilder<Organization, OrganizationBuilderImpl> {}
 }

@@ -1,0 +1,4 @@
+about_resource: .
+name: license-key
+licenses:
+  - key: Apache-2.0

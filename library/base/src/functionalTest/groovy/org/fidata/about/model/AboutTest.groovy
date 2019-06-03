@@ -231,7 +231,7 @@ class AboutTest {
 
   @Test
   void testIsAbleToReadStructuredCustomFields() {
-    File testFile = getTestLoc('model/structured_custom_fields.about')
+    File testFile = getTestLoc('model/structured_custom_fields.ABOUT')
     About a = About.readFromFile(testFile)
     println a
     /* TODO:
@@ -289,7 +289,7 @@ class AboutTest {
   @Parameters
   @TestCaseName('{0} is immutable')
   void testAllCollectionsAreReadOnly(String fieldName, @ClosureParams(value = SimpleType, options = "org.fidata.about.model.About") Closure closure) {
-    File testFile = getTestLoc('model/structured_custom_fields.about')
+    File testFile = getTestLoc('model/structured_custom_fields.ABOUT')
     About a = About.readFromFile(testFile)
 
     thrown.expect(UnsupportedOperationException)
@@ -304,7 +304,7 @@ class AboutTest {
       ],
       [
         'checksums',
-        { it.checksums['abc'] = new ChecksumField((byte[])null) }
+        { it.checksums['abc'] = ChecksumField.NULL }
       ],
       [
         'customFields',
@@ -312,11 +312,41 @@ class AboutTest {
       ],
       [
         'custom_list',
-        { it.customFields['custom_list'].add null }
+        { it.customFields['custom_list'].add 'qwe' }
       ],
       [
         'custom_hash',
-        { it.customFields['custom_hash']['ghi'] = null }
+        { it.customFields['custom_hash']['ghi'] = 'rst' }
+      ],
+    ]*.toArray().toArray()
+    assert result.length > 0
+    result
+  }
+
+  @Test
+  @Parameters
+  @TestCaseName('testInitsAllLicenseFieldsToNotNull({0})')
+  void testInitsAllLicenseFieldsToNotNull(String testName) {
+    File testFile = getTestLoc("model/${ testName }.ABOUT")
+    About a = About.readFromFile(testFile)
+    License license = a.licenses[0]
+    [
+      'key',
+      'name',
+      'file',
+      'url',
+    ].each { String it ->
+      assert license."$it" != null
+    }
+  }
+
+  Object[] parametersForTestInitsAllLicenseFieldsToNotNull() {
+    Object[] result = [
+      [
+        'license-key',
+      ],
+      [
+        'license-name',
       ],
     ]*.toArray().toArray()
     assert result.length > 0

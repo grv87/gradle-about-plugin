@@ -1,8 +1,11 @@
 package org.fidata.about.maven;
 
+import static lombok.Builder.Default;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import java.util.List;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import java.util.Map;
+import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -15,25 +18,32 @@ import org.fidata.about.model.UrlField;
 @EqualsAndHashCode(callSuper = true)
 public class Contributor extends AbstractFieldSet {
   @Getter
-  private final StringField name;
+  @Default
+  private final StringField name = StringField.NULL;
 
   @Getter
-  private final StringField email;
+  @Default
+  private final StringField email = StringField.NULL;
 
   @Getter
-  private final StringField organization;
+  @Default
+  private final StringField organization = StringField.NULL;
 
   @Getter
-  private final UrlField organizationUrl;
+  @Default
+  private final UrlField organizationUrl = UrlField.NULL;
 
   @Getter
-  private final List<StringField> roles;
+  @Default
+  private final Set<StringField> roles = ImmutableSet.of();
 
   @Getter
-  private final StringField timezone;
+  @Default
+  private final StringField timezone = StringField.NULL;
 
   @Getter
-  private final Map<String, StringField> properties;
+  @Default
+  private final Map<String, StringField> properties = ImmutableMap.of();
 
   protected static final class ContributorBuilderImpl extends ContributorBuilder<Contributor, ContributorBuilderImpl> {}
 }

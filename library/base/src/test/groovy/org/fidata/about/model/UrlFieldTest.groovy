@@ -7,7 +7,7 @@ class UrlFieldTest {
     try {
       new UrlField(value)
       return true
-    } catch (MalformedURLException e) {
+    } catch (URISyntaxException | IllegalArgumentException e) {
       return false
     }
   }
@@ -21,7 +21,13 @@ class UrlFieldTest {
   void testIsValidUrlNotStartingWithWww() {
     assert isValidUrl('https://nexb.com')
     assert isValidUrl('http://archive.apache.org/dist/httpcomponents/commons-httpclient/2.0/source/commons-httpclient-2.0-alpha2-src.tar.gz')
-    assert isValidUrl('http://de.wikipedia.org/wiki/Elf (Begriffsklärung)')
+    /*
+     * CAVEAT:
+     * Here aboutcode-toolkit tests URL with space.
+     * We don't support it. Such URL would be incorrect
+     * <grv87 2019-06-03>
+     */
+    assert isValidUrl('http://de.wikipedia.org/wiki/Elf_(Begriffsklärung)')
     assert isValidUrl('http://nothing_here.com')
   }
 
@@ -43,19 +49,12 @@ class UrlFieldTest {
 
   @Test
   void testIsValidUrlEmptyUrl() {
-    /*
-     * CAVEAT:
-     * Here is a bug in aboutcode-toolkit.
-     * Empty path is legal according to the section 3 of RFC 3986.
-     * TODO: report it
-     * <grv87 2019-05-24>
-     */
-    assert isValidUrl('http:')
+    assert !isValidUrl('http:')
   }
 
   @Test
   void testToString() {
-    final URL value = new URL('https://fidata.org/')
+    final URI value = new URI('https://fidata.org/')
     final UrlField field = new UrlField(value)
     final String valueToString = value.toString()
     final String fieldToString = field.toString()

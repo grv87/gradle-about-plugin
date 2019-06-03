@@ -1,7 +1,9 @@
 package org.fidata.about.maven;
 
+import static lombok.Builder.Default;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import java.util.List;
+import com.google.common.collect.ImmutableSet;
+import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -14,19 +16,24 @@ import org.fidata.about.model.UrlField;
 @EqualsAndHashCode(callSuper = true)
 public class MailingList extends AbstractFieldSet {
   @Getter
-  private final StringField subscribe;
+  @Default
+  private final StringField subscribe = StringField.NULL;
 
   @Getter
-  private final StringField unsubscribe;
+  @Default
+  private final StringField unsubscribe = StringField.NULL;
 
   @Getter
-  private final UrlField archiveUrl;
+  @Default
+  private final UrlField archiveUrl = UrlField.NULL;
 
   @Getter
-  private final StringField post;
+  @Default
+  private final StringField post = StringField.NULL;
 
   @Getter
-  private final List<UrlField> otherArchives;
+  @Default
+  private final Set<UrlField> otherArchives = ImmutableSet.of();
 
   protected static final class MailingListBuilderImpl extends MailingListBuilder<MailingList, MailingListBuilderImpl> {}
 }

@@ -2,10 +2,10 @@ package org.fidata.about.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.google.common.io.BaseEncoding;
-import lombok.ToString;
-import org.apache.commons.lang3.ArrayUtils;
 
 public final class ChecksumField extends Field<byte[]> {
+  public static final ChecksumField NULL = new ChecksumField((byte[])null);
+
   static final BaseEncoding CHECKSUM_ENCODING = BaseEncoding.base16();
 
   @JsonCreator

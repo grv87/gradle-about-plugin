@@ -24,6 +24,14 @@ maven_developers:
     timezone: America/Argentina/Mendoza
     properties:
       custom_property: custom_property_value
+maven_contributors:
+  - name: Jane Doe
+    organization: Samples Ltd
+    roles:
+      - developer
+    timezone: Asia/China/Beijing
+    properties:
+      sex: female
 maven_issue_management:
   system: Example BugTracker
   url: https://bugs.example.com/maven/
@@ -31,8 +39,8 @@ maven_ci_management:
   system: ExampleCI
   url: https://ci.example.com/maven/
 maven_mailing_lists:
-  - subsribe: subsribe@maillist.example.com
-    unsubsribe: unsubsribe@maillist.example.com
+  - subscribe: subscribe@maillist.example.com
+    unsubscribe: unsubscribe@maillist.example.com
     post: post@maillist.example.com
     archive_url: https://maillist.example.com/archive
 extended_keywords:

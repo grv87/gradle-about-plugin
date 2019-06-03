@@ -1,22 +1,23 @@
 package org.fidata.about.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLStreamHandler;
+import java.net.URI;
+import java.net.URISyntaxException;
 import lombok.ToString;
-import org.fidata.utils.DummyURLStreamHandler;
 
 @ToString(callSuper = true)
-public final class UrlField extends Field<URL> {
-  private static URLStreamHandler URL_STREAM_HANDLER = new DummyURLStreamHandler();
+public final class UrlField extends Field<URI> {
+  public static final UrlField NULL = new UrlField((URI)null);
 
   @JsonCreator
-  public UrlField(String stringValue) throws MalformedURLException {
-    this(new URL(null, stringValue, URL_STREAM_HANDLER));
+  public UrlField(String stringValue) throws URISyntaxException {
+    this(new URI(stringValue));
   }
 
-  public UrlField(URL urlValue) {
+  public UrlField(URI urlValue) {
     super(urlValue);
+    if (urlValue != null && urlValue.getScheme() == null) {
+      throw new IllegalArgumentException(String.format("URL should have scheme specified: %s", urlValue.toString()));
+    }
   }
 }

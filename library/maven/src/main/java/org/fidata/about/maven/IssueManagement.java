@@ -1,5 +1,6 @@
 package org.fidata.about.maven;
 
+import static lombok.Builder.Default;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,10 +14,12 @@ import org.fidata.about.model.UrlField;
 @EqualsAndHashCode(callSuper = true)
 public class IssueManagement extends AbstractFieldSet {
   @Getter
-  private final StringField system;
+  @Default
+  private final StringField system = StringField.NULL;
 
   @Getter
-  private final UrlField url;
+  @Default
+  private final UrlField url = UrlField.NULL;
 
   protected static final class IssueManagementBuilderImpl extends IssueManagementBuilder<IssueManagement, IssueManagementBuilderImpl> {}
 }

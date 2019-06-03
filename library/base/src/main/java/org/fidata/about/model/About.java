@@ -1,5 +1,6 @@
 package org.fidata.about.model;
 
+import static lombok.Builder.Default;
 import static org.apache.commons.lang3.StringUtils.endsWithIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 import static org.fidata.about.model.FileTextField.PATH_ABSOLUTIZER;
@@ -28,7 +29,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +89,7 @@ public class About extends AbstractFieldSet {
    * This is provided as a hint to readers and tools in order to support future versions of this specification
    */
   @Getter
-  @lombok.Builder.Default
+  @Default
   private final StringField specVersion = new StringField(CURRENT_SPEC_VERSION); // TOTEST
 
   /**
@@ -185,7 +186,7 @@ public class About extends AbstractFieldSet {
   }
 
   @Getter
-  @lombok.Builder.Default
+  @Default
   private final Set<? extends License> licenses = ImmutableSet.of();
 
   /**
@@ -195,7 +196,7 @@ public class About extends AbstractFieldSet {
    * between multiple license identifiers, such as a choice among multiple licenses
    */
   @Getter
-  @lombok.Builder.Default
+  @Default
   private final LicenseExpressionField licenseExpression = new LicenseExpressionField(new SpdxNoneLicense());
 
   /**
@@ -204,7 +205,7 @@ public class About extends AbstractFieldSet {
    * Defaults to no when absent
    */
   @Getter
-  @lombok.Builder.Default
+  @Default
   private final BooleanField redistribute = BooleanField.FALSE;
 
   /**
@@ -213,7 +214,7 @@ public class About extends AbstractFieldSet {
    * Defaults to no when absent
    */
   @Getter
-  @lombok.Builder.Default
+  @Default
   private final BooleanField attribute = BooleanField.FALSE;
 
   /**
@@ -222,7 +223,7 @@ public class About extends AbstractFieldSet {
    * Defaults to no when absent
    */
   @Getter
-  @lombok.Builder.Default
+  @Default
   private final BooleanField trackChanges = BooleanField.FALSE;
 
   /**
@@ -231,7 +232,7 @@ public class About extends AbstractFieldSet {
    * Defaults to no when absent
    */
   @Getter
-  @lombok.Builder.Default
+  @Default
   private final BooleanField modified = BooleanField.FALSE;
 
   /**
@@ -240,7 +241,7 @@ public class About extends AbstractFieldSet {
    * Defaults to no when absent
    */
   @Getter
-  @lombok.Builder.Default
+  @Default
   private final BooleanField internalUseOnly = BooleanField.FALSE;
 
   /**
@@ -348,13 +349,12 @@ public class About extends AbstractFieldSet {
         AnyLicenseInfo licenseInfo = licenseExpression.getOriginalValue();
         if (licenses != null) {
           for (License license : licenses) {
-            StringField licenseKeyField = license.getKey();
-            FileTextField licenseFileField = license.getFile();
-            if (licenseKeyField != null && licenseFileField != null) {
-              String licenseKey = licenseKeyField.getValue();
+            String licenseKey = license.getKey().getValue();
+            Path licenseFile = license.getFile().getValue();
+            if (licenseKey != null && licenseFile != null) {
               String licenseText;
               try {
-                licenseText = FileUtils.readWholeFileAsUTF8(licenseFileField.getValue().toString());
+                licenseText = FileUtils.readWholeFileAsUTF8(licenseFile.toString());
               } catch (IOException ignored) {
                 // Don't use problematic license file
                 // TOTHINK about it
