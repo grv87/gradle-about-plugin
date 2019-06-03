@@ -37,6 +37,7 @@ dependencies {
   testCompile localGroovy()
   testCompile sourceSets.testFixtures.output
   functionalTestCompile sourceSets.testFixtures.output
+  functionalTestCompile group: 'pl.pragmatists', name: 'JUnitParams', version: '[1, 2['
 }
 
 task testFixturesJar(type: Jar) {

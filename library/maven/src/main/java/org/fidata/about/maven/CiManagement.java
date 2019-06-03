@@ -1,4 +1,4 @@
-package org.fidata.about.extended.maven;
+package org.fidata.about.maven;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.EqualsAndHashCode;

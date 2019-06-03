@@ -1,10 +1,9 @@
-package org.fidata.about.extended.maven;
+package org.fidata.about.maven;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import org.fidata.about.model.AbstractFieldSet;
 import org.fidata.about.model.StringField;
@@ -27,7 +26,6 @@ public class MailingList extends AbstractFieldSet {
   private final StringField post;
 
   @Getter
-  @Singular
   private final List<UrlField> otherArchives;
 
   protected static final class MailingListBuilderImpl extends MailingListBuilder<MailingList, MailingListBuilderImpl> {}

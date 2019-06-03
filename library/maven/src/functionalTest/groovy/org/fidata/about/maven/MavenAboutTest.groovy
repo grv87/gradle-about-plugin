@@ -1,12 +1,22 @@
-package org.fidata.about.model.extended
+package org.fidata.about.maven
 
 import static org.fidata.about.TestingUtils.getTestLoc
-import org.fidata.about.extended.ExtendedAbout
-import org.fidata.about.extended.maven.LicenseExtended
+import groovy.transform.stc.ClosureParams
+import groovy.transform.stc.SimpleType
+import junitparams.JUnitParamsRunner
+import junitparams.Parameters
+import junitparams.naming.TestCaseName
 import org.fidata.about.model.License
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.ExpectedException
+import org.junit.runner.RunWith
 
+@RunWith(JUnitParamsRunner)
 class MavenAboutTest {
+  @Rule
+  public ExpectedException thrown = ExpectedException.none()
+
   @Test
   void testIsAbleToReadMavenAbout() {
     final File testFile = getTestLoc('maven/maven.ABOUT')
@@ -47,5 +57,35 @@ class MavenAboutTest {
     assert a.mailingLists[0].unsubscribe.value == 'unsubsribe@maillist.example.com'
     assert a.mailingLists[0].post.value == 'post@maillist.example.com'
     assert a.mailingLists[0].archiveUrl.value == new URL('https://maillist.example.com/archive')
+  }
+
+  @Test
+  @Parameters
+  @TestCaseName('{0} is immutable')
+  void testAllCollectionsAreReadOnly(String fieldName, @ClosureParams(value = SimpleType, options = "org.fidata.about.maven.MavenAbout") Closure closure) {
+    File testFile = getTestLoc('maven/maven.ABOUT')
+    MavenAbout a = MavenAbout.readFromFile(testFile)
+
+    thrown.expect(UnsupportedOperationException)
+    closure.call(a)
+  }
+
+  Object[] parametersForTestAllCollectionsAreReadOnly() {
+    Object[] result = [
+      [
+        'developers',
+        { it.developers.add(null) }
+      ],
+      [
+        'contributors',
+        { it.contributors.add(null) }
+      ],
+      [
+        'mailingLists',
+        { it.mailingLists.add(null) }
+      ],
+    ]*.toArray().toArray()
+    assert result.length > 0
+    result
   }
 }

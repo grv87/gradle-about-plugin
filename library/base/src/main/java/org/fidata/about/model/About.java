@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
@@ -22,9 +23,12 @@ import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.github.jonpeterson.jackson.module.versioning.JsonVersionedModel;
 import com.github.jonpeterson.jackson.module.versioning.VersionedModelConverter;
 import com.github.jonpeterson.jackson.module.versioning.VersioningModule;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -181,7 +185,6 @@ public class About extends AbstractFieldSet {
   }
 
   @Getter
-  @NonNull
   @lombok.Builder.Default
   private final Set<? extends License> licenses = ImmutableSet.of();
 
@@ -192,7 +195,6 @@ public class About extends AbstractFieldSet {
    * between multiple license identifiers, such as a choice among multiple licenses
    */
   @Getter
-  @NonNull
   @lombok.Builder.Default
   private final LicenseExpressionField licenseExpression = new LicenseExpressionField(new SpdxNoneLicense());
 
@@ -411,21 +413,39 @@ public class About extends AbstractFieldSet {
 
     OBJECT_MAPPER.registerModule(new GuavaModule());
 
+    final SimpleModule deserializersModule = new SimpleModule();
+    deserializersModule.addAbstractTypeMapping(List.class, ImmutableList.class);
+    deserializersModule.addAbstractTypeMapping(Set.class, ImmutableSet.class);
+    deserializersModule.addAbstractTypeMapping(Map.class, ImmutableMap.class);
+    OBJECT_MAPPER.registerModule(deserializersModule);
+
     OBJECT_MAPPER.registerModule(new VersioningModule());
   }
 
-  protected static <T extends About> T readFromFile(File src, Class<T> tClass) throws IOException {
-    ObjectMapper objectMapper = OBJECT_MAPPER.copy();
+  private static <U, V> void addAbstractTypeMapping(SimpleModule simpleModule, Class<U> superClass, Class<V> subClass) {
+    simpleModule.addAbstractTypeMapping(superClass, subClass.asSubclass(superClass));
+  }
 
-    InjectableValues.Std injectableValues = new InjectableValues.Std();
+  protected static <T extends About> T readFromFile(File src, Class<T> tClass, Map<Class<?>, Class<?>> abstractTypeMappings) throws IOException {
+    final ObjectMapper objectMapper = OBJECT_MAPPER.copy();
+
+    final InjectableValues.Std injectableValues = new InjectableValues.Std();
     injectableValues.addValue(PATH_ABSOLUTIZER, new PathAbsolutizer(src.getParentFile()));
     objectMapper.setInjectableValues(injectableValues);
+
+    if (abstractTypeMappings.size() > 0) {
+      final SimpleModule deserializersModule = new SimpleModule();
+      for (Class<?> abstractType : abstractTypeMappings.keySet()) {
+        addAbstractTypeMapping(deserializersModule, abstractType, abstractTypeMappings.get(abstractType));
+      }
+      objectMapper.registerModule(deserializersModule);
+    }
 
     return objectMapper.readValue(src, tClass);
   }
 
   public static About readFromFile(File src) throws IOException {
-    return readFromFile(src, About.class);
+    return readFromFile(src, About.class, ImmutableMap.of());
   }
 
   public static class ToCurrentAboutConverter implements VersionedModelConverter {

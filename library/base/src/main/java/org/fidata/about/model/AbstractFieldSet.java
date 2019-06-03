@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.OptBoolean;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -59,7 +59,7 @@ public abstract class AbstractFieldSet {
   public final UrlField getUrl(String name) {
     UrlField result = (UrlField)customFields.get(name);
     if (result == null) {
-      result = new UrlField((URL)null);
+      result = new UrlField((URI)null);
     }
     return result;
   }

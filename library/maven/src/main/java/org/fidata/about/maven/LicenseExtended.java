@@ -1,8 +1,7 @@
-package org.fidata.about.extended.maven;
+package org.fidata.about.maven;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import org.fidata.about.model.License;
 import org.fidata.about.model.StringField;

@@ -1,13 +1,20 @@
 package org.fidata.about.model
 
 import static org.fidata.about.TestingUtils.getTestLoc
+import groovy.transform.stc.ClosureParams
+import groovy.transform.stc.SimpleType
 import java.nio.file.Path
+import junitparams.JUnitParamsRunner
+import junitparams.Parameters
+import junitparams.naming.TestCaseName
 import org.hamcrest.CoreMatchers
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
+import org.junit.runner.RunWith
 
+@RunWith(JUnitParamsRunner)
 class AboutTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none()
@@ -276,5 +283,43 @@ class AboutTest {
     File testFile = getTestLoc('license_expression/invalid.about')
     thrown.expect IOException
     About a = About.readFromFile(testFile)
+  }
+
+  @Test
+  @Parameters
+  @TestCaseName('{0} is immutable')
+  void testAllCollectionsAreReadOnly(String fieldName, @ClosureParams(value = SimpleType, options = "org.fidata.about.model.About") Closure closure) {
+    File testFile = getTestLoc('model/structured_custom_fields.about')
+    About a = About.readFromFile(testFile)
+
+    thrown.expect(UnsupportedOperationException)
+    closure.call(a)
+  }
+
+  Object[] parametersForTestAllCollectionsAreReadOnly() {
+    Object[] result = [
+      [
+        'licenses',
+        { it.licenses.add(null) }
+      ],
+      [
+        'checksums',
+        { it.checksums['abc'] = new ChecksumField((byte[])null) }
+      ],
+      [
+        'customFields',
+        { it.customFields['def'] = Boolean.TRUE }
+      ],
+      [
+        'custom_list',
+        { it.customFields['custom_list'].add null }
+      ],
+      [
+        'custom_hash',
+        { it.customFields['custom_hash']['ghi'] = null }
+      ],
+    ]*.toArray().toArray()
+    assert result.length > 0
+    result
   }
 }

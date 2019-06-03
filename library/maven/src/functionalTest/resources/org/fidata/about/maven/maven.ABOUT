@@ -5,8 +5,7 @@ maven_inception_year: 2019, very good year
 licenses:
   - key: Apache-2.0
     name: Apache-2.0
-    file: LICENSE
-    maven_comment: permissive license
+    maven_comments: permissive license
     maven_distribution: repo
 vcs_tool: git
 vcs_repository: https://git.example.com/maven/

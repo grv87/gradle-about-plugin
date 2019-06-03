@@ -2,6 +2,7 @@ package org.fidata.about.extended;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
 import java.util.Set;
@@ -25,18 +26,12 @@ public class ExtendedAbout extends About {
     return getString("extended", "versioning_schema");
   }
 
-  // @Getter(onMethod_ = {@JsonProperty("extended_keywords")})
   @JsonProperty("extended_keywords")
-  // @JsonDeserialize(as = LinkedHashSet.class)
-  // @Singular
   private final Set<StringField> keywords;
 
-  protected static final class ExtendedAboutBuilderImpl extends ExtendedAboutBuilder<ExtendedAbout, ExtendedAboutBuilderImpl> {
-
-
-  }
+  protected static final class ExtendedAboutBuilderImpl extends ExtendedAboutBuilder<ExtendedAbout, ExtendedAboutBuilderImpl> {}
 
   public static ExtendedAbout readFromFile(File src) throws IOException {
-    return readFromFile(src, ExtendedAbout.class);
+    return readFromFile(src, ExtendedAbout.class, ImmutableMap.of());
   }
 }

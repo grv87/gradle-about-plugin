@@ -45,4 +45,5 @@ dependencies {
   implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-jazz', version: '[1, 2[')
   // TODO testCompile localGroovy()
   functionalTestCompile project(path: ':library:base', configuration: 'testFixtures')
+  functionalTestCompile group: 'pl.pragmatists', name: 'JUnitParams', version: '[1, 2['
 }
