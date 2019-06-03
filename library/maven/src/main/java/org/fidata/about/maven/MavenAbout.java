@@ -12,8 +12,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Set;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import org.apache.maven.scm.manager.ScmManager;
 import org.fidata.about.extended.ExtendedAbout;
@@ -58,11 +60,14 @@ public class MavenAbout extends ExtendedAbout {
 
   @Getter
   @JsonProperty("maven_mailing_lists")
-  @Default
-  private final Set<? extends MailingList> mailingLists = ImmutableSet.of();
+  // @Default
+  @Singular
+  @Builder.ObtainVia
+  private final Set<? extends MailingList> mailingLists /*= ImmutableSet.of()*/;
 
   @JacksonInject
   // @NonNull TODO
+  @EqualsAndHashCode.Exclude
   private final ScmManager scmManager; // TODO
 
   private UrlField constructVcsConnectionUrl()  {

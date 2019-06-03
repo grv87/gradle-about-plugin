@@ -26,7 +26,6 @@ ext.rootDir = file('.')
 
 dependencies {
   api(project(path: ':library:base'))
-  // TODO testCompile localGroovy()
   functionalTestCompile project(path: ':library:base', configuration: 'testFixtures')
   functionalTestCompile group: 'pl.pragmatists', name: 'JUnitParams', version: '[1, 2['
 }

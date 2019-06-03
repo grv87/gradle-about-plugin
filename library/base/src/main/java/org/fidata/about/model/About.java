@@ -38,6 +38,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Singular;
+import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 import org.apache.jena.util.FileUtils;
 import org.fidata.jackson.VersionParser;
@@ -196,6 +197,7 @@ public class About extends AbstractFieldSet {
    * between multiple license identifiers, such as a choice among multiple licenses
    */
   @Getter
+  @Accessors()
   @Default
   private final LicenseExpressionField licenseExpression = new LicenseExpressionField(new SpdxNoneLicense());
 
@@ -290,7 +292,7 @@ public class About extends AbstractFieldSet {
   /**
    * Checksums for the file documented by this ABOUT file in the "about_resource" field
    */
-  @Getter // TODO: check that it is immutable
+  @Getter
   @Singular
   private final Map<String, ? extends ChecksumField> checksums;
 
