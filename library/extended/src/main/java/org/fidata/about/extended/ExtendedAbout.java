@@ -32,6 +32,6 @@ public class ExtendedAbout extends About {
   protected static final class ExtendedAboutBuilderImpl extends ExtendedAboutBuilder<ExtendedAbout, ExtendedAboutBuilderImpl> {}
 
   public static ExtendedAbout readFromFile(File src) throws IOException {
-    return readFromFile(src, ExtendedAbout.class, ImmutableMap.of());
+    return readFromFile(src, ExtendedAbout.class);
   }
 }

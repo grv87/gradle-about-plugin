@@ -43,8 +43,7 @@ apply from: new File(ext.rootDir, 'gradle/build-cache.gradle')
   'gradle-plugin:maven',
   'gradle-plugin:bintray',
   'gradle-plugin:plugin-publish',
-  'gradle-plugin:nebula:info-broker',
-  'gradle-plugin:nebula:publishing',
+  'gradle-plugin:nebula:contacts',
   'gradle-plugin:nebula:bintray',
   'gradle-plugin:toolkit',
 ].each {

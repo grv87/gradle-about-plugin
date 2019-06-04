@@ -27,22 +27,24 @@ ext.rootDir = file('.')
 dependencies {
   api(project(path: ':library:extended'))
   api(group: 'org.apache.maven.scm', name: 'maven-scm-api', version: '[1, 2[')
-  // api(group: 'org.apache.maven.scm', name: 'maven-scm-manager-plexus', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-accurev', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-bazaar', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-clearcase', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-cvs-commons', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-git-commons', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-hg', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-integrity', version: '[1, 2[')
-  // TOTHINK implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-local', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-perforce', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-starteam', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-svn-commons', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-synergy', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-vss', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-tfs', version: '[1, 2[')
-  implementation(group: 'org.apache.maven.scm', name: 'maven-scm-provider-jazz', version: '[1, 2[')
+  api(group: 'org.apache.maven.scm', name: 'maven-scm-manager-plexus', version: '[1, 2[') {
+    /*
+     * WORKAROUND: TODO
+     * org.apache.maven:maven-ant-tasks has old plexus dependency which have undesired JUnit dependency
+     * <grv87 2018-06-24>
+     */
+    exclude group: 'org.codehaus.plexus', module: 'plexus-container-default'
+  }
+  implementation(group: 'org.codehaus.plexus', name: 'plexus-container-default', version: '[1, 2[') {
+    /*
+     * WORKAROUND: TODO
+     * org.codehaus.plexus:plexus-container-default still has google-collections dependency
+     * which is superseded by Guava
+     * <grv87 2018-06-24>
+     */
+    exclude group: 'com.google.collections', module: 'google-collections'
+  }
+  functionalTestCompile(group: 'org.apache.maven.scm', name: 'maven-scm-provider-gitexe', version: '[1, 2[')
   functionalTestCompile project(path: ':library:base', configuration: 'testFixtures')
   functionalTestCompile group: 'pl.pragmatists', name: 'JUnitParams', version: '[1, 2['
 }

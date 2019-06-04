@@ -15,6 +15,7 @@
 package org.fidata.about
 
 import com.google.common.io.Resources
+import java.lang.reflect.Method
 
 final class TestingUtils {
   /**
@@ -32,6 +33,15 @@ final class TestingUtils {
     }
     testLoc
   }
+
+  static List<String> getListSetProperties(Class aClass) {
+    aClass.declaredMethods.find { Method method ->
+      method.name ==~ /^get[A-Z]/ && method.parameterCount == 0 && (Set.isAssignableFrom(method.returnType) || List.isAssignableFrom(method.returnType))
+    }.collect { Method method ->
+      method.name.substring(3).uncapitalize()
+    }
+  }
+
   private TestingUtils() {
     throw new UnsupportedOperationException()
   }

@@ -46,7 +46,7 @@ tasks.named('codenarcCompatTest').configure {
   disabledRules.add 'JavaIoPackageAccess' // TODO
 }
 pluginBundle.plugins {
-  aboutNebulaBintrayPlugin {
+  aboutBintrayPlugin {
     displayName = 'Integration plugin between About and Nebula Bintray plugins'
   }
 }

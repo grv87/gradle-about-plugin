@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.StringUtils.endsWithIgnoreCase;
 import static org.apache.commons.lang3.StringUtils.startsWithIgnoreCase;
 import static org.fidata.about.model.FileTextField.PATH_ABSOLUTIZER;
 import static org.fidata.spdx.SpdxUtils.walkLicenseInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.core.JsonParser;
@@ -187,8 +188,8 @@ public class About extends AbstractFieldSet {
   }
 
   @Getter
-  @Default
-  private final Set<? extends License> licenses = ImmutableSet.of();
+  @Singular
+  private final Set<? extends License> licenses;
 
   /**
    * The license expression that apply to the component
@@ -297,7 +298,7 @@ public class About extends AbstractFieldSet {
   private final Map<String, ? extends ChecksumField> checksums;
 
   @JsonVersionedModel(propertyName = "specVersion", currentVersion = CURRENT_SPEC_VERSION, defaultDeserializeToVersion = CURRENT_SPEC_VERSION, toCurrentConverterClass = About.ToCurrentAboutConverter.class)
-  public static abstract class AboutBuilder<C extends About, B extends AboutBuilder<C, B>> extends AbstractFieldSetBuilder<C, B> {
+  public static abstract class AboutBuilder<C extends About, B extends AboutBuilder<C, B>> extends AbstractFieldSetBuilder<C, B> implements AboutBuilderMeta {
     private License.LicenseBuilder<? extends License, ? extends License.LicenseBuilder> licenseBuilder;
 
     private License.LicenseBuilder<? extends License, ? extends License.LicenseBuilder> getLicenseBuilder() {
@@ -316,6 +317,7 @@ public class About extends AbstractFieldSet {
       return false;
     }
 
+    @Override
     protected boolean parseUnknownUrlField(String name, UrlField value) {
       if ("license_url".equals(name)) {
         getLicenseBuilder().url(value);
@@ -331,10 +333,10 @@ public class About extends AbstractFieldSet {
         checksum(name.substring(CHECKSUM_FIELD_PREFIX.length()), new ChecksumField((String)value));
         return true;
       } else if ("license_key".equals(name)) {
-        licenseBuilder.key(new StringField((String)value));
+        getLicenseBuilder().key(new StringField((String)value));
         return true;
       } else if ("license_name".equals(name)) {
-        licenseBuilder.name(new StringField((String)value));
+        getLicenseBuilder().name(new StringField((String)value));
         return true;
       }
       return false;
@@ -343,14 +345,17 @@ public class About extends AbstractFieldSet {
     @Override
     protected void doValidate() {
       if (licenseBuilder != null) {
-        // TODO: either one or another
-        // licenses.add(licenseBuilder.validate());
+        if (licenses != null) {
+          throw new IllegalArgumentException("Either licenses or license_* fields should be set, not both");
+        }
+        license(licenseBuilder.validate());
       }
 
       if (licenseExpression$set) {
         AnyLicenseInfo licenseInfo = licenseExpression.getOriginalValue();
         if (licenses != null) {
-          for (License license : licenses) {
+          Set<License> licensesList = licenses.build();
+          for (License license : licensesList) {
             String licenseKey = license.getKey().getValue();
             Path licenseFile = license.getFile().getValue();
             if (licenseKey != null && licenseFile != null) {
@@ -398,6 +403,14 @@ public class About extends AbstractFieldSet {
     }
   }
 
+  private interface AboutBuilderMeta {
+    @JsonIgnore
+    AboutBuilder license(License license);
+
+    @JsonIgnore
+    AboutBuilder checksums(Map<? extends String, ? extends ChecksumField> checksums);
+  }
+
   protected static final class AboutBuilderImpl extends AboutBuilder<About, AboutBuilderImpl> {
   }
 
@@ -428,26 +441,18 @@ public class About extends AbstractFieldSet {
     simpleModule.addAbstractTypeMapping(superClass, subClass.asSubclass(superClass));
   }
 
-  protected static <T extends About> T readFromFile(File src, Class<T> tClass, Map<Class<?>, Class<?>> abstractTypeMappings) throws IOException {
+  protected static <T extends About> T readFromFile(File src, Class<T> tClass) throws IOException {
     final ObjectMapper objectMapper = OBJECT_MAPPER.copy();
 
     final InjectableValues.Std injectableValues = new InjectableValues.Std();
     injectableValues.addValue(PATH_ABSOLUTIZER, new PathAbsolutizer(src.getParentFile()));
     objectMapper.setInjectableValues(injectableValues);
 
-    if (abstractTypeMappings.size() > 0) {
-      final SimpleModule deserializersModule = new SimpleModule();
-      for (Class<?> abstractType : abstractTypeMappings.keySet()) {
-        addAbstractTypeMapping(deserializersModule, abstractType, abstractTypeMappings.get(abstractType));
-      }
-      objectMapper.registerModule(deserializersModule);
-    }
-
     return objectMapper.readValue(src, tClass);
   }
 
   public static About readFromFile(File src) throws IOException {
-    return readFromFile(src, About.class, ImmutableMap.of());
+    return readFromFile(src, About.class);
   }
 
   public static class ToCurrentAboutConverter implements VersionedModelConverter {

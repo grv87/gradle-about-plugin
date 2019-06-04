@@ -19,9 +19,9 @@
  */
 gradlePlugin {
   plugins {
-    aboutNebulaBintrayPlugin {
+    aboutBintrayPlugin {
       id = 'org.fidata.about.nebula.bintray'
-      implementationClass = 'org.fidata.about.gradle.nebula.AboutNebulaBintrayPlugin'
+      implementationClass = 'org.fidata.about.gradle.nebula.AboutBintrayPlugin'
     }
   }
 }

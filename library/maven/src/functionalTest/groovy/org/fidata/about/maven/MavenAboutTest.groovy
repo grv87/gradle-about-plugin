@@ -21,6 +21,7 @@ class MavenAboutTest {
   void testIsAbleToReadMavenAbout() {
     final File testFile = getTestLoc('maven/maven.ABOUT')
     final MavenAbout a = MavenAbout.readFromFile(testFile)
+
     assert a.inceptionYear.value == '2019, very good year'
 
     final License l = a.licenses[0]
@@ -66,6 +67,17 @@ class MavenAboutTest {
     assert a.mailingLists[0].unsubscribe.value == 'unsubscribe@maillist.example.com'
     assert a.mailingLists[0].post.value == 'post@maillist.example.com'
     assert a.mailingLists[0].archiveUrl.value == new URI('https://maillist.example.com/archive')
+  }
+
+  @Test
+  void testProvidesVcsConnectionUrl() {
+    final File testFile = getTestLoc('maven/maven.ABOUT')
+    final MavenAbout a = MavenAbout.readFromFile(testFile)
+
+    URI vcsConnectionUrl = a.vcsConnectionUrl.value
+    assert vcsConnectionUrl.scheme == 'scm'
+    assert vcsConnectionUrl.schemeSpecificPart.startsWith('git')
+    assert vcsConnectionUrl.schemeSpecificPart.contains('https://git.example.com/maven/')
   }
 
   @Test

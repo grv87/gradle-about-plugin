@@ -49,6 +49,7 @@ org.apache.jena:jena-tdb2:3.10.0
 org.apache.jena:jena-tdb:3.10.0
 org.apache.logging.log4j:log4j-api:2.10.0
 org.apache.maven.scm:maven-scm-api:1.11.2
+org.apache.maven.scm:maven-scm-manager-plexus:1.11.2
 org.apache.poi:poi-ooxml-schemas:3.17
 org.apache.poi:poi-ooxml:3.17
 org.apache.poi:poi:3.17

@@ -57,5 +57,14 @@ class AboutMavenPublishPlugin implements Plugin<Project> {
         }
       }
     }
+
+    [
+      'nebula.maven-developer',
+      'nebula.maven-apache-license',
+    ].each { String pluginId ->
+      project.plugins.withId(pluginId) {
+        throw new IllegalStateException("Plugin org.fidata.about.maven-publish replaces $pluginId plugin. They should not be used together")
+      }
+    }
   }
 }

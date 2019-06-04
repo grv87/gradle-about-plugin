@@ -64,6 +64,7 @@ org.apache.jena:jena-tdb2:3.10.0
 org.apache.jena:jena-tdb:3.10.0
 org.apache.logging.log4j:log4j-api:2.10.0
 org.apache.maven.scm:maven-scm-api:1.11.2
+org.apache.maven.scm:maven-scm-manager-plexus:1.11.2
 org.apache.maven.wagon:wagon-file:1.0-beta-6
 org.apache.maven.wagon:wagon-http-lightweight:1.0-beta-6
 org.apache.maven.wagon:wagon-http-shared:1.0-beta-6
