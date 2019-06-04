@@ -27,7 +27,24 @@ publicReleases = true // TODO
 ext.rootDir = file('.')
 
 dependencies {
-  implementation(project(':gradle-plugin:base'))
+  implementation(project(':gradle-plugin:maven'))
+  implementation(group: 'com.jfrog.bintray', name: 'com.jfrog.bintray.gradle.plugin', version: '[1, 2[') {
+    /*
+     * WORKAROUND:
+     * org.apache.maven:maven-ant-tasks has old plexus dependency which have undesired JUnit dependency
+     * <grv87 2018-06-24>
+     */
+    exclude group: 'org.codehaus.plexus', module: 'plexus-container-default'
+  }
+  implementation(group: 'org.codehaus.plexus', name: 'plexus-container-default', version: '[1, 2[') {
+    /*
+     * WORKAROUND:
+     * org.codehaus.plexus:plexus-container-default still has google-collections dependency
+     * which is superseded by Guava
+     * <grv87 2018-06-24>
+     */
+    exclude group: 'com.google.collections', module: 'google-collections'
+  }
 }
 
 apply from: new File(ext.rootDir, 'gradle/gradle-plugin-markers.gradle')

@@ -32,8 +32,6 @@ dependencies {
   }
 }
 
-apply from: new File(ext.rootDir, 'gradle/gradle-plugin-markers.gradle')
-
 stutter {
   java(8) {
     compatibleRange '2.10'
@@ -45,9 +43,4 @@ stutter {
 
 tasks.named('codenarcCompatTest').configure {
   disabledRules.add 'JavaIoPackageAccess' // TODO
-}
-pluginBundle.plugins {
-  aboutBasePlugin {
-    displayName = 'Gradle About base plugin'
-  }
 }

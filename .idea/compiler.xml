@@ -9,6 +9,11 @@
       <module name="gradle-about-plugin.gradle-plugin.functionalTest" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.gradleTest" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.main" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.compatTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.gradleTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.main" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.test" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.test" target="1.8" />
       <module name="gradle-about-plugin.library.functionalTest" target="1.8" />
       <module name="gradle-about-plugin.library.main" target="1.8" />

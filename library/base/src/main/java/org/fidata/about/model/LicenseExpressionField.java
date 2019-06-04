@@ -23,7 +23,7 @@ public final class LicenseExpressionField extends Field<AnyLicenseInfo> {
     return super.getValue();
   }
 
-  @JsonCreator
+  @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
   public LicenseExpressionField(String stringValue) throws InvalidLicenseStringException {
     this(LicenseInfoFactory.parseSPDXLicenseString(stringValue));
   }

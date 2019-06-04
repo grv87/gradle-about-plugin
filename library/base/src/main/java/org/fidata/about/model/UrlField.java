@@ -9,7 +9,7 @@ import lombok.ToString;
 public final class UrlField extends Field<URI> {
   public static final UrlField NULL = new UrlField((URI)null);
 
-  @JsonCreator
+  @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
   public UrlField(String stringValue) throws URISyntaxException {
     this(new URI(stringValue));
   }

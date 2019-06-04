@@ -21,7 +21,7 @@ gradlePlugin {
   plugins {
     aboutToolkitPlugin {
       id = 'org.fidata.about'
-      implementationClass = 'org.fidata.gradle.about.AboutToolkitPlugin'
+      implementationClass = 'org.fidata.about.gradle.AboutToolkitPlugin'
     }
   }
 }

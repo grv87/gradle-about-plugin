@@ -26,7 +26,7 @@ public final class BooleanField extends Field<Boolean> {
     System.arraycopy(FALSE_FLAGS, 0, FLAG_VALUES, trueFlagsLen, falseFlagsLen);
   }
 
-  @JsonCreator
+  @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
   public static BooleanField of(String stringValue) {
     stringValue = stringValue.toLowerCase(Locale.ROOT);
     if (ArrayUtils.contains(TRUE_FLAGS, stringValue)) {

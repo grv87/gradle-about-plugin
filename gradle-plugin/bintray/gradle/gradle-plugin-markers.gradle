@@ -21,7 +21,7 @@ gradlePlugin {
   plugins {
     aboutBintrayPlugin {
       id = 'org.fidata.about'
-      implementationClass = 'org.fidata.gradle.about.AboutBintrayPlugin'
+      implementationClass = 'org.fidata.about.gradle.AboutBintrayPlugin'
     }
   }
 }

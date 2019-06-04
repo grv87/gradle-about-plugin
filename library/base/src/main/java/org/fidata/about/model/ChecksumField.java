@@ -8,7 +8,7 @@ public final class ChecksumField extends Field<byte[]> {
 
   static final BaseEncoding CHECKSUM_ENCODING = BaseEncoding.base16();
 
-  @JsonCreator
+  @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
   public ChecksumField(String stringValue) {
     this(CHECKSUM_ENCODING.decode(stringValue));
   }

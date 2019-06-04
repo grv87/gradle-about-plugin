@@ -27,7 +27,8 @@ publicReleases = true // TODO
 ext.rootDir = file('.')
 
 dependencies {
-  implementation(project(':gradle-plugin:base'))
+  implementation(project(':gradle-plugin:maven'))
+  implementation(group: 'com.gradle.plugin-publish', name: 'com.gradle.plugin-publish.gradle.plugin', version: '[0, 1[')
 }
 
 apply from: new File(ext.rootDir, 'gradle/gradle-plugin-markers.gradle')

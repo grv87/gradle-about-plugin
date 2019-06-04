@@ -25,7 +25,7 @@ class AboutToolkitPlugin implements Plugin<Project> {
 
   @Override
   void apply(Project project) {
-    AboutBasePlugin basePlugin = project.plugins.apply(AboutBasePlugin)
+    AbstractAboutPlugin basePlugin = project.plugins.apply(AbstractAboutPlugin)
     project.plugins.apply AboutToolkitBasePlugin
     TaskProvider<AboutCheck> aboutCheckProvider = project.tasks.register(ABOUT_CHECK_TASK_NAME, AboutCheck) { AboutCheck aboutCheck ->
       aboutCheck.group = VERIFICATION_GROUP

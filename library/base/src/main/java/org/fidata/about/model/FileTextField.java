@@ -10,7 +10,7 @@ import org.fidata.utils.PathAbsolutizer;
 public class FileTextField extends PathField {
   public static final FileTextField NULL = new FileTextField(null, null);
 
-  @JsonCreator
+  @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
   public FileTextField(
     @JacksonInject(value = PATH_ABSOLUTIZER, useInput = OptBoolean.FALSE) PathAbsolutizer pathAbsolutizer,
     String stringValue

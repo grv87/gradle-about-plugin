@@ -40,9 +40,12 @@ apply from: new File(ext.rootDir, 'gradle/build-cache.gradle')
   'library:extended',
   'library:maven',
   'gradle-plugin:base',
+  'gradle-plugin:maven',
   'gradle-plugin:bintray',
   'gradle-plugin:plugin-publish',
-  'gradle-plugin:nebula',
+  'gradle-plugin:nebula:info-broker',
+  'gradle-plugin:nebula:publishing',
+  'gradle-plugin:nebula:bintray',
   'gradle-plugin:toolkit',
 ].each {
   include it

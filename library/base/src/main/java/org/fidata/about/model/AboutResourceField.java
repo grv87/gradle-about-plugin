@@ -8,7 +8,7 @@ import org.fidata.utils.PathAbsolutizer;
 
 @ToString(callSuper = true)
 public class AboutResourceField extends PathField {
-  @JsonCreator
+  @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
   public AboutResourceField(
     @JacksonInject(value = PATH_ABSOLUTIZER, useInput = OptBoolean.FALSE) PathAbsolutizer pathAbsolutizer,
     String stringValue
