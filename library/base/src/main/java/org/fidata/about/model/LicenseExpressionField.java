@@ -25,9 +25,14 @@ public final class LicenseExpressionField extends Field<AnyLicenseInfo> {
 
   @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
   public LicenseExpressionField(String stringValue) throws InvalidLicenseStringException {
-    this(LicenseInfoFactory.parseSPDXLicenseString(stringValue));
+    super(LicenseInfoFactory.parseSPDXLicenseString(stringValue));
   }
   public LicenseExpressionField(AnyLicenseInfo licenseInfo) {
-    super(licenseInfo);
+    /*
+     * CAVEAT:
+     * Defense copying
+     * <grv87 2019-06-05>
+     */
+    super(licenseInfo.clone());
   }
 }

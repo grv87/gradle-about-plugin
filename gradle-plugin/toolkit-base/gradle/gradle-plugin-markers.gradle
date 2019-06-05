@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 /*
- * Compile dependencies for about-library
+ * Gradle plugin markers for gradle-about-plugin
  * Copyright ©  Basil Peace
  *
  * This file is part of gradle-about-plugin.
@@ -17,8 +17,11 @@
  * implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-
-dependencies {
-  api project(':gradle-plugin:toolkit-base')
-  implementation project(':gradle-plugin:base')
+gradlePlugin {
+  plugins {
+    aboutToolkitPlugin {
+      id = 'org.fidata.about'
+      implementationClass = 'org.fidata.about.gradle.AboutToolkitPlugin'
+    }
+  }
 }

@@ -19,6 +19,5 @@
  */
 
 dependencies {
-  api project(':gradle-plugin:toolkit-base')
-  implementation project(':gradle-plugin:base')
+  implementation group: 'org.ysb33r.gradle', name: 'grolifant', version: '[0, 1['
 }

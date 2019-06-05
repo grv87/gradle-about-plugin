@@ -45,6 +45,7 @@ apply from: new File(ext.rootDir, 'gradle/build-cache.gradle')
   'gradle-plugin:plugin-publish',
   'gradle-plugin:nebula:contacts',
   'gradle-plugin:nebula:bintray',
+  'gradle-plugin:toolkit-base',
   'gradle-plugin:toolkit',
 ].each {
   include it

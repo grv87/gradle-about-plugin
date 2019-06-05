@@ -12,7 +12,17 @@
       <module name="gradle-about-plugin.gradle-plugin.nebula.compatTest" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.nebula.functionalTest" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.nebula.gradleTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.info-broker.compatTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.info-broker.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.info-broker.gradleTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.info-broker.main" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.info-broker.test" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.nebula.main" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.publishing.compatTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.publishing.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.publishing.gradleTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.publishing.main" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.publishing.test" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.nebula.test" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.test" target="1.8" />
       <module name="gradle-about-plugin.library.functionalTest" target="1.8" />
