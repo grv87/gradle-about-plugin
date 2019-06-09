@@ -1,0 +1,9 @@
+# SPDX-Copyright: ©  Basil Peace
+# SPDX-License-Identifier: Apache-2.0
+about_resource: .
+name: license-key
+licenses:
+  - key: LGPL-3.0
+  - file:
+      - COPYING
+      - COPYING.LESSER

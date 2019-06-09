@@ -238,7 +238,7 @@ class AboutTest {
 
   @Test
   void testIsAbleToReadStructuredCustomFields() {
-    File testFile = getTestLoc('model/structured_custom_fields.ABOUT')
+    File testFile = getTestLoc('model/custom_fields/structured_custom_fields.ABOUT')
     About a = About.readFromFile(testFile)
     println a
     /* TODO:
@@ -254,40 +254,40 @@ class AboutTest {
 
   @Test
   void testSetsDefaultLicenseExpressionToNone() {
-    File testFile = getTestLoc('license_expression/default.about')
+    File testFile = getTestLoc('model/license_expression/default.about')
     About a = About.readFromFile(testFile)
     assert a.licenseExpression.value.toString() == 'NONE'
   }
 
   @Test
   void testAcceptsValidLicenseExpression() {
-    File testFile = getTestLoc('license_expression/valid.about')
+    File testFile = getTestLoc('model/license_expression/valid.about')
     About a = About.readFromFile(testFile)
   }
 
   @Test
   void testAcceptsLicenseExpressionWithException() {
-    File testFile = getTestLoc('license_expression/with_exception.about')
+    File testFile = getTestLoc('model/license_expression/with_exception.about')
     About a = About.readFromFile(testFile)
   }
 
   @Test
   void testDoesntAcceptEmptyLicenseExpression() {
-    File testFile = getTestLoc('license_expression/empty.about')
+    File testFile = getTestLoc('model/license_expression/empty.about')
     thrown.expect IOException
     About a = About.readFromFile(testFile)
   }
 
   @Test
   void testDoesntAcceptNullLicenseExpression() {
-    File testFile = getTestLoc('license_expression/null.about')
+    File testFile = getTestLoc('model/license_expression/null.about')
     thrown.expect IOException
     About a = About.readFromFile(testFile)
   }
 
   @Test
   void testDoesntAcceptInvalidLicenseExpression() {
-    File testFile = getTestLoc('license_expression/invalid.about')
+    File testFile = getTestLoc('model/license_expression/invalid.about')
     thrown.expect IOException
     About a = About.readFromFile(testFile)
   }
@@ -296,7 +296,7 @@ class AboutTest {
   @Parameters
   @TestCaseName('{0} is immutable')
   void testAllCollectionsAreReadOnly(String fieldName, @ClosureParams(value = SimpleType, options = "org.fidata.about.model.About") Closure closure) {
-    File testFile = getTestLoc('model/structured_custom_fields.ABOUT')
+    File testFile = getTestLoc('model/custom_fields/structured_custom_fields.ABOUT')
     About a = About.readFromFile(testFile)
 
     thrown.expect(UnsupportedOperationException)
@@ -334,7 +334,7 @@ class AboutTest {
   @Parameters
   @TestCaseName('testInitsAllLicenseFieldsToNotNull({0})')
   void testInitsAllLicenseFieldsToNotNull(String testName) {
-    File testFile = getTestLoc("model/${ testName }.ABOUT")
+    File testFile = getTestLoc("model/license_${ testName }.ABOUT")
     About a = About.readFromFile(testFile)
     License license = a.licenses[0]
     [
@@ -345,18 +345,25 @@ class AboutTest {
     ].each { String it ->
       assert license."$it" != null
     }
+    assert license."$testName".value == 'Apache-2.0'
   }
 
   Object[] parametersForTestInitsAllLicenseFieldsToNotNull() {
     Object[] result = [
       [
-        'license-key',
+        'key',
       ],
       [
-        'license-name',
+        'name',
       ],
     ]*.toArray().toArray()
     assert result.length > 0
     result
+  }
+
+  @Test
+  void testAcceptsSeveralLicenseFiles() {
+    File testFile = getTestLoc('model/several_license_files/several_license_files.ABOUT')
+    About a = About.readFromFile(testFile)
   }
 }

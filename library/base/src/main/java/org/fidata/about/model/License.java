@@ -4,9 +4,11 @@ package org.fidata.about.model;
 
 import static lombok.Builder.Default;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.util.List;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 
 @JsonDeserialize(builder = License.LicenseBuilderImpl.class)
@@ -33,8 +35,9 @@ public class License extends AbstractFieldSet {
    * For example, the name of a license file such as LICENSE or COPYING file extracted from a downloaded archive
    */
   @Getter
-  @Default
-  private final FileTextField file = FileTextField.NULL;
+  // @Default
+  @Singular
+  private final List<FileTextField> files;
 
   /**
    * URL to the license text for the component
