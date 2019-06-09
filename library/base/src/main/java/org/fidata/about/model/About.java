@@ -32,7 +32,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -376,9 +375,9 @@ public class About extends AbstractFieldSet {
               }
               String combinedLicenseText = combinedLicenseTextBuilder.toString();
               if (combinedLicenseText.length() > 0) {
-                walkLicenseInfo(licenseInfo, new AnyLicenseInfoWalker() {
+                walkLicenseInfo(licenseInfo, new AnyLicenseInfoWalker<Boolean>() {
                   @Override
-                  public void visitSimpleLicensingInfo(SimpleLicensingInfo simpleLicensingInfo) {
+                  public Boolean visitSimpleLicensingInfo(SimpleLicensingInfo simpleLicensingInfo) {
                     if (ExtractedLicenseInfo.class.isInstance(simpleLicensingInfo)) {
                       ExtractedLicenseInfo extractedLicenseInfo = (ExtractedLicenseInfo)simpleLicensingInfo;
                       if (licenseKey.equals(extractedLicenseInfo.getLicenseId())) {
@@ -390,13 +389,15 @@ public class About extends AbstractFieldSet {
                         license.setLicenseText(combinedLicenseText);
                       }
                     }
+                    return Boolean.TRUE;
                   }
 
                   @Override
-                  public void visitException(LicenseException licenseException) {
+                  public Boolean visitException(LicenseException licenseException) {
                     if (licenseKey.equals(licenseException.getLicenseExceptionId())) {
                       licenseException.setLicenseExceptionText(combinedLicenseText);
                     }
+                    return Boolean.TRUE;
                   }
                 });
               }

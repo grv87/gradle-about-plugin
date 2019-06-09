@@ -28,7 +28,9 @@ class LicenseCopyingPlugin implements Plugin<Project> {
     project.extensions.configure(About) { About about ->
       project.tasks.withType(ProcessResources).configureEach { ProcessResources processResources ->
         about.licenses.each { License license ->
-          processLicenseResource processResources, license.file
+          license.files.each { FileTextField licenseFile ->
+            processLicenseResource processResources, licenseFile
+          }
         }
         processLicenseResource processResources, about.noticeFile
       }

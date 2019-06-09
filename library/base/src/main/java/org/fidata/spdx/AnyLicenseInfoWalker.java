@@ -2,17 +2,25 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.fidata.spdx;
 
+import javax.annotation.Nullable;
 import org.spdx.rdfparser.license.LicenseException;
+import org.spdx.rdfparser.license.OrLaterOperator;
 import org.spdx.rdfparser.license.SimpleLicensingInfo;
 import org.spdx.rdfparser.license.SpdxNoAssertionLicense;
 import org.spdx.rdfparser.license.SpdxNoneLicense;
+import org.spdx.rdfparser.license.WithExceptionOperator;
 
-public interface AnyLicenseInfoWalker {
-  void visitSimpleLicensingInfo(SimpleLicensingInfo simpleLicensingInfo);
+public interface AnyLicenseInfoWalker<T> {
+  @Nullable T visitSimpleLicensingInfo(SimpleLicensingInfo simpleLicensingInfo);
 
-  default void visitException(LicenseException licenseException) {}
+  @Deprecated
+  default @Nullable T visitOrLaterOperator(OrLaterOperator orLaterOperator) { return null; }
 
-  default void visitNoAssertionLicense(SpdxNoAssertionLicense noAssertionLicense) {}
+  default @Nullable T visitWithExceptionOperator(WithExceptionOperator withExceptionOperator) { return null; };
 
-  default void visitNoneLicense(SpdxNoneLicense noneLicense) {}
+  default @Nullable T visitException(LicenseException licenseException) { return null; };
+
+  default @Nullable T visitNoAssertionLicense(SpdxNoAssertionLicense noAssertionLicense)  { return null; };
+
+  default @Nullable T visitNoneLicense(SpdxNoneLicense noneLicense) { return null; };
 }

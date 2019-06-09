@@ -101,6 +101,7 @@ org.slf4j:jcl-over-slf4j:1.7.25
 org.slf4j:slf4j-api:1.7.25
 org.spdx:spdx-tools:2.1.16
 org.yaml:snakeyaml:1.23
+pl.pragmatists:JUnitParams:1.1.1
 stax:stax-api:1.0.1
 xerces:xercesImpl:2.9.1
 xml-resolver:xml-resolver:1.2

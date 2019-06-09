@@ -28,6 +28,7 @@ dependencies {
      */
     exclude group: 'com.google.collections', module: 'google-collections'
   }
+  testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: '[1, 2['
 }
 
 apply from: new File(ext.rootDir, 'gradle/gradle-plugin-markers.gradle')
