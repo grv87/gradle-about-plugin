@@ -1,8 +1,16 @@
+// SPDX-Copyright: ©  Basil Peace
+// SPDX-License-Identifier: Apache-2.0
 package org.fidata.about.model
 
 import org.junit.Test
 
 class UrlFieldTest {
+  /*
+   * @third party code - BEGIN aboutcode-toolkit
+   * SnippetSource: tests/test_model.py
+   * SnippetCopyrightText: (c) 2017 nexB Inc. http://www.nexb.com/
+   * LicenseInfoInSnippet: Apache-2.0
+   */
   private static boolean isValidUrl(String value) {
     try {
       new UrlField(value)
@@ -51,6 +59,7 @@ class UrlFieldTest {
   void testIsValidUrlEmptyUrl() {
     assert !isValidUrl('http:')
   }
+  // @third party code - END aboutcode-toolkit
 
   @Test
   void testToString() {

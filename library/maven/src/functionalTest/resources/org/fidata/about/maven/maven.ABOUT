@@ -1,3 +1,5 @@
+# SPDX-Copyright: ©  Basil Peace
+# SPDX-License-Identifier: Apache-2.0
 about_resource: .
 name: maven
 extended_versioning_schema: semver-2.0.0

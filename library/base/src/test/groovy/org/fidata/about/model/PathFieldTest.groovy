@@ -1,3 +1,5 @@
+// SPDX-Copyright: ©  Basil Peace
+// SPDX-License-Identifier: Apache-2.0
 package org.fidata.about.model
 
 import static org.fidata.about.TestingUtils.getTestLoc
@@ -11,6 +13,12 @@ class PathFieldTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none()
 
+  /*
+   * @third party code - BEGIN aboutcode-toolkit
+   * SnippetSource: tests/testing_utils.py#get_test_loc
+   * SnippetCopyrightText: (c) 2017 nexB Inc. http://www.nexb.com/
+   * LicenseInfoInSnippet: Apache-2.0
+   */
   @Test
   void testCheckLocation() {
     String testFile = 'license.LICENSE'
@@ -45,6 +53,7 @@ class PathFieldTest {
 
     PathField field = new PathField(pathAbsolutizer, testFile)
   }
+  // @third party code - END aboutcode-toolkit
 
   @Test
   void testToString() {

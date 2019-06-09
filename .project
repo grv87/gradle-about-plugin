@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+SPDX-Copyright: ©  Basil Peace
+SPDX-License-Identifier: Apache-2.0
+-->
 <projectDescription>
 	<name>gradle-about-plugin</name>
 	<comment></comment>

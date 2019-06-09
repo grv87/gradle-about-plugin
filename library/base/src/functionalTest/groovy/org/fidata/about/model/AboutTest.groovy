@@ -1,3 +1,5 @@
+// SPDX-Copyright: ©  Basil Peace
+// SPDX-License-Identifier: Apache-2.0
 package org.fidata.about.model
 
 import static org.fidata.about.TestingUtils.getTestLoc
@@ -19,6 +21,12 @@ class AboutTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none()
 
+  /*
+   * @third party code - BEGIN aboutcode-toolkit
+   * SnippetSource: tests/test_model.py
+   * SnippetCopyrightText: (c) 2017 nexB Inc. http://www.nexb.com/
+   * LicenseInfoInSnippet: Apache-2.0
+   */
   @Test
   void testDuplicateFieldNamesAreDetectedWithDifferentCase() {
     File testFile = getTestLoc('model/parse/dupe_field_name.ABOUT')
@@ -26,8 +34,6 @@ class AboutTest {
     thrown.expect IOException
 
     About a = About.readFromFile(testFile)
-
-    null
   }
 
   /*
@@ -187,6 +193,7 @@ class AboutTest {
     About b = About.readFromFile(testFile2)
     assert a != b
   }
+  // @third party code - END aboutcode-toolkit
 
   @Test
   void testInitsAllFieldsToNotNull() {

@@ -1,3 +1,5 @@
+// SPDX-Copyright: ©  Basil Peace
+// SPDX-License-Identifier: Apache-2.0
 package org.fidata.about.maven;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
