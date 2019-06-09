@@ -340,7 +340,7 @@ class AboutTest {
     [
       'key',
       'name',
-      'file',
+      'files',
       'url',
     ].each { String it ->
       assert license."$it" != null

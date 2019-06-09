@@ -357,39 +357,49 @@ public class About extends AbstractFieldSet {
           Set<License> licensesList = licenses.build();
           for (License license : licensesList) {
             String licenseKey = license.getKey().getValue();
-            Path licenseFile = license.getFile().getValue();
-            if (licenseKey != null && licenseFile != null) {
-              String licenseText;
-              try {
-                licenseText = FileUtils.readWholeFileAsUTF8(licenseFile.toString());
-              } catch (IOException ignored) {
-                // Don't use problematic license file
-                // TOTHINK about it
-                continue;
+            if (licenseKey != null) {
+              List<FileTextField> licenseFiles = license.getFiles();
+              StringBuilder combinedLicenseTextBuilder = new StringBuilder();
+              for (FileTextField licenseFileField : licenseFiles) {
+                String licenseText;
+                try {
+                  licenseText = FileUtils.readWholeFileAsUTF8(licenseFileField.getValue().toString());
+                } catch (IOException ignored) {
+                  // Don't use problematic license file
+                  // TOTHINK about it. Log warning ?
+                  continue;
+                }
+                if (combinedLicenseTextBuilder.length() > 0) {
+                  combinedLicenseTextBuilder.append('\n');
+                }
+                combinedLicenseTextBuilder.append(licenseText);
               }
-              walkLicenseInfo(licenseInfo, new AnyLicenseInfoWalker() {
-                @Override
-                public void visitSimpleLicensingInfo(SimpleLicensingInfo simpleLicensingInfo) {
-                  if (ExtractedLicenseInfo.class.isInstance(simpleLicensingInfo)) {
-                    ExtractedLicenseInfo extractedLicenseInfo = (ExtractedLicenseInfo)simpleLicensingInfo;
-                    if (licenseKey.equals(extractedLicenseInfo.getLicenseId())) {
-                      extractedLicenseInfo.setExtractedText(licenseText);
-                    }
-                  } else if (org.spdx.rdfparser.license.License.class.isInstance(simpleLicensingInfo)) {
-                    org.spdx.rdfparser.license.License license = (org.spdx.rdfparser.license.License)simpleLicensingInfo;
-                    if (licenseKey.equals(license.getLicenseId())) {
-                      license.setLicenseText(licenseText);
+              String combinedLicenseText = combinedLicenseTextBuilder.toString();
+              if (combinedLicenseText.length() > 0) {
+                walkLicenseInfo(licenseInfo, new AnyLicenseInfoWalker() {
+                  @Override
+                  public void visitSimpleLicensingInfo(SimpleLicensingInfo simpleLicensingInfo) {
+                    if (ExtractedLicenseInfo.class.isInstance(simpleLicensingInfo)) {
+                      ExtractedLicenseInfo extractedLicenseInfo = (ExtractedLicenseInfo)simpleLicensingInfo;
+                      if (licenseKey.equals(extractedLicenseInfo.getLicenseId())) {
+                        extractedLicenseInfo.setExtractedText(combinedLicenseText);
+                      }
+                    } else if (org.spdx.rdfparser.license.License.class.isInstance(simpleLicensingInfo)) {
+                      org.spdx.rdfparser.license.License license = (org.spdx.rdfparser.license.License)simpleLicensingInfo;
+                      if (licenseKey.equals(license.getLicenseId())) {
+                        license.setLicenseText(combinedLicenseText);
+                      }
                     }
                   }
-                }
 
-                @Override
-                public void visitException(LicenseException licenseException) {
-                  if (licenseKey.equals(licenseException.getLicenseExceptionId())) {
-                    licenseException.setLicenseExceptionText(licenseText);
+                  @Override
+                  public void visitException(LicenseException licenseException) {
+                    if (licenseKey.equals(licenseException.getLicenseExceptionId())) {
+                      licenseException.setLicenseExceptionText(combinedLicenseText);
+                    }
                   }
-                }
-              });
+                });
+              }
             }
           }
         }

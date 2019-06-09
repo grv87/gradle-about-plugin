@@ -4,6 +4,6 @@ about_resource: .
 name: license-key
 licenses:
   - key: LGPL-3.0
-  - file:
+  - files:
       - COPYING
       - COPYING.LESSER
