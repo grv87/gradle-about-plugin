@@ -14,12 +14,13 @@ import org.fidata.spdx.AnyLicenseInfoWalker
 import org.fidata.spdx.SpdxUtils
 import org.spdx.rdfparser.license.AnyLicenseInfo
 import org.spdx.rdfparser.license.LicenseException
-import org.spdx.rdfparser.license.OrLaterOperator
 import org.spdx.rdfparser.license.SimpleLicensingInfo
 import org.spdx.rdfparser.license.SpdxListedLicense
 import org.spdx.rdfparser.license.SpdxNoAssertionLicense
 import org.spdx.rdfparser.license.SpdxNoneLicense
 import org.spdx.rdfparser.license.WithExceptionOperator
+
+// Another approach: https://github.com/aalmiray/kordamp-gradle-plugins/blob/master/plugins/base-gradle-plugin/src/main/groovy/org/kordamp/gradle/plugin/base/model/LicenseId.groovy
 
 @CompileStatic
 final class SpdxToBintrayLicenseConverter {

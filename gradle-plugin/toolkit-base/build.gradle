@@ -9,13 +9,18 @@ publicReleases = true // TODO
 
 ext.rootDir = file('.')
 
-apply from: new File(ext.rootDir, 'gradle/dependencies-compile.gradle')
-
 dependencies {
-  implementation(project(':gradle-plugin:base'))
+  implementation group: 'org.ysb33r.gradle', name: 'grolifant', version: '[0, 1['
 }
 
-apply from: new File(ext.rootDir, 'gradle/gradle-plugin-markers.gradle')
+gradlePlugin {
+  plugins {
+    aboutToolkitBasePlugin {
+      id = 'org.fidata.about'
+      implementationClass = 'org.fidata.about.gradle.AboutToolkitBasePlugin'
+    }
+  }
+}
 
 stutter {
   java(8) {
@@ -30,7 +35,7 @@ tasks.named('codenarcCompatTest').configure {
   disabledRules.add 'JavaIoPackageAccess' // TODO
 }
 pluginBundle.plugins {
-  aboutToolkitPlugin {
-    displayName = 'Gradle About Toolkit plugin'
+  aboutToolkitBasePlugin {
+    displayName = 'About Toolkit base plugin'
   }
 }

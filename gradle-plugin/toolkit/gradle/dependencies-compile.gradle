@@ -1,6 +1,0 @@
-// SPDX-Copyright: ©  Basil Peace
-// SPDX-License-Identifier: Apache-2.0
-dependencies {
-  api project(':gradle-plugin:toolkit-base')
-  implementation project(':gradle-plugin:base')
-}

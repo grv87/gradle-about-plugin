@@ -9,13 +9,19 @@ publicReleases = true // TODO
 
 ext.rootDir = file('.')
 
-apply from: new File(ext.rootDir, 'gradle/dependencies-compile.gradle')
-
 dependencies {
+  api project(':gradle-plugin:toolkit-base')
   implementation(project(':gradle-plugin:base'))
 }
 
-apply from: new File(ext.rootDir, 'gradle/gradle-plugin-markers.gradle')
+gradlePlugin {
+  plugins {
+    aboutToolkitPlugin {
+      id = 'org.fidata.about'
+      implementationClass = 'org.fidata.about.gradle.AboutToolkitPlugin'
+    }
+  }
+}
 
 stutter {
   java(8) {

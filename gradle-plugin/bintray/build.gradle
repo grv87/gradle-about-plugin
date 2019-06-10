@@ -31,7 +31,14 @@ dependencies {
   testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: '[1, 2['
 }
 
-apply from: new File(ext.rootDir, 'gradle/gradle-plugin-markers.gradle')
+gradlePlugin {
+  plugins {
+    aboutBintrayPlugin {
+      id = 'org.fidata.about'
+      implementationClass = 'org.fidata.about.gradle.AboutBintrayPlugin'
+    }
+  }
+}
 
 stutter {
   java(8) {
@@ -47,6 +54,6 @@ tasks.named('codenarcCompatTest').configure {
 }
 pluginBundle.plugins {
   aboutBintrayPlugin {
-    displayName = 'Integration plugin between About and Bintray plugins'
+    // TODO displayName = 'Integration plugin between About and Bintray plugins'
   }
 }

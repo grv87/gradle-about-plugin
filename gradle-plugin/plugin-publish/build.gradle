@@ -10,11 +10,18 @@ publicReleases = true // TODO
 ext.rootDir = file('.')
 
 dependencies {
-  implementation(project(':gradle-plugin:maven'))
+  implementation(project(':gradle-plugin:base'))
   implementation(group: 'com.gradle.plugin-publish', name: 'com.gradle.plugin-publish.gradle.plugin', version: '[0, 1[')
 }
 
-apply from: new File(ext.rootDir, 'gradle/gradle-plugin-markers.gradle')
+gradlePlugin {
+  plugins {
+    aboutPluginPublishPlugin {
+      id = 'org.fidata.about'
+      implementationClass = 'org.fidata.about.gradle.AboutPluginPublishPlugin'
+    }
+  }
+}
 
 stutter {
   java(8) {
@@ -30,6 +37,6 @@ tasks.named('codenarcCompatTest').configure {
 }
 pluginBundle.plugins {
   aboutPluginPublishPlugin {
-    displayName = 'Integration plugin between About and Plugin Publish plugins'
+    // TODO displayName = 'Integration plugin between About and Plugin Publish plugins'
   }
 }

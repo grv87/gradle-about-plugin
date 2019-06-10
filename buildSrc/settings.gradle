@@ -28,10 +28,4 @@ apply from: new File(ext.rootDir, 'buildSrc/gradle/load-properties.gradle')
 
 apply from: new File(ext.rootDir, 'gradle/build-cache.gradle')
 
-/*[
-  'library',
-  'gradle-plugin',
-].each {
-  include it
-  project(":$it").projectDir = new File(ext.rootDir, it)
-}*/
+// apply from: new File(ext.rootDir, 'gradle/subprojects.gradle')

@@ -32,7 +32,7 @@ class AboutToolkitPlugin implements Plugin<Project> {
     TaskProvider<AboutCheck> aboutCheckProvider = project.tasks.register(ABOUT_CHECK_TASK_NAME, AboutCheck) { AboutCheck aboutCheck ->
       aboutCheck.group = VERIFICATION_GROUP
       aboutCheck.description = ' Validates that the format of project\'s .ABOUT file is correct'
-      // TODO: configure: pass ABOUT etc.
+      // TODO: configure: pass .ABOUT etc.
     }
     project.plugins.withType(LifecycleBasePlugin) {
       project.tasks.named(CHECK_TASK_NAME).configure { Task check ->
@@ -42,7 +42,7 @@ class AboutToolkitPlugin implements Plugin<Project> {
     TaskProvider<AboutAttrib> aboutAttribProvider = project.tasks.register(ABOUT_ATTRIB_TASK_NAME, AboutAttrib) { AboutAttrib aboutAttrib ->
       aboutAttrib.group = DOCUMENTATION_GROUP
       aboutAttrib.description = 'Generates an attribution document from project\'s .ABOUT file.'
-      // TODO: configure: pass ABOUT, set output etc.
+      // TODO: configure: pass .ABOUT, set output etc.
     }
   }
 }

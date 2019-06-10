@@ -16,7 +16,18 @@ dependencies {
   implementation(project(':gradle-plugin:base'))
 }
 
-apply from: new File(ext.rootDir, 'gradle/gradle-plugin-markers.gradle')
+gradlePlugin {
+  plugins {
+    mavenAboutPlugin {
+      id = 'org.fidata.about.maven'
+      implementationClass = 'org.fidata.about.gradle.MavenAboutPlugin'
+    }
+    mavenPublishAboutPlugin {
+      id = 'org.fidata.about.maven-publish'
+      implementationClass = 'org.fidata.about.gradle.AboutMavenPublishPlugin'
+    }
+  }
+}
 
 stutter {
   java(8) {
@@ -35,6 +46,6 @@ pluginBundle.plugins {
     displayName = 'About Maven plugin'
   }
   mavenPublishAboutPlugin {
-    displayName = 'About Maven Publish plugin'
+    displayName = 'Integration plugin between Maven About and Maven Publish plugin'
   }
 }

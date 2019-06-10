@@ -3,9 +3,9 @@
 = gradle-about-plugin
 
 This library and Gradle plugin are able to read
-https://github.com/nexB/aboutcode-toolkit/blob/develop/SPECIFICATION.rst[ABOUT files].
+https://github.com/nexB/aboutcode-toolkit/blob/develop/SPECIFICATION.rst[.ABOUT files].
 
-ABOUT file is an excellent way to describe your project - what it is, how it is licensed, is it intended for public
+.ABOUT file is an excellent way to describe your project - what it is, how it is licensed, is it intended for public
 or for internal use only and so on.
 
 Maven has `pom.xml`, which contains all this metadata. Gradle doesn't.
@@ -22,7 +22,7 @@ How would you accomplish that? Is your approach really efficient and DRY?
 
 The other problem is that these Gradle plugins are mostly opinionated. There are no common practices.
 
-Separate standardised ABOUT file, in YAML format, is a solution.
+Separate standardised .ABOUT file, in YAML format, is a solution.
 CI build can read it and know what it is building beforehand.
 Gradle build can read it and use the same metadata during build.
 Also YAML is simple enough so human users can read it too.
@@ -56,10 +56,10 @@ a|
 | Accepts multiline strings as well
 | It is not mentioned in specificaton. We consider this as a bug
 
-| Validates ABOUT content and returns list of found errors
+| Validates .ABOUT content and returns list of found errors
 | Just throws exception when something is not valid
 | Use separate Gradle plugin and task to run `about check` and be sure
-that ABOUT file is correct
+that .ABOUT file is correct
 
 | Reads contents of TextFileFields
 | Doesn't read them
@@ -80,11 +80,11 @@ a|
 | Currently allows null values
 | Bug in Jackson https://github.com/FasterXML/jackson-databind/issues/2024
 
-| Is able to read ABOUT in Json and Csv formats as well
+| Is able to read .ABOUT in Json and Csv formats as well
 | Is not able to read them
 | There was no need
 
-| Is able to save (serialize) ABOUT
+| Is able to save (serialize) .ABOUT
 | Is not able to save
 | There was no need
 

@@ -1,22 +1,23 @@
 # SPDX-Copyright: ©  Basil Peace
 # SPDX-License-Identifier: CC0-1.0
 about_resource: .
-name: gradle-about-plugin
+name: gradle-about-plugin-gradle-plugin-base
 extended_versioning_schema: semver-2.0.0
 owner: FIDATA
 # author: Basil Peace
 copyright: Copyright ©  Basil Peace
 description: |-
-  Parsing .ABOUT files from Java and Gradle
+  Integration plugin between About and Plugin Publish plugins
 license_expression: Apache-2.0
 licenses:
   - key: Apache-2.0
     name: Apache-2.0
-    file: LICENSE
+    file: ../../LICENSE
     maven_distribution: repo
 internal_use_only: no
 vcs_repository: https://github.com/FIDATA/gradle-about-plugin
 vcs_tool: git
+vcs_path: gradle-plugin/base
 maven_organization:
   name: FIDATA
   url: https://fidata.org/

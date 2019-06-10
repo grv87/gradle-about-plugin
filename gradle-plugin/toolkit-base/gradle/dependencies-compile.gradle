@@ -1,5 +1,0 @@
-// SPDX-Copyright: ©  Basil Peace
-// SPDX-License-Identifier: Apache-2.0
-dependencies {
-  implementation group: 'org.ysb33r.gradle', name: 'grolifant', version: '[0, 1['
-}

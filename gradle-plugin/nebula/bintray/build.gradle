@@ -14,7 +14,14 @@ dependencies {
   implementation(group: 'nebula.nebula-bintray', name: 'nebula.nebula-bintray.gradle.plugin', version: '[7, 8[')
 }
 
-apply from: new File(ext.rootDir, 'gradle/gradle-plugin-markers.gradle')
+gradlePlugin {
+  plugins {
+    aboutBintrayPlugin {
+      id = 'org.fidata.about.nebula.bintray'
+      implementationClass = 'org.fidata.about.gradle.nebula.AboutBintrayPlugin'
+    }
+  }
+}
 
 stutter {
   java(8) {

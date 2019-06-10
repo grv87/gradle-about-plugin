@@ -14,7 +14,14 @@ dependencies {
   implementation(group: 'nebula.contacts', name: 'nebula.contacts.gradle.plugin', version: '[5, 6[')
 }
 
-apply from: new File(ext.rootDir, 'gradle/gradle-plugin-markers.gradle')
+gradlePlugin {
+  plugins {
+    aboutContactsPlugin {
+      id = 'org.fidata.about.nebula.contacts'
+      implementationClass = 'org.fidata.about.gradle.nebula.AboutContactsPlugin'
+    }
+  }
+}
 
 stutter {
   java(8) {
