@@ -1,0 +1,41 @@
+// SPDX-Copyright: ©  Basil Peace
+// SPDX-License-Identifier: Apache-2.0
+plugins {
+  id 'org.fidata.project.groovy'
+  id 'org.fidata.plugin'
+}
+publicReleases = true // TODO
+
+ext.rootDir = file('.')
+
+dependencies {
+  api(project(':gradle-plugin:base'))
+  api(project(':library:extended'))
+}
+
+gradlePlugin {
+  plugins {
+    extendedAboutPlugin {
+      id = 'org.fidata.about.extended'
+      implementationClass = 'org.fidata.about.gradle.ExtendedAboutPlugin'
+    }
+  }
+}
+
+stutter {
+  java(8) {
+    compatibleRange '2.10'
+  }
+  java(9) {
+    compatibleRange '2.10'
+  }
+}
+
+tasks.named('codenarcCompatTest').configure {
+  disabledRules.add 'JavaIoPackageAccess' // TODO
+}
+pluginBundle.plugins {
+  extendedAboutPlugin {
+    // TODO displayName = 'Extended About plugin'
+  }
+}

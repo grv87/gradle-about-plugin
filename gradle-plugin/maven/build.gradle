@@ -13,7 +13,7 @@ dependencies {
      exclude(group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl')
      exclude(group: 'org.apache.logging.log4j', module: 'log4j-core')
   }
-  implementation(project(':gradle-plugin:base'))
+  api(project(':gradle-plugin:base'))
 }
 
 gradlePlugin {
@@ -46,6 +46,6 @@ pluginBundle.plugins {
     displayName = 'About Maven plugin'
   }
   mavenPublishAboutPlugin {
-    displayName = 'Integration plugin between Maven About and Maven Publish plugin'
+    displayName = 'Integration plugin between Maven About and Maven Publish plugins'
   }
 }
