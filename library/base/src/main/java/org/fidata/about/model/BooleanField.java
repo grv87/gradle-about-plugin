@@ -12,11 +12,13 @@ import org.apache.commons.lang3.ArrayUtils;
 public final class BooleanField extends Field<Boolean> {
   public static final BooleanField FALSE = new BooleanField(false);
   public static final BooleanField TRUE = new BooleanField(true);
+  public static final BooleanField NULL = new BooleanField(null);
 
-  BooleanField(boolean booleanValue) {
+  private BooleanField(Boolean booleanValue) {
     super(booleanValue);
   }
 
+  // TOTHINK: use ImmutableSet instead
   private static final String[] TRUE_FLAGS = {"yes", "y", "true", "x"};
   private static final String[] FALSE_FLAGS = {"no", "n", "false"};
   private static final String[] FLAG_VALUES;
@@ -30,6 +32,9 @@ public final class BooleanField extends Field<Boolean> {
 
   @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
   public static BooleanField of(String stringValue) {
+    if (stringValue == null) {
+      return NULL;
+    }
     stringValue = stringValue.toLowerCase(Locale.ROOT);
     if (ArrayUtils.contains(TRUE_FLAGS, stringValue)) {
       return TRUE;
@@ -37,5 +42,10 @@ public final class BooleanField extends Field<Boolean> {
       return FALSE;
     }
     throw new IllegalArgumentException(String.format("Invalid flag value: '%s' is not one of: %s", stringValue, Arrays.toString(FLAG_VALUES)));
+  }
+
+  @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+  public static BooleanField of(Boolean boolValue) {
+    return boolValue == null ? NULL : boolValue ? TRUE : FALSE;
   }
 }

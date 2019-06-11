@@ -1,19 +1,13 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 
-# WORKAROUNDs for https://github.com/fsfe/reuse-tool/issues/22
-# Have to provide variants with Windows separators as well
-
 # Standard generated files
 Files:
  *.lockfile
 # IDEA project files should not contain
 # any creative (non-trivial) settings
  .idea/*
- .idea\\*
  */.stutter/*.lock
- *\\.stutter\\*.lock
  gradle/wrapper/gradle-wrapper.properties
- gradle\\wrapper\\gradle-wrapper.properties
 Copyright: ©  Basil Peace
 # CAVEAT:
 # While these files are required to build software,
@@ -30,7 +24,6 @@ Files:
  gradlew
  gradlew.bat
  gradle/wrapper/gradle-wrapper.jar
- gradle\\wrapper\\gradle-wrapper.jar
 Copyright: Copyright 2015 the original author or authors. 
 License: Apache-2.0
 
@@ -41,12 +34,7 @@ Files:
  library/base/src/functionalTest/resources/org/fidata/about/model/custom_fields
  library/base/src/functionalTest/resources/org/fidata/about/model/equal
  library/base/src/functionalTest/resources/org/fidata/about/model/parse
- library\\base\\src\\functionalTest\\resources\\org\\fidata\\about\\gen
- library\\base\\src\\functionalTest\\resources\\org\\fidata\\about\\model\\custom_fields
- library\\base\\src\\functionalTest\\resources\\org\\fidata\\about\\model\\equal
- library\\base\\src\\functionalTest\\resources\\org\\fidata\\about\\model\\parse
  library/base/src/test/resources/org/fidata/about/model/base_dir/license.LICENSE
- library\\base\\src\\test\\resources\\org\\fidata\\about\\model\\base_dir\\license.LICENSE
 Copyright: (c) 2013-2017 nexB Inc. http://www.nexb.com/ - All rights reserved.
 License: Apache-2.0
 # Apache-2.0 NOTICE

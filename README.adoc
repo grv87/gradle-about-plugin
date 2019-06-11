@@ -31,6 +31,170 @@ Also YAML is simple enough so human users can read it too.
 
 TODO
 
+=== .ABOUT file fields used
+
+{empty}.ABOUT file can be used for both source code and binaries.
+For sources, filling some fields makes no sense.
+
+The following table contains:
+
+* recommendations which .ABOUT fields should be set if .ABOUT file describes source code
+* usage by plugins (mappings to fields in plugins being integrated)
+
+[cols="7",options="header"]
+|===
+^|.ABOUT file field
+^|maven-publish
+^|ivy-publish
+^|bintray
+^|nebula.contacts
+^|nebula.bintray
+^|plugin-publish
+
+| `about_resource`
+6+^| required. Recommended to set to `.`
+
+| `description`
+| `description`
+| `descriptor.description.text`
+|
+|
+|
+|
+
+| `download_url`
+6+^| should not be set
+
+| `homepage_url`
+| `url`
+| `descriptor.description.homepage`
+|
+|
+|
+|
+
+| `license_expression`
+6+^| recommended to set
+
+| `licenses.*.file`
+|
+|
+|
+|
+|
+|
+
+| `licenses.*.url`
+| `licenses.*.url`
+| `descriptor.license.url`
+|
+|
+|
+|
+
+| `licenses.*.name`
+| `licenses.*.name`
+| `descriptor.license.name`
+|
+|
+|
+|
+
+| `license_key`
+6+^| recommended to set
+
+| `licenses.*.maven_comments`
+| `licenses.*.comments`
+|
+|
+|
+|
+|
+
+| `licenses.*.maven_distribution`
+| `licenses.*.distribution`
+|
+|
+|
+|
+|
+
+| `redistribute`
+6+^| if SPDX-listed license is used, should not be set
+
+| `attribute`
+6+^| if SPDX-listed license is used, should not be set
+
+| `track_changes`
+6+^| if SPDX-listed license is used, should not be set
+
+
+| `maven_vcs_developer_connection_url`
+| `vcsDeveloperConnectionUrl`
+|
+|
+|
+|
+|
+
+| `maven_inception_year`
+| `inceptionYear`
+|
+|
+|
+|
+|
+
+| `maven_organization.*`
+| `organization.*`
+|
+|
+|
+|
+|
+
+| `maven_developers.*`
+| `developers.*`
+|
+|
+|
+|
+|
+
+| `maven_contributors.*`
+| `contributors.*`
+|
+|
+|
+|
+|
+
+| `maven_issue_management.*`
+| `issueManagement.*`
+|
+|
+|
+|
+|
+
+| `maven_ci_management.*`
+| `ciManagement.*`
+|
+|
+|
+|
+|
+
+| `maven_mailing_lists.*`
+| `mailingLists.*`
+|
+|
+|
+|
+|
+
+|===
+
 == Differences with aboutcode-toolkit
 
 [cols="3",options="header"]
@@ -41,8 +205,7 @@ TODO
 
 | Handles all custom fields as `StringField` s
 a|
-*   Respects suffixes described by specification for file and URL
-    fields
+*   Respects suffixes described by specification for file and URL fields
 *   Allows extensibility with custom fields of complex types
 a|
 1. Simpler extensibility
@@ -50,16 +213,17 @@ a|
 
 | Parses `licenses` field into 4 separate lists
 | Has designated `License` class
-| Simpler architecture
+a|
+1. Simpler architecture
+2. Determined behavior when there are several licenses
 
 | Requires some string fields to be single line
 | Accepts multiline strings as well
-| It is not mentioned in specificaton. We consider this as a bug
+| It is not mentioned in specification. We consider this as a bug in aboutcode-toolkit
 
 | Validates .ABOUT content and returns list of found errors
 | Just throws exception when something is not valid
-| Use separate Gradle plugin and task to run `about check` and be sure
-that .ABOUT file is correct
+| Use separate Gradle plugin and task to run `about check` and be sure that .ABOUT file is correct
 
 | Reads contents of TextFileFields
 | Doesn't read them

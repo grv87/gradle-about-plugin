@@ -6,7 +6,7 @@ extended_versioning_schema: semver-2.0.0
 maven_inception_year: 2019, very good year
 licenses:
   - key: Apache-2.0
-    name: Apache-2.0
+    name: Apache License 2.0
     maven_comments: permissive license
     maven_distribution: repo
 vcs_tool: git

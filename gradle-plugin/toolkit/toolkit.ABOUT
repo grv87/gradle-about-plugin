@@ -11,7 +11,7 @@ description: |-
 license_expression: Apache-2.0
 licenses:
   - key: Apache-2.0
-    name: Apache-2.0
+    name: Apache License 2.0
     file: ../../LICENSE
     maven_distribution: repo
 internal_use_only: no

@@ -19,43 +19,43 @@ import org.gradle.api.publish.maven.plugins.MavenPublishPlugin
 class AboutMavenPublishPlugin implements Plugin<Project> {
   @Override
   void apply(Project project) {
-    project.plugins.apply MavenAboutPlugin
+    project.plugins.withType(MavenAboutPlugin) { ->
+      MavenAbout mavenAbout = project.extensions.getByType(MavenAbout)
 
-    MavenAbout mavenAbout = project.extensions.getByType(MavenAbout)
-
-    project.plugins.withType(MavenPublishPlugin) {
-      project.extensions.getByType(PublishingExtension).publications.withType(MavenPublication) { MavenPublication mavenPublication ->
-        MavenPom pom = mavenPublication.pom
-        pom.name.set mavenAbout.name.value
-        pom.description.set mavenAbout.description.value
-        pom.url.set mavenAbout.homepageUrl.value.toString()
-        /* TODO
-        properties.set [
-          myProp: "value",
-          "prop.with.dots": "anotherValue"
-        ]*/
-        pom.licenses { MavenPomLicenseSpec licenseSpec ->
-          mavenAbout.licenses.each { LicenseExtended aboutLicense ->
-            licenseSpec.license { MavenPomLicense license ->
-              license.name.set aboutLicense.name.value
-              license.url.set aboutLicense.url.value.toString()
-              license.comments.set aboutLicense.comments.value
-              license.distribution.set aboutLicense.distribution.value
+      project.plugins.withType(MavenPublishPlugin) {
+        project.extensions.getByType(PublishingExtension).publications.withType(MavenPublication) { MavenPublication mavenPublication ->
+          MavenPom pom = mavenPublication.pom
+          pom.name.set mavenAbout.name.value
+          pom.description.set mavenAbout.description.value
+          pom.url.set mavenAbout.homepageUrl.value.toString()
+          /* TODO
+          properties.set [
+            myProp: "value",
+            "prop.with.dots": "anotherValue"
+          ]*/
+          pom.licenses { MavenPomLicenseSpec licenseSpec ->
+            mavenAbout.licenses.each { LicenseExtended aboutLicense ->
+              licenseSpec.license { MavenPomLicense license ->
+                license.name.set aboutLicense.name.value
+                license.url.set aboutLicense.url.value.toString()
+                license.comments.set aboutLicense.comments.value
+                license.distribution.set aboutLicense.distribution.value
+              }
             }
           }
-        }
-        /* TODO
-        developers {
-          developer {
-            id = 'johnd'
-            name = 'John Doe'
-            email = 'john.doe@example.com'
+          /* TODO
+          developers {
+            developer {
+              id = 'johnd'
+              name = 'John Doe'
+              email = 'john.doe@example.com'
+            }
+          }*/
+          pom.scm { MavenPomScm scm ->
+            scm.connection.set mavenAbout.vcsConnectionUrl.value.toString()
+            scm.developerConnection.set mavenAbout.getVcsDeveloperConnectionUrl().value.toString()
+            scm.url.set mavenAbout.vcsUrl.value.toString()
           }
-        }*/
-        pom.scm { MavenPomScm scm ->
-          scm.connection.set mavenAbout.vcsConnectionUrl.value.toString()
-          scm.developerConnection.set mavenAbout.getVcsDeveloperConnectionUrl().value.toString()
-          scm.url.set mavenAbout.vcsUrl.value.toString()
         }
       }
     }
