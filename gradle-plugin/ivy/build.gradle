@@ -1,15 +1,18 @@
 // SPDX-Copyright: ©  Basil Peace
 // SPDX-License-Identifier: Apache-2.0
 plugins {
+  id 'org.fidata.project.java'
   id 'org.fidata.project.groovy'
   id 'org.fidata.plugin'
 }
 publicReleases = true // TODO
 
+group = "${ parent.group }.${ name.replace('-', '_') }" // TODO
+
 ext.rootDir = file('.')
 
 dependencies {
-  api(project(':gradle-plugin:base'))
+  api(project(':gradle-plugin:extended'))
 }
 
 gradlePlugin {

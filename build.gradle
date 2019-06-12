@@ -5,7 +5,9 @@ plugins {
   // id 'org.fidata.about'
 }
 
-ext.rootDir = file('.')
+group = 'org.fidata.about' // TODO
+
+// ext.rootDir = file('.')
 
 tasks.named('codenarcBuildSrc').configure {
   disabledRules.addAll 'JavaIoPackageAccess' // TODO, 'DuplicateNumberLiteral'

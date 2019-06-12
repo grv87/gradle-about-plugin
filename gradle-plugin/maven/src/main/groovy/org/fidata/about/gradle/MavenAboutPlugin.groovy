@@ -3,7 +3,7 @@
 package org.fidata.about.gradle
 
 import groovy.transform.CompileStatic
-import org.fidata.about.maven.MavenAbout
+import org.fidata.about.model.maven.MavenAbout
 
 @CompileStatic
 class MavenAboutPlugin extends AbstractAboutPlugin<MavenAbout> {

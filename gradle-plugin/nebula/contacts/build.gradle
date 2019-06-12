@@ -7,10 +7,12 @@ plugins {
 }
 publicReleases = true // TODO
 
+group = parent.group // TODO
+
 ext.rootDir = file('.')
 
 dependencies {
-  implementation(project(':gradle-plugin:base'))
+  implementation(project(':gradle-plugin:extended'))
   implementation(group: 'nebula.contacts', name: 'nebula.contacts.gradle.plugin', version: '[5, 6[')
 }
 

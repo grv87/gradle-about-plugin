@@ -7,17 +7,19 @@ plugins {
 }
 publicReleases = true // TODO
 
+group = "${ parent.group }.${ name.replace('-', '_') }" // TODO
+
 ext.rootDir = file('.')
 
 dependencies {
   api project(':gradle-plugin:toolkit-base')
-  implementation(project(':gradle-plugin:base'))
+  implementation(project(':gradle-plugin:extended'))
 }
 
 gradlePlugin {
   plugins {
     aboutToolkitPlugin {
-      id = 'org.fidata.about'
+      id = 'org.fidata.about.toolkit'
       implementationClass = 'org.fidata.about.gradle.AboutToolkitPlugin'
     }
   }
@@ -37,6 +39,6 @@ tasks.named('codenarcCompatTest').configure {
 }
 pluginBundle.plugins {
   aboutToolkitPlugin {
-    displayName = 'Gradle About Toolkit plugin'
+    displayName = 'AboutCode Toolkit plugin'
   }
 }

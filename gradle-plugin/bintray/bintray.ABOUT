@@ -1,7 +1,7 @@
 # SPDX-Copyright: ©  Basil Peace
 # SPDX-License-Identifier: CC0-1.0
 about_resource: .
-name: gradle-about-plugin-gradle-plugin-bintray
+name: gradle-about-plugin/gradle-plugin/bintray
 extended_versioning_schema: semver-2.0.0
 owner: FIDATA
 # author: Basil Peace
@@ -40,9 +40,15 @@ maven_ci_management:
   url: https://jenkins.fidata.org/job/Github/job/gradle-about-plugin/
 extended_keywords:
   - ABOUT
+  - .ABOUT
+  - ABCD
+  - ABC Data
   - dot-about
   - AboutCode
-  - info
-  - contacts
+  - Bintray
+  - description
+  - labels
   - license
+  - vcs
   - metadata
+  - integration

@@ -1,17 +1,14 @@
 // SPDX-Copyright: ©  Basil Peace
 // SPDX-License-Identifier: Apache-2.0
 [
-  'library:base',
-  'library:extended',
-  'library:maven',
-  'gradle-plugin:base',
+  'model:extended',
+  'model:maven',
   'gradle-plugin:extended',
   'gradle-plugin:maven',
   'gradle-plugin:ivy',
   'gradle-plugin:bintray',
   'gradle-plugin:plugin-publish',
   'gradle-plugin:nebula:contacts',
-  'gradle-plugin:nebula:bintray',
   'gradle-plugin:toolkit-base',
   'gradle-plugin:toolkit',
 ].each {

@@ -1,15 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
+    <option name="BUILD_PROCESS_HEAP_SIZE" value="1024" />
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="gradle-about-plugin.gradle-plugin.base.compatTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.base.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.base.gradleTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.base.main" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.base.test" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.bintray.compatTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.bintray.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.bintray.gradleTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.bintray.main" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.bintray.test" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.compatTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.extended.compatTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.extended.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.extended.gradleTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.extended.main" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.extended.test" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.functionalTest" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.gradleTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.ivy.compatTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.ivy.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.ivy.gradleTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.ivy.main" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.ivy.test" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.main" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.maven.compatTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.maven.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.maven.gradleTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.maven.main" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.maven.test" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.bintray.compatTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.bintray.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.bintray.gradleTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.bintray.main" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.bintray.test" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.nebula.compatTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.contacts.compatTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.contacts.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.contacts.gradleTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.contacts.main" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.nebula.contacts.test" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.nebula.functionalTest" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.nebula.gradleTest" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.nebula.info-broker.compatTest" target="1.8" />
@@ -24,9 +60,35 @@
       <module name="gradle-about-plugin.gradle-plugin.nebula.publishing.main" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.nebula.publishing.test" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.nebula.test" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.plugin-publish.compatTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.plugin-publish.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.plugin-publish.gradleTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.plugin-publish.main" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.plugin-publish.test" target="1.8" />
       <module name="gradle-about-plugin.gradle-plugin.test" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.toolkit-base.compatTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.toolkit-base.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.toolkit-base.gradleTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.toolkit-base.main" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.toolkit-base.test" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.toolkit.compatTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.toolkit.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.toolkit.gradleTest" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.toolkit.main" target="1.8" />
+      <module name="gradle-about-plugin.gradle-plugin.toolkit.test" target="1.8" />
+      <module name="gradle-about-plugin.library.base.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.library.base.main" target="1.8" />
+      <module name="gradle-about-plugin.library.base.test" target="1.8" />
+      <module name="gradle-about-plugin.library.base.testFixtures" target="1.8" />
+      <module name="gradle-about-plugin.library.extended.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.library.extended.main" target="1.8" />
+      <module name="gradle-about-plugin.library.extended.test" target="1.8" />
+      <module name="gradle-about-plugin.library.extended.testFixtures" target="1.8" />
       <module name="gradle-about-plugin.library.functionalTest" target="1.8" />
       <module name="gradle-about-plugin.library.main" target="1.8" />
+      <module name="gradle-about-plugin.library.maven.functionalTest" target="1.8" />
+      <module name="gradle-about-plugin.library.maven.main" target="1.8" />
+      <module name="gradle-about-plugin.library.maven.test" target="1.8" />
       <module name="gradle-about-plugin.library.test" target="1.8" />
       <module name="gradle-about-plugin.library.testFixtures" target="1.8" />
       <module name="org.fidata.gradle.buildSrc.main" target="1.8" />

@@ -1,0 +1,51 @@
+// SPDX-Copyright: ©  Basil Peace
+// SPDX-License-Identifier: Apache-2.0
+plugins {
+  id 'org.fidata.project.java'
+}
+publicReleases = true // TODO
+
+group = parent.group // TODO
+
+ext.rootDir = file('.')
+
+dependencies {
+  implementation(group: 'com.google.guava', name: 'guava', version: '25.1-jre')
+  implementation(group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '[2.9, 3[')
+  implementation(group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-guava', version: '[2.9, 3[')
+  implementation(group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '[2.9, 3[')
+  implementation(group: 'com.github.jonpeterson', name: 'jackson-module-model-versioning', version: '[1.2.2, 2[')
+  api(group: 'org.spdx', name: 'spdx-tools', version: '[2.1.15, 3[') {
+    // exclude(group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl')
+    // exclude(group: 'org.apache.logging.log4j', module: 'log4j-core')
+  }
+}
+
+configurations {
+  testFixtures
+}
+
+sourceSets {
+  testFixtures {
+    groovy.srcDirs = ['src/testFixtures/groovy']
+  }
+}
+
+dependencies {
+  testFixturesCompile localGroovy()
+  testFixturesCompile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
+  testCompile localGroovy()
+  testCompile configurations.testFixtures
+  functionalTestCompile configurations.testFixtures
+  functionalTestCompile group: 'pl.pragmatists', name: 'JUnitParams', version: '[1, 2['
+}
+
+task testFixturesJar(type: Jar) {
+  /*from compileTestFixturesJava
+  from compileTestFixturesGroovy*/
+  from sourceSets.testFixtures.output
+  classifier 'testFixtures'
+}
+artifacts {
+  testFixtures testFixturesJar
+}

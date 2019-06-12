@@ -7,6 +7,8 @@ plugins {
 }
 publicReleases = true // TODO
 
+group = "${ parent.group }.${ name.replace('-', '_') }" // TODO
+
 ext.rootDir = file('.')
 
 dependencies {
@@ -34,7 +36,7 @@ dependencies {
 gradlePlugin {
   plugins {
     aboutBintrayPlugin {
-      id = 'org.fidata.about'
+      id = 'org.fidata.about.bintray'
       implementationClass = 'org.fidata.about.gradle.AboutBintrayPlugin'
     }
   }
@@ -52,6 +54,7 @@ stutter {
 tasks.named('codenarcCompatTest').configure {
   disabledRules.add 'JavaIoPackageAccess' // TODO
 }
+
 pluginBundle.plugins {
   aboutBintrayPlugin {
     // TODO displayName = 'Integration plugin between About and Bintray plugins'

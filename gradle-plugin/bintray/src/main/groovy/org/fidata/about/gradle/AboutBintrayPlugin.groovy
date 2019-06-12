@@ -5,7 +5,7 @@ package org.fidata.about.gradle
 import com.jfrog.bintray.gradle.BintrayExtension
 import com.jfrog.bintray.gradle.BintrayPlugin
 import groovy.transform.CompileStatic
-import org.fidata.about.maven.MavenAbout
+import org.fidata.about.model.maven.MavenAbout
 import org.fidata.bintray.SpdxToBintrayLicenseConverter
 import org.gradle.api.Plugin
 import org.gradle.api.Project

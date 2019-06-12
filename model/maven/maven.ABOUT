@@ -1,0 +1,54 @@
+# SPDX-Copyright: ©  Basil Peace
+# SPDX-License-Identifier: CC0-1.0
+about_resource: .
+name: gradle-about-plugin/model/maven
+extended_versioning_schema: semver-2.0.0
+owner: FIDATA
+# author: Basil Peace
+copyright: Copyright ©  Basil Peace
+description: |-
+  Java library to parse .ABOUT files with Maven extension
+license_expression: Apache-2.0
+licenses:
+  - key: Apache-2.0
+    name: Apache License 2.0
+    file: ../../LICENSE
+    maven_distribution: repo
+internal_use_only: no
+vcs_repository: https://github.com/FIDATA/gradle-about-plugin
+vcs_tool: git
+vcs_path: model/maven
+maven_organization:
+  name: FIDATA
+  url: https://fidata.org/
+maven_developers:
+  - id: grv87
+    name: Basil Peace
+    organization: FIDATA
+    roles:
+      - owner
+      - developer
+    timezone: Europe/Moscow
+    properties:
+      github: grv87
+      twitter: grv87
+maven_issue_management:
+  system: GitHub
+  url: https://github.com/FIDATA/gradle-about-plugin/issues
+maven_ci_management:
+  system: Jenkins
+  url: https://jenkins.fidata.org/job/Github/job/gradle-about-plugin/
+extended_keywords:
+  - ABOUT
+  - .ABOUT
+  - ABCD
+  - ABC Data
+  - dot-about
+  - Maven ABOUT
+  - AboutCode
+  - Maven
+  - pom
+  - info
+  - contacts
+  - license
+  - metadata

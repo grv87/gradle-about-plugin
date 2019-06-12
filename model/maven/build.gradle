@@ -1,0 +1,35 @@
+// SPDX-Copyright: ©  Basil Peace
+// SPDX-License-Identifier: Apache-2.0
+plugins {
+  id 'org.fidata.project.java'
+}
+publicReleases = true // TODO
+
+group = "${ parent.group }.${ name.replace('-', '_') }" // TODO
+
+ext.rootDir = file('.')
+
+dependencies {
+  api(project(path: ':model:extended'))
+  api(group: 'org.apache.maven.scm', name: 'maven-scm-api', version: '[1, 2[')
+  api(group: 'org.apache.maven.scm', name: 'maven-scm-manager-plexus', version: '[1, 2[') {
+    /*
+     * WORKAROUND: TODO
+     * org.apache.maven:maven-ant-tasks has old plexus dependency which have undesired JUnit dependency
+     * <grv87 2018-06-24>
+     */
+    exclude group: 'org.codehaus.plexus', module: 'plexus-container-default'
+  }
+  implementation(group: 'org.codehaus.plexus', name: 'plexus-container-default', version: '[1, 2[') {
+    /*
+     * WORKAROUND: TODO
+     * org.codehaus.plexus:plexus-container-default still has google-collections dependency
+     * which is superseded by Guava
+     * <grv87 2018-06-24>
+     */
+    exclude group: 'com.google.collections', module: 'google-collections'
+  }
+  functionalTestCompile(group: 'org.apache.maven.scm', name: 'maven-scm-provider-gitexe', version: '[1, 2[')
+  functionalTestCompile project(path: ':model:extended', configuration: 'testFixtures')
+  functionalTestCompile group: 'pl.pragmatists', name: 'JUnitParams', version: '[1, 2['
+}

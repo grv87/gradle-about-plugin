@@ -1,23 +1,36 @@
 // SPDX-Copyright: ©  Basil Peace
 // SPDX-License-Identifier: Apache-2.0
 plugins {
+  id 'org.fidata.project.java'
   id 'org.fidata.project.groovy'
   id 'org.fidata.plugin'
 }
 publicReleases = true // TODO
 
+group = parent.group // TODO
+
 ext.rootDir = file('.')
 
 dependencies {
-  api(project(':gradle-plugin:base'))
-  api(project(':library:extended'))
+  api(project(':model:extended')) {
+     exclude(group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl')
+     exclude(group: 'org.apache.logging.log4j', module: 'log4j-core')
+  }
 }
 
 gradlePlugin {
   plugins {
     extendedAboutPlugin {
-      id = 'org.fidata.about.extended'
+      id = 'org.fidata.about.model.extended'
       implementationClass = 'org.fidata.about.gradle.ExtendedAboutPlugin'
+    }
+    licenseResourcesPlugin {
+      id = 'org.fidata.about.resources.licenses'
+      implementationClass = 'org.fidata.about.gradle.jvm.resources.LicensesPlugin'
+    }
+    noticeResourcePlugin {
+      id = 'org.fidata.about.resources.notice'
+      implementationClass = 'org.fidata.about.gradle.jvm.resources.NoticePlugin'
     }
   }
 }
@@ -34,8 +47,15 @@ stutter {
 tasks.named('codenarcCompatTest').configure {
   disabledRules.add 'JavaIoPackageAccess' // TODO
 }
+
 pluginBundle.plugins {
   extendedAboutPlugin {
-    // TODO displayName = 'Extended About plugin'
+    displayName = 'Extended About plugin'
+  }
+  licenseResourcesPlugin {
+    displayName = 'Plugin copying license files specified in .ABOUT to resources'
+  }
+  noticeResourcePlugin {
+    displayName = 'Plugin copying notice file specified in .ABOUT to resources'
   }
 }

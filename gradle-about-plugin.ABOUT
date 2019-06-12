@@ -39,6 +39,9 @@ maven_ci_management:
   url: https://jenkins.fidata.org/job/Github/job/gradle-about-plugin/
 extended_keywords:
   - ABOUT
+  - .ABOUT
+  - ABCD
+  - ABC Data
   - dot-about
   - AboutCode
   - info

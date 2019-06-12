@@ -8,7 +8,7 @@ Files:
  .idea/*
  */.stutter/*.lock
  gradle/wrapper/gradle-wrapper.properties
-Copyright: ©  Basil Peace
+Copyright: ï¿½  Basil Peace
 # CAVEAT:
 # While these files are required to build software,
 # they can be regenerated from sources.
@@ -30,11 +30,11 @@ License: Apache-2.0
 # @third party code - BEGIN aboutcode-toolkit
 # Source: tests/testdata
 Files:
- library/base/src/functionalTest/resources/org/fidata/about/gen
- library/base/src/functionalTest/resources/org/fidata/about/model/custom_fields
- library/base/src/functionalTest/resources/org/fidata/about/model/equal
- library/base/src/functionalTest/resources/org/fidata/about/model/parse
- library/base/src/test/resources/org/fidata/about/model/base_dir/license.LICENSE
+ library/extended/src/functionalTest/resources/org/fidata/about/gen
+ library/extended/src/functionalTest/resources/org/fidata/about/model/custom_fields
+ library/extended/src/functionalTest/resources/org/fidata/about/model/equal
+ library/extended/src/functionalTest/resources/org/fidata/about/model/parse
+ library/extended/src/test/resources/org/fidata/about/model/base_dir/license.LICENSE
 Copyright: (c) 2013-2017 nexB Inc. http://www.nexb.com/ - All rights reserved.
 License: Apache-2.0
 # Apache-2.0 NOTICE

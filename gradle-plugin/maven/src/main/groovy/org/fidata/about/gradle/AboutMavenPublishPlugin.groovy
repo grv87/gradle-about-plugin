@@ -3,8 +3,8 @@
 package org.fidata.about.gradle
 
 import groovy.transform.CompileStatic
-import org.fidata.about.maven.LicenseExtended
-import org.fidata.about.maven.MavenAbout
+import org.fidata.about.model.maven.LicenseExtended
+import org.fidata.about.model.maven.MavenAbout
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.publish.PublishingExtension

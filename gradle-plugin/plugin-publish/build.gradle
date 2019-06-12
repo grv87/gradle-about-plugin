@@ -7,10 +7,12 @@ plugins {
 }
 publicReleases = true // TODO
 
+group = "${ parent.group }.${ name.replace('-', '_') }" // TODO
+
 ext.rootDir = file('.')
 
 dependencies {
-  implementation(project(':gradle-plugin:base'))
+  implementation(project(':gradle-plugin:extended'))
   implementation(group: 'com.gradle.plugin-publish', name: 'com.gradle.plugin-publish.gradle.plugin', version: '[0, 1[')
 }
 

@@ -1,13 +1,13 @@
 # SPDX-Copyright: ©  Basil Peace
 # SPDX-License-Identifier: CC0-1.0
 about_resource: .
-name: gradle-about-plugin-gradle-plugin-extended
+name: gradle-about-plugin/gradle-plugin/extended
 extended_versioning_schema: semver-2.0.0
 owner: FIDATA
 # author: Basil Peace
 copyright: Copyright ©  Basil Peace
 description: |-
-  Extended About plugin
+  Gradle plugin to parse base and extended .ABOUT files
 license_expression: Apache-2.0
 licenses:
   - key: Apache-2.0
@@ -40,7 +40,11 @@ maven_ci_management:
   url: https://jenkins.fidata.org/job/Github/job/gradle-about-plugin/
 extended_keywords:
   - ABOUT
+  - .ABOUT
+  - ABCD
+  - ABC Data
   - dot-about
+  - extended ABOUT
   - AboutCode
   - info
   - contacts
