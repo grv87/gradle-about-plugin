@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
@@ -298,7 +299,8 @@ public class About extends AbstractFieldSet {
 
   @JsonVersionedModel(propertyName = "specVersion", currentVersion = CURRENT_SPEC_VERSION, defaultDeserializeToVersion = CURRENT_SPEC_VERSION, toCurrentConverterClass = About.ToCurrentAboutConverter.class)
   public static abstract class AboutBuilder<C extends About, B extends AboutBuilder<C, B>> extends AbstractFieldSetBuilder<C, B> implements AboutBuilderMeta {
-    private License.LicenseBuilder<? extends License, ? extends License.LicenseBuilder> licenseBuilder;
+    // TODO @Getter(value = AccessLevel.PRIVATE, lazy = true)
+    private /*final*/ License.LicenseBuilder<? extends License, ? extends License.LicenseBuilder> licenseBuilder;
 
     private License.LicenseBuilder<? extends License, ? extends License.LicenseBuilder> getLicenseBuilder() {
       if (licenseBuilder == null) {
@@ -310,7 +312,7 @@ public class About extends AbstractFieldSet {
     @Override
     protected boolean parseUnknownFileTextField(String name, FileTextField value) {
       if ("license_file".equals(name)) {
-        getLicenseBuilder().file(value);
+        getLicenseBuilder().customField("file", value);
         return true;
       }
       return false;
@@ -319,7 +321,7 @@ public class About extends AbstractFieldSet {
     @Override
     protected boolean parseUnknownUrlField(String name, UrlField value) {
       if ("license_url".equals(name)) {
-        getLicenseBuilder().url(value);
+        getLicenseBuilder().customField("url", value);
         return true;
       }
       return false;
@@ -332,10 +334,10 @@ public class About extends AbstractFieldSet {
         checksum(name.substring(CHECKSUM_FIELD_PREFIX.length()), new ChecksumField((String)value));
         return true;
       } else if ("license_key".equals(name)) {
-        getLicenseBuilder().key(new StringField((String)value));
+        getLicenseBuilder().customField("key", new StringField((String)value));
         return true;
       } else if ("license_name".equals(name)) {
-        getLicenseBuilder().name(new StringField((String)value));
+        getLicenseBuilder().customField("name", new StringField((String)value));
         return true;
       }
       return false;

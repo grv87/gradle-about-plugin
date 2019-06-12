@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.fidata.about.model.extended;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.io.File;
@@ -29,10 +30,19 @@ public class ExtendedAbout extends About {
     return getString("extended", "versioning_schema");
   }
 
-  @JsonProperty("extended_keywords")
+  public static abstract class ExtendedAboutBuilder<C extends ExtendedAbout, B extends ExtendedAboutBuilder<C, B>> extends About.AboutBuilder<C, B> implements ExtendedAboutBuilderMeta {}
+
   @Getter
   @Singular
   private final Set<StringField> keywords;
+
+  private interface ExtendedAboutBuilderMeta {
+    @JsonIgnore
+    ExtendedAboutBuilder keyword(StringField developer);
+
+    @JsonProperty("extended_keywords")
+    ExtendedAboutBuilder keywords(Iterable<? extends StringField> developers);
+  }
 
   protected static final class ExtendedAboutBuilderImpl extends ExtendedAboutBuilder<ExtendedAbout, ExtendedAboutBuilderImpl> {}
 

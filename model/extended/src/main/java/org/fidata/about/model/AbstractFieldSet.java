@@ -40,7 +40,7 @@ public abstract class AbstractFieldSet {
    * Extension fields referencing files
    */
   public final FileTextField getFile(String name) {
-    FileTextField result = (FileTextField)customFields.get(name);
+    FileTextField result = (FileTextField)customFields.get(name + FILE_FIELD_SUFFIX);
     if (result == null) {
       result = FileTextField.NULL;
     }
@@ -58,7 +58,7 @@ public abstract class AbstractFieldSet {
    * Extension fields referencing URLs
    */
   public final UrlField getUrl(String name) {
-    UrlField result = (UrlField)customFields.get(name);
+    UrlField result = (UrlField)customFields.get(name + URL_FIELD_SUFFIX);
     if (result == null) {
       result = UrlField.NULL;
     }
@@ -136,7 +136,7 @@ public abstract class AbstractFieldSet {
       } else if (!parseUnknownField(name, value)) {
         if (value == null) {
           // Default behavior of aboutcode-toolkit
-          // Note that Guava's ImmutableMap anyway doesn't accept nulls
+          // Note that Guava's ImmutableMap doesn't accept nulls anyway
           value = StringField.EMPTY;
         } else if (String.class.isInstance(value)) {
           // Note: Jackson already trimmed trailing spaces
