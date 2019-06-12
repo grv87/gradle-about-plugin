@@ -91,6 +91,29 @@
       <module name="gradle-about-plugin.library.maven.test" target="1.8" />
       <module name="gradle-about-plugin.library.test" target="1.8" />
       <module name="gradle-about-plugin.library.testFixtures" target="1.8" />
+      <module name="org.fidata.about.gradle.bintray.bintray.compatTest" target="1.8" />
+      <module name="org.fidata.about.gradle.bintray.bintray.functionalTest" target="1.8" />
+      <module name="org.fidata.about.gradle.bintray.bintray.gradleTest" target="1.8" />
+      <module name="org.fidata.about.gradle.bintray.bintray.main" target="1.8" />
+      <module name="org.fidata.about.gradle.bintray.bintray.test" target="1.8" />
+      <module name="org.fidata.about.gradle.ivy.ivy.compatTest" target="1.8" />
+      <module name="org.fidata.about.gradle.ivy.ivy.functionalTest" target="1.8" />
+      <module name="org.fidata.about.gradle.ivy.ivy.gradleTest" target="1.8" />
+      <module name="org.fidata.about.gradle.ivy.ivy.main" target="1.8" />
+      <module name="org.fidata.about.gradle.ivy.ivy.test" target="1.8" />
+      <module name="org.fidata.about.gradle.maven.maven.compatTest" target="1.8" />
+      <module name="org.fidata.about.gradle.maven.maven.functionalTest" target="1.8" />
+      <module name="org.fidata.about.gradle.maven.maven.gradleTest" target="1.8" />
+      <module name="org.fidata.about.gradle.maven.maven.main" target="1.8" />
+      <module name="org.fidata.about.gradle.maven.maven.test" target="1.8" />
+      <module name="org.fidata.about.gradle.plugin_publish.plugin-publish.compatTest" target="1.8" />
+      <module name="org.fidata.about.gradle.plugin_publish.plugin-publish.functionalTest" target="1.8" />
+      <module name="org.fidata.about.gradle.plugin_publish.plugin-publish.gradleTest" target="1.8" />
+      <module name="org.fidata.about.gradle.plugin_publish.plugin-publish.main" target="1.8" />
+      <module name="org.fidata.about.gradle.plugin_publish.plugin-publish.test" target="1.8" />
+      <module name="org.fidata.about.model.maven.maven.functionalTest" target="1.8" />
+      <module name="org.fidata.about.model.maven.maven.main" target="1.8" />
+      <module name="org.fidata.about.model.maven.maven.test" target="1.8" />
       <module name="org.fidata.gradle.buildSrc.main" target="1.8" />
       <module name="org.fidata.gradle.buildSrc.test" target="1.8" />
       <module name="org.fidata.gradle.gradle-about-plugin.compatTest" target="1.8" />

@@ -35,15 +35,15 @@ dependencies {
   testFixturesCompile localGroovy()
   testFixturesCompile group: 'com.google.guava', name: 'guava', version: '25.1-jre'
   testCompile localGroovy()
-  testCompile configurations.testFixtures
-  functionalTestCompile configurations.testFixtures
+  testCompile sourceSets.testFixtures.output // configurations.testFixtures
+  functionalTestCompile sourceSets.testFixtures.output // configurations.testFixtures
   functionalTestCompile group: 'pl.pragmatists', name: 'JUnitParams', version: '[1, 2['
 }
 
 task testFixturesJar(type: Jar) {
-  /*from compileTestFixturesJava
-  from compileTestFixturesGroovy*/
-  from sourceSets.testFixtures.output
+  from compileTestFixturesJava
+  from compileTestFixturesGroovy
+  // from sourceSets.testFixtures.output
   classifier 'testFixtures'
 }
 artifacts {

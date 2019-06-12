@@ -8,7 +8,7 @@ class UrlFieldTest {
   /*
    * @third party code - BEGIN aboutcode-toolkit
    * SnippetSource: tests/test_model.py
-   * SnippetCopyrightText: (c) 2017 nexB Inc. http://www.nexb.com/
+   * SnippetCopyrightText: (c) 2014-2018 nexB Inc. http://www.nexb.com/ - All rights reserved.
    * LicenseInfoInSnippet: Apache-2.0
    */
   private static boolean isValidUrl(String value) {

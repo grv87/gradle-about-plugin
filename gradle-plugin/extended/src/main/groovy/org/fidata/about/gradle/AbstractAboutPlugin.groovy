@@ -11,13 +11,30 @@ import org.gradle.api.Project
 abstract class AbstractAboutPlugin<T extends About> implements Plugin<Project> {
   public static final String ABOUT_EXTENSION_NAME = 'about'
 
-  public T about
+  private T about
 
-  protected abstract T readFromFile(File src)
+  T getAbout() {
+    this.@about
+  }
+
+  private File aboutFile
+
+  File getAboutFile() {
+    this.@aboutFile
+  }
+
+  protected abstract T readFromFile()
 
   @Override
   final void apply(Project project) {
-    this.@about = readFromFile(project.file("${ project.name }.ABOUT"))
+    /*
+     * We don't use lazy configuration since:
+     * 1. Values from ABOUT are most probably used in each build.
+     *    Lazy configuration would just slow down everything
+     * 2. Read values are immutable anyway
+     */
+    this.@aboutFile = project.file("${ project.name }.ABOUT")
+    this.@about = readFromFile()
 
     project.extensions.add ABOUT_EXTENSION_NAME, about
   }

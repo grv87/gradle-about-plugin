@@ -19,6 +19,12 @@ public final class BooleanField extends Field<Boolean> {
   }
 
   // TOTHINK: use ImmutableSet instead
+  /*
+   * @third party code - BEGIN aboutcode-toolkit
+   * SnippetSource: src/attributecode/model.py#BooleanField
+   * SnippetCopyrightText: Copyright (c) 2013-2019 nexB Inc. http://www.nexb.com/ - All rights reserved.
+   * LicenseInfoInSnippet: Apache-2.0
+   */
   private static final String[] TRUE_FLAGS = {"yes", "y", "true", "x"};
   private static final String[] FALSE_FLAGS = {"no", "n", "false"};
   private static final String[] FLAG_VALUES;
@@ -29,6 +35,7 @@ public final class BooleanField extends Field<Boolean> {
     System.arraycopy(TRUE_FLAGS, 0, FLAG_VALUES, 0, trueFlagsLen);
     System.arraycopy(FALSE_FLAGS, 0, FLAG_VALUES, trueFlagsLen, falseFlagsLen);
   }
+  // @third party code - END aboutcode-toolkit
 
   @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
   public static BooleanField of(String stringValue) {

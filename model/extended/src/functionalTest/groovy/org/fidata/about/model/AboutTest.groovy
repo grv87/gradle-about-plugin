@@ -24,7 +24,7 @@ class AboutTest {
   /*
    * @third party code - BEGIN aboutcode-toolkit
    * SnippetSource: tests/test_model.py
-   * SnippetCopyrightText: (c) 2017 nexB Inc. http://www.nexb.com/
+   * SnippetCopyrightText: (c) 2014-2018 nexB Inc. http://www.nexb.com/ - All rights reserved.
    * LicenseInfoInSnippet: Apache-2.0
    */
   @Test
@@ -307,7 +307,7 @@ class AboutTest {
     Object[] result = [
       [
         'licenses',
-        { it.licenses.add(null) }
+        { it.licenses.add(License.builder().build()) }
       ],
       [
         'checksums',

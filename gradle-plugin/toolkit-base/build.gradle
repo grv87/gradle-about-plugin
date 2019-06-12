@@ -12,14 +12,14 @@ group = "${ parent.group }.toolkit" // TODO
 ext.rootDir = file('.')
 
 dependencies {
-  implementation group: 'org.ysb33r.gradle', name: 'grolifant', version: '[0, 1['
+  api group: 'org.ysb33r.gradle', name: 'grolifant', version: '[0, 1['
 }
 
 gradlePlugin {
   plugins {
     aboutToolkitBasePlugin {
       id = 'org.fidata.about.toolkit-base'
-      implementationClass = 'org.fidata.about.gradle.AboutToolkitBasePlugin'
+      implementationClass = 'org.fidata.about.gradle.toolkit.AboutToolkitBasePlugin'
     }
   }
 }

@@ -9,7 +9,8 @@ import org.ysb33r.grolifant.api.exec.ExternalExecutable
 
 @CompileStatic
 class AboutToolkitExecSpec extends AbstractCommandExecSpec {
-  /** Construct class and attach it to specific project.
+  /**
+   * Construct class and attach it to specific project.
    *
    * @param project Project this exec spec is attached.
    * @param registry Registry used to resolve executables.

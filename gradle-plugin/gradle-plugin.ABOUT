@@ -3,11 +3,10 @@
 about_resource: .
 name: gradle-about-plugin/gradle-plugin
 extended_versioning_schema: semver-2.0.0
-owner: FIDATA
 # author: Basil Peace
 copyright: Copyright ©  Basil Peace
 description: |-
-  Gradle plugin to parse .ABOUT files and integrate with other plugins
+  Gradle plugins to parse .ABOUT files and integrate with other plugins
 license_expression: Apache-2.0
 licenses:
   - key: Apache-2.0

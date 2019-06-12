@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import org.fidata.about.model.About;
 import org.fidata.about.model.StringField;
@@ -28,6 +30,8 @@ public class ExtendedAbout extends About {
   }
 
   @JsonProperty("extended_keywords")
+  @Getter
+  @Singular
   private final Set<StringField> keywords;
 
   protected static final class ExtendedAboutBuilderImpl extends ExtendedAboutBuilder<ExtendedAbout, ExtendedAboutBuilderImpl> {}

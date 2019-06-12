@@ -3,9 +3,8 @@
 package org.fidata.about.gradle.toolkit
 
 import groovy.transform.CompileStatic
-import org.fidata.about.gradle.tasks.AboutAttrib
-import org.fidata.about.gradle.tasks.AboutCheck
 import org.fidata.about.gradle.toolkit.tasks.AboutAttrib
+import org.fidata.about.gradle.toolkit.tasks.AboutCheck
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

@@ -35,7 +35,6 @@ public class License extends AbstractFieldSet {
    * For example, the name of a license file such as LICENSE or COPYING file extracted from a downloaded archive
    */
   @Getter
-  // @Default
   @Singular
   private final List<FileTextField> files;
 

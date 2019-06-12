@@ -1,0 +1,43 @@
+// SPDX-Copyright: ©  Basil Peace
+// SPDX-License-Identifier: Apache-2.0
+plugins {
+  id 'org.fidata.project.java'
+  id 'org.fidata.project.groovy'
+  id 'org.fidata.plugin'
+}
+publicReleases = true // TODO
+
+group = "${ parent.group }.${ name.replace('-', '_') }" // TODO
+
+ext.rootDir = file('.')
+
+dependencies {
+  implementation(project(':gradle-plugin:extended'))
+}
+
+gradlePlugin {
+  plugins {
+    ivyPublishAboutPlugin {
+      id = 'org.fidata.about.jvm.ivy-publish'
+      implementationClass = 'org.fidata.about.gradle.jvm.AboutIvyPublishPlugin'
+    }
+  }
+}
+
+stutter {
+  java(8) {
+    compatibleRange '2.10'
+  }
+  java(9) {
+    compatibleRange '2.10'
+  }
+}
+
+tasks.named('codenarcCompatTest').configure {
+  disabledRules.add 'JavaIoPackageAccess' // TODO
+}
+pluginBundle.plugins {
+  ivyPublishAboutPlugin {
+    // TODO displayName = 'Integration plugin between About and Ivy Publish plugins'
+  }
+}

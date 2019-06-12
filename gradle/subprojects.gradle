@@ -2,12 +2,12 @@
 // SPDX-License-Identifier: Apache-2.0
 [
   'model:extended',
-  'model:maven',
+  'model:jvm:maven',
   'gradle-plugin:extended',
-  'gradle-plugin:maven',
-  'gradle-plugin:ivy',
-  'gradle-plugin:bintray',
-  'gradle-plugin:plugin-publish',
+  'gradle-plugin:jvm:maven',
+  'gradle-plugin:jvm:ivy',
+  'gradle-plugin:jvm:bintray',
+  'gradle-plugin:jvm:plugin-publish',
   'gradle-plugin:nebula:contacts',
   'gradle-plugin:toolkit-base',
   'gradle-plugin:toolkit',

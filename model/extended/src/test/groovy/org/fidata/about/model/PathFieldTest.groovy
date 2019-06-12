@@ -16,7 +16,7 @@ class PathFieldTest {
   /*
    * @third party code - BEGIN aboutcode-toolkit
    * SnippetSource: tests/testing_utils.py#get_test_loc
-   * SnippetCopyrightText: (c) 2017 nexB Inc. http://www.nexb.com/
+   * SnippetCopyrightText: (c) 2014-2018 nexB Inc. http://www.nexb.com/ - All rights reserved.
    * LicenseInfoInSnippet: Apache-2.0
    */
   @Test

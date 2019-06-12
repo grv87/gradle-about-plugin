@@ -3,7 +3,6 @@
 about_resource: .
 name: gradle-about-plugin
 extended_versioning_schema: semver-2.0.0
-owner: FIDATA
 author: Basil Peace
 copyright: Copyright ©  Basil Peace
 description: |-
@@ -25,6 +24,7 @@ maven_developers:
     name: Basil Peace
     organization: FIDATA
     roles:
+      - author
       - owner
       - developer
     timezone: Europe/Moscow

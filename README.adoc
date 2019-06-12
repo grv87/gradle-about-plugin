@@ -41,43 +41,45 @@ The following table contains:
 * recommendations which .ABOUT fields should be set if .ABOUT file describes source code
 * usage by plugins (mappings to fields in plugins being integrated)
 
-[cols="7",options="header"]
+(prefix `org.fidata.about.` is skipped from plugin IDs for brevity)
+
+[cols="6",options="header"]
 |===
 ^|.ABOUT file field
-^|maven-publish
-^|ivy-publish
-^|bintray
-^|nebula.contacts
-^|nebula.bintray
-^|plugin-publish
+^|`jvm.maven-publish`
+^|`jvm.ivy-publish`
+^|`jvm.bintray`
+^|`nebula.contacts`
+^|`jvm.plugin-publish`
 
 | `about_resource`
-6+^| required. Recommended to set to `.`
+5+^| required. I recommend you to set it to `.`
 
 | `description`
 | `description`
 | `descriptor.description.text`
 |
 |
-|
-|
-
-| `download_url`
-6+^| should not be set
+| `description`
 
 | `homepage_url`
 | `url`
 | `descriptor.description.homepage`
 |
 |
-|
-|
+| `website`
+
+| `owner`
+5.5+^| use `maven_organization` and `maven_developers` fields instead
+| `owner_url`
+| `contact`
+| `author`
+| `author_file`
 
 | `license_expression`
-6+^| recommended to set
+5+^| I recommend to set this
 
 | `licenses.*.file`
-|
 |
 |
 |
@@ -90,7 +92,6 @@ The following table contains:
 |
 |
 |
-|
 
 | `licenses.*.name`
 | `licenses.*.name`
@@ -98,14 +99,12 @@ The following table contains:
 |
 |
 |
-|
 
-| `license_key`
-6+^| recommended to set
+| `licenses.*.key`
+5+^| I recommend to set this
 
 | `licenses.*.maven_comments`
 | `licenses.*.comments`
-|
 |
 |
 |
@@ -117,21 +116,14 @@ The following table contains:
 |
 |
 |
-|
 
 | `redistribute`
-6+^| if SPDX-listed license is used, should not be set
-
+5.3+^| I don't recommend to set it if SPDX-listed license is used
 | `attribute`
-6+^| if SPDX-listed license is used, should not be set
-
 | `track_changes`
-6+^| if SPDX-listed license is used, should not be set
-
 
 | `maven_vcs_developer_connection_url`
 | `vcsDeveloperConnectionUrl`
-|
 |
 |
 |
@@ -143,11 +135,9 @@ The following table contains:
 |
 |
 |
-|
 
-| `maven_organization.*`
+| `maven_organization.*` (except `contact` field)
 | `organization.*`
-|
 |
 |
 |
@@ -159,11 +149,9 @@ The following table contains:
 |
 |
 |
-|
 
 | `maven_contributors.*`
 | `contributors.*`
-|
 |
 |
 |
@@ -175,11 +163,9 @@ The following table contains:
 |
 |
 |
-|
 
 | `maven_ci_management.*`
 | `ciManagement.*`
-|
 |
 |
 |
@@ -191,7 +177,13 @@ The following table contains:
 |
 |
 |
+
+| `extended_keywords`
 |
+|
+|
+|
+| `tags`
 
 |===
 

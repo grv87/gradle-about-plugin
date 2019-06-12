@@ -8,6 +8,7 @@ import groovy.transform.stc.SimpleType
 import junitparams.JUnitParamsRunner
 import junitparams.Parameters
 import junitparams.naming.TestCaseName
+import org.fidata.about.model.StringField
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.ExpectedException
@@ -20,7 +21,7 @@ class ExtendedAboutTest {
 
   @Test
   void testIsAbleToReadExtendedAbout() {
-    final File testFile = getTestLoc('extended/extended.ABOUT')
+    final File testFile = getTestLoc('model/extended/extended.ABOUT')
     final ExtendedAbout a = ExtendedAbout.readFromFile(testFile)
 
     assert a.versioningSchema.value == 'semver-2.0.0'
@@ -35,7 +36,7 @@ class ExtendedAboutTest {
   @Parameters
   @TestCaseName('{0} is immutable')
   void testAllCollectionsAreReadOnly(String fieldName, @ClosureParams(value = SimpleType, options = "org.fidata.about.model.extended.ExtendedAbout") Closure closure) {
-    File testFile = getTestLoc('extended/extended.ABOUT')
+    File testFile = getTestLoc('model/extended/extended.ABOUT')
     ExtendedAbout a = ExtendedAbout.readFromFile(testFile)
 
     thrown.expect(UnsupportedOperationException)
@@ -46,7 +47,7 @@ class ExtendedAboutTest {
     Object[] result = [
       [
         'keywords',
-        { it.keywords.add(null) }
+        { it.keywords.add(StringField.NULL) }
       ],
     ]*.toArray().toArray()
     assert result.length > 0
