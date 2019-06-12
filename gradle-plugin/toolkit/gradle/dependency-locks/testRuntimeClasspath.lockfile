@@ -68,3 +68,5 @@ org.tukaani:xz:1.6
 org.yaml:snakeyaml:1.23
 org.ysb33r.gradle:grolifant:0.12.1
 stax:stax-api:1.0.1
+xerces:xercesImpl:2.12.0
+xml-apis:xml-apis:1.4.01
