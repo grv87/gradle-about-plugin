@@ -2,20 +2,20 @@
 # SPDX-License-Identifier: CC0-1.0
 about_resource: .
 name: gradle-about-plugin/gradle-plugin/jvm/plugin-publish
+spec_version: 3.1.2
 extended_versioning_schema: semver-2.0.0
-# author: Basil Peace
-copyright: Copyright ©  Basil Peace
 description: |-
   Integration plugin between About and Plugin Publish plugins
+copyright: ©  Basil Peace
 license_expression: Apache-2.0
 licenses:
   - key: Apache-2.0
     name: Apache License 2.0
-    file: ../../LICENSE
+    file: ../../../LICENSE
     maven_distribution: repo
 internal_use_only: no
-vcs_repository: https://github.com/FIDATA/gradle-about-plugin
 vcs_tool: git
+vcs_repository: https://github.com/FIDATA/gradle-about-plugin
 vcs_path: gradle-plugin/jvm/plugin-publish
 maven_organization:
   name: FIDATA
@@ -26,6 +26,7 @@ maven_developers:
     organization: FIDATA
     roles:
       - owner
+      - author
       - developer
     timezone: Europe/Moscow
     properties:
