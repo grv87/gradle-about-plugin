@@ -13,9 +13,9 @@ import org.fidata.about.model.StringField;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class Developer extends Contributor {
-  @Getter
-  @Default
-  private final StringField id = StringField.NULL;
+  public final StringField getId() {
+    return getString("id");
+  }
 
   protected static final class DeveloperBuilderImpl extends DeveloperBuilder<Developer, DeveloperBuilderImpl> {}
 }

@@ -19,29 +19,29 @@ import org.fidata.about.model.UrlField;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class Contributor extends AbstractFieldSet {
-  @Getter
-  @Default
-  private final StringField name = StringField.NULL;
+  public final StringField getName() {
+    return getString("name");
+  }
 
-  @Getter
-  @Default
-  private final StringField email = StringField.NULL;
+  public final StringField getEmail() {
+    return getString("email");
+  }
 
-  @Getter
-  @Default
-  private final StringField organization = StringField.NULL;
+  public final StringField getOrganization() {
+    return getString("organization");
+  }
 
-  @Getter
-  @Default
-  private final UrlField organizationUrl = UrlField.NULL;
+  public final UrlField getOrganizationUrl() {
+    return getUrl("organization");
+  }
 
   @Getter
   @Singular
   private final Set<StringField> roles;
 
-  @Getter
-  @Default
-  private final StringField timezone = StringField.NULL;
+  public final StringField getTimezone() {
+    return getString("timezone");
+  }
 
   @Getter
   @Singular

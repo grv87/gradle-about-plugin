@@ -18,16 +18,16 @@ public class License extends AbstractFieldSet {
   /**
    * The license key for the component
    */
-  @Getter
-  @Default
-  private final StringField key = StringField.NULL;
+  public final StringField getKey() {
+    return getString("key");
+  }
 
   /**
    * The license short name for the license
    */
-  @Getter
-  @Default
-  private final StringField name = StringField.NULL;
+  public final StringField getName() {
+    return getString("name");
+  }
 
   /**
    * License file that applies to the component

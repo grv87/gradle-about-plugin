@@ -6,7 +6,7 @@ import com.jfrog.bintray.gradle.BintrayExtension
 import com.jfrog.bintray.gradle.BintrayPlugin
 import groovy.transform.CompileStatic
 import org.fidata.about.model.jvm.maven.MavenAbout
-import org.fidata.bintray.SpdxToBintrayLicenseConverter
+import org.fidata.bintray.SpdxToBintrayLicensesConverter
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -23,10 +23,16 @@ class AboutBintrayPlugin implements Plugin<Project> {
         extension.pkg.with {
           // TODO version.name = ''
           version.vcsTag = '' // TODO
-          // TODO desc = project.version.toString() == '1.0.0' ? project.description : rootProjectConvention.changeLogTxt.get().toString()
-          // TODO labels = projectConvention.tags.get().toArray(new String[0])
-          licenses = SpdxToBintrayLicenseConverter.convert(mavenAbout.licenseExpression.value).toArray(new String[0])
+          desc = mavenAbout.description.value
+          websiteUrl = mavenAbout.homepageUrl.value.toString()
+          issueTrackerUrl = mavenAbout.issueManagement.url.value.toString()
           // TODO vcsUrl = rootProjectConvention.vcsUrl.get()
+          /* TODO
+          githubRepo
+          githubReleaseNotesFile
+          */
+          licenses = SpdxToBintrayLicensesConverter.convert(mavenAbout.licenseExpression.value).toArray(new String[0])
+          labels = mavenAbout.keywords*.value.toArray(new String[0])
           // pkg.version.attributes // Attributes to be attached to the version
         }
       }

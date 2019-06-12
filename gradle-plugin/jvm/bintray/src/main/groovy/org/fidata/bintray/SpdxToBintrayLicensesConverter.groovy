@@ -23,7 +23,7 @@ import org.spdx.rdfparser.license.WithExceptionOperator
 // Another approach: https://github.com/aalmiray/kordamp-gradle-plugins/blob/master/plugins/base-gradle-plugin/src/main/groovy/org/kordamp/gradle/plugin/base/model/LicenseId.groovy
 
 @CompileStatic
-final class SpdxToBintrayLicenseConverter {
+final class SpdxToBintrayLicensesConverter {
   // Mapping is made: some exceptions (like WITH operator or BSD-2-Clause-Patent) may be removed
   // But additional limitations (like BSD-3-Clause-No-Nuclear-License) are preserved
   // TODO: write doc
@@ -224,7 +224,7 @@ final class SpdxToBintrayLicenseConverter {
     })
   }
 
-  private SpdxToBintrayLicenseConverter() {
+  private SpdxToBintrayLicensesConverter() {
     throw new UnsupportedOperationException()
   }
 }

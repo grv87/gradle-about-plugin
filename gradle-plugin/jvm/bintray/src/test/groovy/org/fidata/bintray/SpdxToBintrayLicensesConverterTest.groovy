@@ -13,7 +13,7 @@ import org.spdx.rdfparser.license.AnyLicenseInfo
 import org.spdx.rdfparser.license.LicenseInfoFactory
 
 @RunWith(JUnitParamsRunner)
-class SpdxToBintrayLicenseConverterTest {
+class SpdxToBintrayLicensesConverterTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none()
 
@@ -22,7 +22,7 @@ class SpdxToBintrayLicenseConverterTest {
   @TestCaseName('convert({0}) succeeds')
   testConvertSucceeds(String spdxLicenseId, List<String> expected) {
     AnyLicenseInfo licenseInfo = LicenseInfoFactory.parseSPDXLicenseString(spdxLicenseId)
-    List<String> result = SpdxToBintrayLicenseConverter.convert(licenseInfo)
+    List<String> result = SpdxToBintrayLicensesConverter.convert(licenseInfo)
     assert expected.sort() == result.toSorted()
   }
 
@@ -56,7 +56,7 @@ class SpdxToBintrayLicenseConverterTest {
   testConvertFails(String spdxLicenseId) {
     AnyLicenseInfo licenseInfo = LicenseInfoFactory.parseSPDXLicenseString(spdxLicenseId)
     thrown.expect(IllegalArgumentException)
-    SpdxToBintrayLicenseConverter.convert(licenseInfo)
+    SpdxToBintrayLicensesConverter.convert(licenseInfo)
   }
 
   Object[] parametersForTestConvertFails() {

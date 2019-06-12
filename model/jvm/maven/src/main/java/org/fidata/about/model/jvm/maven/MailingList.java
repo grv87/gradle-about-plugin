@@ -18,21 +18,21 @@ import org.fidata.about.model.UrlField;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class MailingList extends AbstractFieldSet {
-  @Getter
-  @Default
-  private final StringField subscribe = StringField.NULL;
+  public final StringField getSubscribe() {
+    return getString("subscribe");
+  }
 
-  @Getter
-  @Default
-  private final StringField unsubscribe = StringField.NULL;
+  public final StringField getUnsubscribe() {
+    return getString("unsubscribe");
+  }
 
-  @Getter
-  @Default
-  private final UrlField archiveUrl = UrlField.NULL;
+  public final UrlField getArchiveUrl() {
+    return getUrl("archive");
+  }
 
-  @Getter
-  @Default
-  private final StringField post = StringField.NULL;
+  public final StringField getPost() {
+    return getString("post");
+  }
 
   @Getter
   @Singular

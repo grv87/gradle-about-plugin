@@ -27,6 +27,10 @@ CI build can read it and know what it is building beforehand.
 Gradle build can read it and use the same metadata during build.
 Also YAML is simple enough so human users can read it too.
 
+== Extended .ABOUT format specification
+
+TODO
+
 == Gradle plugins
 
 TODO
@@ -53,7 +57,7 @@ The following table contains:
 ^|`jvm.plugin-publish`
 
 | `about_resource`
-5+^| required. I recommend you to set it to `.`
+5+^| Required. I recommend you to set it to `.` (single dot, meaning current directory)
 
 | `description`
 | `description`
@@ -65,12 +69,12 @@ The following table contains:
 | `homepage_url`
 | `url`
 | `descriptor.description.homepage`
-|
+| `websiteUrl`
 |
 | `website`
 
 | `owner`
-5.5+^| use `maven_organization` and `maven_developers` fields instead
+5.5+^| These fields don't differentiate organizations from persons. Use `maven_organization` and `maven_developers` fields instead
 | `owner_url`
 | `contact`
 | `author`
@@ -118,7 +122,9 @@ The following table contains:
 |
 
 | `redistribute`
-5.3+^| I don't recommend to set it if SPDX-listed license is used
+5.3+^| When SPDX-listed licenses are used
+then the information for these fields can (and should) be derived programmatically.
+In this case I don't recommend to set them. DRY and SSOT
 | `attribute`
 | `track_changes`
 
@@ -136,8 +142,15 @@ The following table contains:
 |
 |
 
-| `maven_organization.*` (except `contact` field)
-| `organization.*`
+| `maven_organization.name`
+| `organization.name`
+|
+|
+|
+|
+
+| `maven_organization.url`
+| `organization.url`
 |
 |
 |
@@ -157,10 +170,17 @@ The following table contains:
 |
 |
 
-| `maven_issue_management.*`
-| `issueManagement.*`
+| `maven_issue_management.system`
+| `issueManagement.system`
 |
 |
+|
+|
+
+| `maven_issue_management.url`
+| `issueManagement.url`
+|
+| `issueTrackerUrl`
 |
 |
 
@@ -181,7 +201,7 @@ The following table contains:
 | `extended_keywords`
 |
 |
-|
+| `labels`
 |
 | `tags`
 
@@ -206,7 +226,7 @@ a|
 | Parses `licenses` field into 4 separate lists
 | Has designated `License` class
 a|
-1. Simpler architecture
+1. Simpler and bug-free architecture
 2. Determined behavior when there are several licenses
 
 | Requires some string fields to be single line
@@ -245,6 +265,8 @@ a|
 | There was no need
 
 | Keeps order of fields
-| Doesn't keep order of fields
+| Generally, doesn't keep order of fields
+(preserves order of string, file, URL and custom non-mapped fields,
+but all fields mapped to separate classes are parsed to separate Java class fields, which have no 'order')
 | There was no need
 |===

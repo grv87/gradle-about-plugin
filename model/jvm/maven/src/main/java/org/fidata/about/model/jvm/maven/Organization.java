@@ -15,9 +15,9 @@ import org.fidata.about.model.UrlField;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class Organization extends AbstractFieldSet {
-  @Getter
-  @Default
-  private final StringField name = StringField.NULL;
+  public final StringField getName() {
+    return getString("name");
+  }
 
   @Getter
   @Default
@@ -29,9 +29,9 @@ public class Organization extends AbstractFieldSet {
    * The reason for replacement is that standard .ABOUT specification
    * doesn't differentiate persons and organizations in owners and authors fields
    */
-  @Getter
-  @Default
-  private final StringField contact = StringField.NULL;
+  public final StringField getContact() {
+    return getString("contact");
+  }
 
   protected static final class OrganizationBuilderImpl extends OrganizationBuilder<Organization, OrganizationBuilderImpl> {}
 }

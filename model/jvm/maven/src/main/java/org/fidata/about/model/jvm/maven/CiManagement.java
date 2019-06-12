@@ -15,9 +15,9 @@ import org.fidata.about.model.UrlField;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 public class CiManagement extends AbstractFieldSet {
-  @Getter
-  @Default
-  private final StringField system = StringField.NULL;
+  public final StringField getSystem() {
+    return getString("system");
+  }
 
   @Getter
   @Default
