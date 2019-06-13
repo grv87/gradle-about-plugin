@@ -11,7 +11,7 @@ import org.ysb33r.grolifant.api.exec.AbstractToolExtension
 import org.ysb33r.grolifant.api.exec.ResolvableExecutable
 
 @CompileStatic
-class AboutToolkitExtension extends AbstractToolExtension {
+final class AboutToolkitExtension extends AbstractToolExtension {
   /**
    * Name of aboutToolkit extension
    */

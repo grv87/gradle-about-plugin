@@ -9,7 +9,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 @CompileStatic
-class AboutToolkitBasePlugin implements Plugin<Project> {
+final class AboutToolkitBasePlugin implements Plugin<Project> {
   @Override
   void apply(Project project) {
     [

@@ -84,7 +84,8 @@ abstract class AbstractAboutToolkitTask extends AbstractExecWrapperTask<AboutToo
 
   @Override
   protected AboutToolkitExecSpec configureExecSpec(AboutToolkitExecSpec execSpec) {
-    execSpec.workingDir project.projectDir
+    // Run in temporary dir so that log files don't pollute project root dir
+    execSpec.workingDir this.temporaryDir
     List<Object> options = this.options
     if (options) {
       execSpec.cmdArgs options

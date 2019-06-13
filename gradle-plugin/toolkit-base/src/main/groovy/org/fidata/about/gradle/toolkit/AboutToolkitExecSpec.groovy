@@ -8,7 +8,7 @@ import org.ysb33r.grolifant.api.exec.AbstractCommandExecSpec
 import org.ysb33r.grolifant.api.exec.ExternalExecutable
 
 @CompileStatic
-class AboutToolkitExecSpec extends AbstractCommandExecSpec {
+final class AboutToolkitExecSpec extends AbstractCommandExecSpec {
   /**
    * Construct class and attach it to specific project.
    *

@@ -5,6 +5,7 @@ package org.fidata.about.gradle.toolkit.tasks
 import groovy.transform.CompileStatic
 import org.fidata.about.gradle.toolkit.AboutToolkitExecSpec
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.logging.LogLevel
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Console
@@ -44,7 +45,7 @@ final class AboutAttrib extends AbstractAboutToolkitTask {
    * Do not print error or warning messages.
    */
   @Console
-  final Property<Boolean> quiet = project.objects.property(Boolean).convention(Boolean.FALSE)
+  final Property<Boolean> quiet = project.objects.property(Boolean).convention project.provider { (project.logging.level ?: project.gradle.startParameter.logLevel) >= LogLevel.QUIET }
 
   @Override
   protected List<Object> getOptions() {
